@@ -10,8 +10,207 @@
 		<param path="type_test" name="type_test" type="simple"/>
 		<param path="localization_standart" name="localization_standart" type="simple"/>
 		<param path="print_mode" name="print_mode" type="simple"/>
-		<param path="residual_parameters" name="residual_parameters" type="simple"/>
+		<param path="select_method" name="select_method" type="complex"/>
+		<param path="residual_parameters" name="residual_parameters" type="table" format="bracket_matrix">
+			<column name="Freq start"/>
+			<column name="Freq end"/>
+			<column name="ED"/>
+			<column name="ES"/>
+			<column name="EL"/>
+			<column name="ET"/>
+			<column name="ER"/>
+			<column name="EX"/>
+			<column name="Refl Mg"/>
+			<column name="Refl Ph"/>
+			<column name="Transm Mg"/>
+			<column name="Transm Ph"/>
+		</param>
 		<param path="column_mu_enable" name="column_mu_enable" type="simple"/>
+	</test>
+	<test name="CalibrationCertificate">
+	</test>
+	<test name="Equipment">
+		<param path="config/key_dev_list" name="key_dev_list" type="table" format="array"/>
+	</test>
+	<test name="Uncertainties">
+		<param path="config/reflection_enabled" name="reflection_enabled" type="simple"/>
+		<param path="config/transmission_enabled" name="transmission_enabled" type="simple"/>
+		<param path="config/frequency-counter-table" name="frequency-counter-table" type="table" format="bracket_matrix">
+			<column name="Frequency Start[MHz]"/>
+			<column name="Frequency Stop[MHz]"/>
+			<column name="Frequency CounterAccuracy[ppm]"/>
+		</param>
+		<param path="config/power-meter-table" name="power-meter-table" type="table" format="bracket_matrix">
+			<column name="Frequency Start[MHz]"/>
+			<column name="Frequency Stop[MHz]"/>
+			<column name="Power Sensor Accuracy [dB]"/>
+		</param>
+		<param path="config/short-table" name="short-table" type="table" format="bracket_matrix">
+			<column name="Frequency Start[MHz]"/>
+			<column name="Frequency Stop[MHz]"/>
+			<column name="Short Characterization Accuracy [linear scale]"/>
+			<column name="Short Characterization Accuracy [degree"/>
+		</param>
+		<param path="config/attenuator-table" name="attenuator-table" type="table" format="bracket_matrix">
+			<column name="Frequency Start[MHz]"/>
+			<column name="Frequency Stop[MHz]"/>
+			<column name="Refl mg accuracy [lin]"/>
+			<column name="Trans mg accuracy [dB]"/>
+			<column name="Trans ph accuracy [degree]"/>
+		</param>
+		<param path="config/calibration-kit-table" name="calibration-kit-table" type="table" format="bracket_matrix">
+			<column name="Frequency Start[MHz]"/>
+			<column name="Frequency Stop[MHz]"/>
+			<column name="Open accuracy [degree]"/>
+			<column name="Short accuracy [degree]"/>
+			<column name="Load accuracy [mg in lin]"/>
+		</param>
+		<param path="config/calibration-kit-parameters-table" name="calibration-kit-parameters-table" type="table" format="bracket_matrix">
+			<column name="Frequency Start[MHz]"/>
+			<column name="Frequency Stop[MHz]"/>
+			<column name="Resid Param/ED [dB]"/>
+			<column name="Resid Param/ES [dB]"/>
+			<column name="Resid Param/EL [dB]"/>
+			<column name="Resid Param/ER [dB]"/>
+			<column name="Resid Param/ET [dB]"/>
+		</param>
+	</test>
+	<test name="MainTable">
+	</test>
+	<test name="CalibrationKit">
+		<param path="config/frequency/min" name="min_frequency" type="simple"/>
+		<param path="config/frequency/max" name="max_frequency" type="simple"/>
+		<param path="initialization/CalibrationKitDataTable" name="CalibrationKitDataTable" type="table" format="bracket_matrix">
+			<column name="Frequency Start[MHz]"/>
+			<column name="Frequency Stop[MHz]"/>
+			<column name="Resid Param/ED [dB]"/>
+			<column name="Resid Param/ES [dB]"/>
+			<column name="Resid Param/EL [dB]"/>
+			<column name="Resid Param/ER [dB]"/>
+			<column name="Resid Param/ET [dB]"/>
+		</param>
+	</test>
+	<test name="VisualIntpector">
+		<param path="config/check_test" name="check_test" type="table" format="bracket_array"/>
+	</test>
+	<test name="GagingConnectors">
+		<param path="config/count_ports" name="count_ports" type="simple"/>
+		<param path="config/ports" name="ports" type="complex"/>
+	</test>
+	<test name="FrequencyAccuracy">
+		<param path="config/countPorts" name="countPorts" type="simple"/>
+		<param path="config/specification" name="specification" type="simple"/>
+		<param path="config/frequency" name="frequency" type="table" format="bracket_array"/>
+	</test>
+	<test name="FrequencyAccuracyHz">
+		<param path="config/key_dev_list" name="key_dev_list" type="table" format="array"/>
+		<param path="config/countPorts" name="countPorts" type="simple"/>
+		<param path="config/specification" name="specification" type="simple"/>
+		<param path="config/frequency" name="frequency" type="table" format="bracket_array"/>
+	</test>
+	<test name="PowerAccuracy">
+		<param path="config/count_ports" name="count_ports" type="simple"/>
+		<param path="config/IMP_definition" name="IMP_definition" type="simple"/>
+		<param path="config/Z0_Ohm" name="Z0_Ohm" type="simple"/>
+		<param path="config/ifbw" name="ifbw" type="simple"/>
+		<param path="config/frequency_list" name="frequency_list" type="table" format="array"/>
+		<param path="config/power_list" name="power_list" type="table" format="array"/>
+		<param path="config/ifbw_list" name="ifbw_list" type="table" format="array"/>
+		<param path="config/specification" name="specification items" type="table" format="array"/>
+		<param path="config/ignore_list" name="ignore_list items" type="table" format="matrix">
+			<column name="Power"/>
+			<column name="Freq"/>
+		</param>
+	</test>
+	<test name="PowerAccuracyV2">
+		<param path="config/count_ports" name="count_ports" type="simple"/>
+		<param path="config/key_dev_list" name="key_dev_list" type="table" format="array"/>
+		<param path="config/ifbw" name="ifbw" type="simple"/>
+		<param path="config/adapter_status" name="adapter_status" type="simple"/>
+		<param path="config/min_count_points" name="min_count_points" type="simple"/>
+		<param path="config/power_list" name="power_list items" type="complex"/>
+	</test>
+	<test name="TraceNoiseMagnitude">
+		<param path="config/countPorts" name="countPorts" type="simple"/>
+		<param path="config/power" name="power" type="simple"/>
+		<param path="config/trace_format" name="trace_format" type="simple"/>
+		<param path="config/source_ports" name="source_ports" type="table" format="bracket_array"/>
+		<param path="config/under_range" name="under_range" type="table" format="bracket_matrix">
+			<column name="Min freq"/>
+			<column name="Max freq"/>
+			<column name="Count ports"/>
+			<column name="Filter"/>
+			<column name="Specification"/>
+		</param>
+	</test>
+	<test name="ReceiverNoiseFloor">
+		<param path="config/countPorts" name="countPorts" type="simple"/>
+		<param path="config/power" name="power" type="simple"/>
+		<param path="config/trace_format" name="trace_format" type="simple"/>
+		<param path="config/source_ports" name="source_ports" type="table" format="bracket_array"/>
+		<param path="config/under_range" name="under_range" type="table" format="bracket_matrix">
+			<column name="Min freq"/>
+			<column name="Max freq"/>
+			<column name="Count ports"/>
+			<column name="Filter"/>
+			<column name="Specification"/>
+		</param>
+	</test>
+	<test name="UncorrectedParameters">
+		<param path="config/count_ports" name="count_ports" type="simple"/>
+		<param path="config/count_source_port" name="count_source_port" type="simple"/>
+		<param path="config/calibration" name="calibration" type="table" format="bracket_matrix">
+			<column name="Freq start"/>
+			<column name="Freq end"/>
+			<column name="Count ports"/>
+			<column name="ifbw"/>
+			<column name="Power"/>
+		</param>
+		<param path="config/limitED" name="limitED" type="table" format="bracket_matrix">
+			<column name="Freq start"/>
+			<column name="Freq end"/>
+			<column name="ED Value"/>
+		</param>
+		<param path="config/limitES" name="limitES" type="table" format="bracket_matrix">
+			<column name="Freq start"/>
+			<column name="Freq end"/>
+			<column name="ES Value"/>
+		</param>
+		<param path="config/limitEL" name="limitEL" type="table" format="bracket_matrix">
+			<column name="Freq start"/>
+			<column name="Freq end"/>
+			<column name="EL Value"/>
+		</param>
+	</test>
+	<test name="TransCoeffMagPhAcc">
+		<param path="config/count_source_port" name="count_source_port" type="simple"/>
+		<param path="config/under_range" name="under_range" type="table" format="bracket_matrix">
+			<column name="Freq start"/>
+			<column name="Freq end"/>
+			<column name="Count ports"/>
+			<column name="ifbw"/>
+			<column name="Power"/>
+		</param>
+		<param path="config/attenuators" name="attenuators" type="simple"/>
+	</test>
+	<test name="ReflCoeffMagPhAcc">
+		<param path="config/count_s_params" name="count_s_params" type="simple"/>
+		<param path="config/ifbw" name="ifbw" type="simple"/>
+		<param path="config/power" name="power" type="simple"/>
+		<param path="config/magnitude_bands" name="magnitude_bands" type="complex"/>
+		<param path="config/phase_bands" name="phase_bands" type="complex"/>
+		<param path="config/calibration_coefficients" name="calibration_coefficients" type="complex"/>
+	</test>
+	<test name="AccuracyMeasurement">
+		<param path="config/count_ports" name="count_ports" type="simple"/>
+		<param path="config/noise_floor/source_ports" name="noise_floor/source_ports" type="simple"/>
+		<param path="config/noise_floor/trace_format" name="noise_floor/trace_format" type="simple"/>
+		<param path="config/noise_floor/bands" name="noise_floor bands" type="complex"/>
+		<param path="config/calibration/bands" name="calibration bands" type="complex"/>
+		<param path="config/uncorrected_parameters/count_source_port" name="uncorrected_parameters/count_source_port" type="simple"/>
+		<param path="config/uncorrected_parameters/bands" name="uncorrected_parameters bands" type="complex"/>
+		<param path="config/reflection/bands" name="reflection bands" type="complex"/>
+		<param path="config/transmission/bands" name="transmission bands" type="complex"/>
 	</test>
 	<test name="AccuracyTest">
 		<param path="config/min_freq" name="min_freq" type="simple"/>
@@ -26,5 +225,47 @@
 		<param path="config/compression_enabled" name="compression_enabled" type="simple"/>
 		<param path="config/measurement" name="measurement bands" type="complex"/>
 		<param path="config/calculation" name="calculation bands" type="complex"/>
+	</test>
+	<test name="AccuracyTestUncorrectedAndStabilities">
+		<param path="config/min_freq" name="min_freq" type="simple"/>
+		<param path="config/max_freq" name="max_freq" type="simple"/>
+		<param path="config/key_dev_list" name="adapter" type="simple"/>
+		<param path="config/reflection_low_limit" name="reflection_low_limit" type="simple"/>
+		<param path="config/stabilities_enabled" name="stabilities_enabled" type="simple"/>
+		<param path="config/measurement" name="measurement bands" type="complex"/>
+		<param path="config/calculation" name="calculation bands" type="complex"/>
+	</test>
+	<test name="HighLowReflection">
+		<param path="config/min_freq" name="min_freq" type="simple"/>
+		<param path="config/max_freq" name="max_freq" type="simple"/>
+		<param path="config/reflection_low_limit" name="reflection_low_limit" type="simple"/>
+		<param path="config/measurement" name="measurement bands" type="complex"/>
+		<param path="config/calculation" name="calculation bands" type="complex"/>
+	</test>	
+	<test name="AccuracyMeasurementCaban">
+		<param path="config/min_freq" name="min_freq" type="simple"/>
+		<param path="config/max_freq" name="max_freq" type="simple"/>
+		<param path="config/count_ports" name="count_ports" type="simple"/>
+		<param path="config/effective_system_data_enabled" name="effective_system_data_enabled" type="simple"/>
+		<param path="config/calibration/bands" name="calibration bands" type="complex"/>
+		<param path="config/uncorrected_parameters/count_source_port" name="uncorrected_parameters/count_source_port" type="simple"/>
+		<param path="config/uncorrected_parameters/bands" name="uncorrected_parameters bands" type="complex"/>
+		<param path="config/reflection/bands" name="reflection bands" type="complex"/>
+	</test>
+	<test name="HarmonicDistortion">
+		<param path="config/specification" name="specification" type="simple"/>
+		<param path="config/source_ports" name="source_ports" type="table" format="bracket_array"/>
+		<param path="config/frequency" name="frequency" type="table" format="bracket_array"/>
+	</test>
+	<test name="NonHarmonicDistortion">
+		<param path="config/specification" name="specification" type="simple"/>
+		<param path="config/source_ports" name="source_ports" type="table" format="bracket_array"/>
+		<param path="config/power" name="power" type="simple"/>
+		<param path="config/under_range" name="under_range" type="table" format="bracket_matrix">
+			<column name="Min freq"/>
+			<column name="Max freq"/>
+			<column name="Count ports"/>
+			<column name="Filter"/>
+		</param>
 	</test>
 </tests>
