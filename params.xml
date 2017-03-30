@@ -1,0 +1,30 @@
+﻿<?xml version='1.0' encoding='UTF-8'?>
+<tests>
+	<test name="Main">
+		<param path="device_info/device" name="device_info/device" type="simple"/>
+		<param path="device_info/description" name="device_info/description" type="simple"/>
+		<param path="device_info/model" name="device_info/model" type="simple"/>
+		<param path="device_info/auxiliary_model" name="device_info/auxiliary_model" type="simple"/>
+		<param path="device_info/vid_pid" name="device_info/vid_pid" type="simple"/>
+		<param path="device_info/com_name" name="device_info/com_name" type="simple"/>
+		<param path="type_test" name="type_test" type="simple"/>
+		<param path="localization_standart" name="localization_standart" type="simple"/>
+		<param path="print_mode" name="print_mode" type="simple"/>
+		<param path="residual_parameters" name="residual_parameters" type="simple"/>
+		<param path="column_mu_enable" name="column_mu_enable" type="simple"/>
+	</test>
+	<test name="AccuracyTest">
+		<param path="config/min_freq" name="min_freq" type="simple"/>
+		<param path="config/max_freq" name="max_freq" type="simple"/>
+		<param path="config/adapter" name="adapter" type="simple"/>
+		<param path="config/count_ports" name="count_ports" type="simple"/>
+		<param path="config/dev_type" name="dev_type" type="simple"/>
+		<param path="config/num_short_for_compression" name="num_short_for_compression" type="simple"/>
+		<param path="config/count_source_ports" name="count_source_ports" type="simple"/>
+		<param path="config/reflection_low_limit" name="reflection_low_limit" type="simple"/>
+		<param path="config/stabilities_enabled" name="stabilities_enabled" type="simple"/>
+		<param path="config/compression_enabled" name="compression_enabled" type="simple"/>
+		<param path="config/measurement" name="measurement bands" type="complex"/>
+		<param path="config/calculation" name="calculation bands" type="complex"/>
+	</test>
+</tests>
