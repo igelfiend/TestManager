@@ -303,6 +303,4 @@ void Group::editAccepted()
 		button->setText( new_data );
 	}
 	qDebug() << "Update complite!";
-//	window->clearGroups();
-	//	window->loadGroups();
 }
