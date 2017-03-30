@@ -20,13 +20,13 @@
 #include "configlist.h"
 #include "utils.h"
 #include "test_info.h"
+#include "tableparam.h"
 
 Group::Group()
 {
 	group_param	= nullptr;
 	container	= nullptr;
 	button		= nullptr;
-	table		= nullptr;
 	list		= nullptr;
 	lb			= nullptr;
 }
@@ -99,10 +99,6 @@ Group::~Group()
 	}
 	delete list;
 	delete container;
-	if( table )
-	{
-		delete table;
-	}
 }
 
 void Group::addConfigs(QVector<Config *> conf_array)
@@ -224,45 +220,21 @@ void Group::paramEdited()
 		QObject::disconnect(var);
 	}
 
-	if( table )
-	{
-		table	= nullptr;
-	}
-
 	switch( group_param->getType() )
 	{
 	case Table:
 	{
 
-		QVector<QVector<QString>> str_data = Utils::parseString( text );
-		QVector<QVector<QString>> data;
+		QVector<QVector<QString>> data = Utils::parseString( text );
 		manager->getEditForm()->setDataType( group_param->getStrFormat() );
 
 		QStringList	columns	= param_info->getColumnNames();
-
-		// Rotate data if it's just an array
-		if( ( group_param->getStrFormat() == StringType::Array ) ||
-			( group_param->getStrFormat() == StringType::BracketsArray ))
-		{
-			columns << param_info->getName();
-
-			for( int i = 0; i < str_data.at( 0 ).count(); ++i )
-			{
-				QVector< QString > tmp;
-				tmp << str_data[ 0 ][ i ];
-				data << tmp;
-			}
-		}
-		else
-		{
-			data = str_data;
-		}
 
 		QHBoxLayout		*h_layout	= new QHBoxLayout();
 		QVBoxLayout		*v_layout	= new QVBoxLayout();
 		QPushButton		*plus		= new QPushButton( "+" );
 		QPushButton		*minus		= new QPushButton( "-" );
-		this->table					= new QTableWidget( data.count(), columns.count(),  manager->getEditForm() );
+		TableParam		*table		= new TableParam( data.count(), columns.count(),  manager->getEditForm() );
 
 		h_layout->addWidget( table );
 		v_layout->addWidget( plus );
@@ -277,37 +249,19 @@ void Group::paramEdited()
 		plus->setSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum );
 		plus->setMaximumWidth( 50 );
 
-		connections << QObject::connect(plus, SIGNAL(clicked(bool)),
-										this, SLOT(insertRowInTable(bool)) );
+		connections << QObject::connect(plus,	SIGNAL(clicked(bool)),
+										table,	SLOT(insertRowWhereSelected(bool)));
 
-		connections << QObject::connect(minus, SIGNAL(clicked(bool)),
-										this,	SLOT(removeRowInTable(bool)) );
+		connections << QObject::connect(minus,	SIGNAL(clicked(bool)),
+										table,	SLOT(removeRowWhereSelected(bool)));
 
 		table->setHorizontalHeaderLabels( columns );
+		table->uploadData( data, group_param->getStrFormat() );
+		table->correctSize( 400 );
 
-		for( int i = 0; i < data.count(); ++i )
-		{
-			for( int j = 0; j < data.at( i ).count(); ++j )
-			{
-				QTableWidgetItem *item = new QTableWidgetItem( data[ i ][ j ] );
-				table->setItem( i, j, item );
-			}
-		}
-		table->resizeRowsToContents();
-		table->resizeColumnsToContents();
-
-		int header_length = 0;
-		for( int i = 0; i < table->columnCount(); ++i )
-		{
-			header_length += table->columnWidth( i );
-		}
-		header_length += 20;
-
-		table->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
-		table->setMinimumSize( header_length, 400 );
 		manager->getEditForm()->getLayout()->addLayout( h_layout );
-
 		manager->getEditForm()->adjustSize();
+
 		break;
 	}
 	default:
@@ -351,22 +305,4 @@ void Group::editAccepted()
 	qDebug() << "Update complite!";
 //	window->clearGroups();
 	//	window->loadGroups();
-}
-
-void Group::insertRowInTable(bool)
-{
-	if( table )
-	{
-		int row = ( table->currentRow() == -1 ) ? (table->rowCount()) : (table->currentRow()+1);
-		emit( table->insertRow( row ) );
-	}
-}
-
-void Group::removeRowInTable(bool)
-{
-	if( table )
-	{
-		int row = ( table->currentRow() == -1 ) ? (table->rowCount()-1) : (table->currentRow());
-		emit( table->removeRow( row ) );
-	}
 }

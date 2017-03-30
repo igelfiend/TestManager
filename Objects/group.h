@@ -16,6 +16,7 @@ class Config;
 class Param;
 class MainWindow;
 class TestParam;
+class TableParam;
 
 class Group : public QObject
 {
@@ -52,7 +53,6 @@ private:
 	ConfigList	*list;
 	MainWindow	*window;
 	TestParam	*param_info;
-	QTableWidget		*table;
 	QVector< Config* >	configs;
 	QVector< Param* >	params;
 	QList<QMetaObject::Connection>	connections;
@@ -63,8 +63,6 @@ public slots:
 	void	rowChanged( int row );
 	void	paramEdited();
 	void	editAccepted();
-	void	insertRowInTable( bool );
-	void	removeRowInTable( bool );
 };
 
 #endif // GROUP_H
