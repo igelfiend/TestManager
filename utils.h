@@ -28,7 +28,7 @@ public:
 										const QString& path,
 										Qt::CaseSensitivity caseSensitivity );
 
-	static	printNode(QDomNode node );
+	static	void	printNode(QDomNode node );
 	static	QVector< QVector< QString > > parseString(QString str);
 	static	QString saveToString( QVector<QVector<QString>> matrix, StringType string_type );
 	static	QString saveToString( QVector<QString> matrix, StringType string_type );
@@ -38,20 +38,6 @@ public:
 
 private:
 	static QVector< QString > StringToVector(QString str);
-};
-
-template <class T> class VPtr
-{
-public:
-	static T* asPtr(QVariant v)
-	{
-		return  (T *) v.value<void *>();
-	}
-
-	static QVariant asQVariant(T* ptr)
-	{
-		return qVariantFromValue((void *) ptr);
-	}
 };
 
 #endif // UTILS_H

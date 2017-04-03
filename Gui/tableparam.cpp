@@ -20,11 +20,15 @@ void TableParam::uploadData(QVector<QVector<QString> > data, StringType type)
 		return;
 	}
 
+	qDebug() << "Type = " << type;
+
 	if( ( type == StringType::Array ) ||
 		( type == StringType::BracketsArray ) )
 	{
+		qDebug() << "ARRAY";
 		for( int i = 0; i < data.at( 0 ).count(); ++i )
 		{
+			qDebug() << "Adding data: " << data[ 0 ][ i ];
 			QTableWidgetItem *item = new QTableWidgetItem( data[ 0 ][ i ] );
 			this->setItem( i, 0, item );
 		}

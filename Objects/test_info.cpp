@@ -186,6 +186,7 @@ TestParam *TestInfo::getParam( int index)
 	{
 		return params.at( index );
 	}
+	return nullptr;
 }
 
 TestParam *TestInfo::getParam(QString name)

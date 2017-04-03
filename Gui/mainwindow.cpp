@@ -364,7 +364,7 @@ void MainWindow::on_pushButtonCheckAvailable_clicked()
 	QFile file( path );
 	if( !file.open(QIODevice::ReadOnly |QIODevice::Text) )
 	{
-		qWarning()<< "Error loading ready devices file!";
+		qWarning()<< "Error loading ready devices file! Searching at: " << (QApplication::applicationDirPath() + "/" +  "ready_devices_list.cfg");
 		return;
 	}
 
@@ -464,5 +464,20 @@ void MainWindow::on_pushButtonNext_clicked()
 	if( ui->comboBoxParameters->currentIndex() < ui->comboBoxParameters->count()-1 )
 	{
 		ui->comboBoxParameters->setCurrentIndex( ui->comboBoxParameters->currentIndex() + 1 );
+	}
+}
+
+void MainWindow::on_listWidgetDevices_itemChanged(QListWidgetItem *item)
+{
+	QListWidget *parent = item->listWidget();
+	QList<QListWidgetItem *> selection = parent->selectedItems();
+	if( selection.indexOf( item ) == -1 )
+	{
+		return;
+	}
+
+	for( int i = 0; i < selection.count(); ++i)
+	{
+		selection.at( i )->setCheckState( item->checkState() );
 	}
 }

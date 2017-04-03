@@ -229,12 +229,22 @@ void Group::paramEdited()
 		manager->getEditForm()->setDataType( group_param->getStrFormat() );
 
 		QStringList	columns	= param_info->getColumnNames();
+		int	rows_count;
+		if( columns.isEmpty() )
+		{
+			columns.append( param_info->getName() );
+			rows_count = ( data.count() > 0 ) ? ( data.at( 0 ).count() ) : 0 ;
+		}
+		else
+		{
+			rows_count = data.count();
+		}
 
 		QHBoxLayout		*h_layout	= new QHBoxLayout();
 		QVBoxLayout		*v_layout	= new QVBoxLayout();
 		QPushButton		*plus		= new QPushButton( "+" );
 		QPushButton		*minus		= new QPushButton( "-" );
-		TableParam		*table		= new TableParam( data.count(), columns.count(),  manager->getEditForm() );
+		TableParam		*table		= new TableParam( rows_count, columns.count(),  manager->getEditForm() );
 
 		h_layout->addWidget( table );
 		v_layout->addWidget( plus );
@@ -255,6 +265,8 @@ void Group::paramEdited()
 		connections << QObject::connect(minus,	SIGNAL(clicked(bool)),
 										table,	SLOT(removeRowWhereSelected(bool)));
 
+
+		qDebug() << "Columns = " << columns;
 		table->setHorizontalHeaderLabels( columns );
 		table->uploadData( data, group_param->getStrFormat() );
 		table->correctSize( 400 );

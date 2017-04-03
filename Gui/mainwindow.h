@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QList>
 #include <QVector>
+#include <QListWidgetItem>
 
 
 namespace Ui
@@ -65,6 +66,8 @@ private slots:
 	void on_pushButtonSave_clicked();
 
 	void on_pushButtonNext_clicked();
+
+	void on_listWidgetDevices_itemChanged(QListWidgetItem *item);
 
 private:
 	void createStatusBar();

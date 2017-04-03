@@ -14,6 +14,7 @@ TEMPLATE = app
 
 target.path = C:/work/VNAPT_EXPERIMENT/TestManager/release
 INSTALLS += target
+CONFIG(release, debug|release):DEFINES += QT_NO_DEBUG_OUTPUT
 
 INCLUDEPATH += gui\
                objects

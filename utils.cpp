@@ -32,7 +32,7 @@ QDomElement Utils::getXmlElement(const QDomNode &domNode, const QString &path, Q
 	return QDomElement();
 }
 
-Utils::printNode(QDomNode node)
+void Utils::printNode(QDomNode node)
 {
 	QString pStr;
 	QTextStream s(&pStr);
@@ -105,6 +105,9 @@ QVector<QVector<QString> > Utils::parseString(QString str)
 		result.append( str_vector );
 		break;
 	case Error:
+		result.append( str_vector );
+		break;
+	case None:
 		result.append( str_vector );
 		break;
 	}
