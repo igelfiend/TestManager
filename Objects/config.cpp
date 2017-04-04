@@ -181,3 +181,13 @@ void Config::setPath(const QString &value)
 	path = value;
 }
 
+bool Config::isChanged() const
+{
+	return changed;
+}
+
+void Config::setChagned(bool flag)
+{
+	changed = flag;
+}
+

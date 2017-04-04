@@ -44,9 +44,13 @@ public:
 	QString getPath() const;
 	void	setPath(const QString &value);
 
+	bool	isChanged() const;
+	void	setChagned( bool flag );
+
 private:
 	QString	device;
 	QString type;
+	bool	changed;
 	QString	path;
 	Manager	* manager;
 	QDomDocument	root;

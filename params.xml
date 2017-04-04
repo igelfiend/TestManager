@@ -229,13 +229,14 @@
 	<test name="AccuracyTestUncorrectedAndStabilities">
 		<param path="config/min_freq" name="min_freq" type="simple"/>
 		<param path="config/max_freq" name="max_freq" type="simple"/>
-		<param path="config/key_dev_list" name="adapter" type="simple"/>
+		<param path="config/key_dev_list" name="key_dev_list" type="simple"/>
 		<param path="config/reflection_low_limit" name="reflection_low_limit" type="simple"/>
 		<param path="config/stabilities_enabled" name="stabilities_enabled" type="simple"/>
 		<param path="config/measurement" name="measurement bands" type="complex"/>
 		<param path="config/calculation" name="calculation bands" type="complex"/>
 	</test>
 	<test name="HighLowReflection">
+		<param path="config/key_dev_list" name="key_dev_list" type="simple"/>
 		<param path="config/min_freq" name="min_freq" type="simple"/>
 		<param path="config/max_freq" name="max_freq" type="simple"/>
 		<param path="config/reflection_low_limit" name="reflection_low_limit" type="simple"/>

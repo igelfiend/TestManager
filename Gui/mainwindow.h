@@ -69,6 +69,8 @@ private slots:
 
 	void on_listWidgetDevices_itemChanged(QListWidgetItem *item);
 
+	void on_pushButtonNextTest_clicked();
+
 private:
 	void createStatusBar();
 	Ui::MainWindow	*ui;

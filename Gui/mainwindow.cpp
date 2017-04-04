@@ -330,14 +330,6 @@ void MainWindow::on_comboBoxParameters_currentIndexChanged(int index)
 		return;
 	}
 
-	if( index == ui->comboBoxParameters->count() - 1 )
-	{
-		ui->pushButtonNext->setEnabled( false );
-	}
-	else
-	{
-		ui->pushButtonNext->setEnabled( true );
-	}
 	clearGroups();
 	loadGroups();
 }
@@ -479,5 +471,13 @@ void MainWindow::on_listWidgetDevices_itemChanged(QListWidgetItem *item)
 	for( int i = 0; i < selection.count(); ++i)
 	{
 		selection.at( i )->setCheckState( item->checkState() );
+	}
+}
+
+void MainWindow::on_pushButtonNextTest_clicked()
+{
+	if( ui->comboBoxTests->currentIndex() < ui->comboBoxTests->count()-1 )
+	{
+		ui->comboBoxTests->setCurrentIndex( ui->comboBoxTests->currentIndex() + 1 );
 	}
 }

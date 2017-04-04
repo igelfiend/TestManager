@@ -287,6 +287,7 @@ void Group::paramEdited()
 
 //	manager->getEditForm()->setText( params.at( 0 )->getData() );
 	manager->getEditForm()->setCaller( this );
+	manager->getEditForm()->setWindowTitle( "Editing: " + button->text() );
 	manager->getEditForm()->exec();
 }
 

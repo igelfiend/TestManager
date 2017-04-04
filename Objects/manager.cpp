@@ -109,10 +109,13 @@ void Manager::Save()
 	}
 
 	qDebug() << "Manager::Save() : Start";
-	QTime t;
-	t.start();
 	for( int i = 0; i < configs.count(); ++i)
 	{
+		if( !configs.at( i )->isChanged() )
+		{
+			continue;
+		}
+
 		qDebug() << "Saving path: " << configs.at( i )->getPath();
 		QFile file( configs.at( i )->getPath() );
 		if( file.open( QIODevice::WriteOnly ) )
@@ -123,6 +126,7 @@ void Manager::Save()
 //			str << Utils::spacesToTabs( doc.toString() );
 			doc.save( str, 4 );
 			file.close();
+			configs.at( i )->setChagned( false );
 		}
 		else
 		{
