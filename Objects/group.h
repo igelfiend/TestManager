@@ -35,6 +35,7 @@ public:
 
 	void	removeConfigs( QVector<Config *>	conf_vector );
 	void	removeParams( QVector<Param *>		param_vector );
+	int		getParamsCount() const;
 	Param	*getGroupParam() const;
 
 	QBoxLayout	*getContainer() const;

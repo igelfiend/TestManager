@@ -258,7 +258,7 @@
 		<param path="config/source_ports" name="source_ports" type="table" format="bracket_array"/>
 		<param path="config/frequency" name="frequency" type="table" format="bracket_array"/>
 	</test>
-	<test name="NonHarmonicDistortion">
+	<test name="NonHarmonicSpurious">
 		<param path="config/specification" name="specification" type="simple"/>
 		<param path="config/source_ports" name="source_ports" type="table" format="bracket_array"/>
 		<param path="config/power" name="power" type="simple"/>

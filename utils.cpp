@@ -1,4 +1,3 @@
-#include <QString>
 #include <QStringList>
 #include <QTextStream>
 #include <QFile>

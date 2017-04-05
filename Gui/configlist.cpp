@@ -69,7 +69,9 @@ void ConfigList::dropEvent(QDropEvent *event)
 		QVector<Param *> params = mime->getParams();
 		if (!params.isEmpty())
 		{
+			qDebug() << "Adding params: " << params.count();
 			group->addParams( params );
+			qDebug() << "Total params:  " << group->getParamsCount();
 			for( int i = 0; i < params.count(); ++i )
 			{
 				ParamListItem * item = new ParamListItem( params.at( i )->getConfig()->getFullName(), this, params.at( i ) );

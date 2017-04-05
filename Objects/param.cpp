@@ -25,7 +25,7 @@ Param::Param(Param *param):
 	name	= param->name;
 	node	= param->node.cloneNode( true );
 	type	= param->type;
-	owner	= param->owner;
+//	owner	= param->owner;
 	str_format	= param->str_format;
 
 }

@@ -153,6 +153,11 @@ void Group::removeParams(QVector<Param *> param_vector)
 	}
 }
 
+int Group::getParamsCount() const
+{
+	return params.count();
+}
+
 QBoxLayout *Group::getContainer() const
 {
 	return container;
@@ -293,6 +298,11 @@ void Group::paramEdited()
 
 void Group::editAccepted()
 {
+	if(params.count() == 0)
+	{
+		return;
+	}
+
 	Manager * manager = params.at( 0 )->getOwner()->getConfig()->getManager();
 	if( manager->getEditForm()->getCaller() != this )
 	{
@@ -304,7 +314,6 @@ void Group::editAccepted()
 	QString			new_data	= edit_form->getText();
 	qDebug() << "NEW DATA: " << new_data;
 
-
 	QVector<Param *> params_all;
 	params_all.append( params );
 	params_all.append( group_param );
@@ -315,5 +324,4 @@ void Group::editAccepted()
 	{
 		button->setText( new_data );
 	}
-	qDebug() << "Update complite!";
 }
