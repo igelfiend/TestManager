@@ -10,24 +10,32 @@
 
 class QMimeData;
 class ConfigMime;
+class ParamListItem;
 
 
 class ConfigList : public QListWidget
 {
 	Q_OBJECT
 public:
-	ConfigList();
-	ConfigList( Group *group );
+	ConfigList(QWidget *parent);
+	ConfigList(Group *group , QWidget *parent = nullptr);
 
 	Group	*getGroup() const;
 	void	setGroup(Group *value);
 
+	QVector<Param *> getParams() const;
+
+public slots:
+	void	ShowContextMenu(QPoint pos);
+	void	ShowItemInfo();
+	void	CreateNewGroup();
+
 protected:
-	void dragEnterEvent(QDragEnterEvent *event);
-	void dragMoveEvent(QDragMoveEvent *event);
-	void dragLeaveEvent(QDragLeaveEvent *event);
-	void dropEvent(QDropEvent *event);
-	QMimeData *mimeData(const QList<QListWidgetItem *> items) const;
+	void	dragEnterEvent(QDragEnterEvent *event);
+	void	dragMoveEvent(QDragMoveEvent *event);
+	void	dragLeaveEvent(QDragLeaveEvent *event);
+	void	dropEvent(QDropEvent *event);
+	QMimeData	*mimeData(const QList<QListWidgetItem *> items) const;
 
 private:
 	Group	*group;

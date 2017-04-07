@@ -43,7 +43,8 @@ public:
 
 	bool hasData() const;
 
-	TestParam *getParamInfo() const;
+	TestParam	*getParamInfo() const;
+	QString		getButtonTitle() const;
 
 private:
 	bool	has_data;

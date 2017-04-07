@@ -132,6 +132,7 @@
 	</test>
 	<test name="TraceNoiseMagnitude">
 		<param path="config/countPorts" name="countPorts" type="simple"/>
+		<param path="config/count_ports" name="count_ports" type="simple"/>
 		<param path="config/power" name="power" type="simple"/>
 		<param path="config/trace_format" name="trace_format" type="simple"/>
 		<param path="config/source_ports" name="source_ports" type="table" format="bracket_array"/>
@@ -145,6 +146,7 @@
 	</test>
 	<test name="ReceiverNoiseFloor">
 		<param path="config/countPorts" name="countPorts" type="simple"/>
+		<param path="config/count_ports" name="count_ports" type="simple"/>
 		<param path="config/power" name="power" type="simple"/>
 		<param path="config/trace_format" name="trace_format" type="simple"/>
 		<param path="config/source_ports" name="source_ports" type="table" format="bracket_array"/>

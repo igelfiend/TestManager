@@ -39,7 +39,7 @@ Group::Group(QString title, QVector<Config *> configs, MainWindow *window) : Gro
 
 	container	= new QVBoxLayout;
 	lb			= new QLabel(title);
-	list		= new ConfigList( this );
+	list		= new ConfigList( this, window );
 
 	list->setGroup( this );
 	for( int i = 0; i < configs.count(); ++i )
@@ -63,7 +63,7 @@ Group::Group(QString title, QVector<Param *> params, MainWindow *window) : Group
 
 	container	= new QVBoxLayout;
 	button		= new QPushButton( title );
-	list		= new ConfigList( this );
+	list		= new ConfigList( this, window );
 
 	button->setFlat( true );
 	list->setGroup( this );
@@ -78,7 +78,8 @@ Group::Group(QString title, QVector<Param *> params, MainWindow *window) : Group
 	if( params.count() > 0 )
 	{
 		EditParamForm * edit_form = params.at( 0 )->getOwner()->getConfig()->getManager()->getEditForm();
-		connect( edit_form, edit_form->accepted, this, editAccepted );
+		edit_form->clearConnections();
+		edit_form->getConnections() <<  connect( edit_form, edit_form->accepted, this, editAccepted ) ;
 	}
 	param_info = window->getCurrentParam();
 
@@ -171,6 +172,11 @@ bool Group::hasData() const
 TestParam *Group::getParamInfo() const
 {
 	return param_info;
+}
+
+QString Group::getButtonTitle() const
+{
+	return button->text();
 }
 
 Param *Group::getGroupParam() const

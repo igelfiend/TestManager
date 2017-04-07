@@ -24,6 +24,7 @@ public:
 	Param	*getParam()		const;
 	Item	*getItem()		const;
 	Config	*getConfig()	const;
+	void	ShowInfo()		const;
 
 
 protected:

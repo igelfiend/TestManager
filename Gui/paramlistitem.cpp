@@ -1,8 +1,10 @@
 #include "paramlistitem.h"
-
 #include "param.h"
 #include "test.h"
 #include "config.h"
+
+#include <QDebug>
+
 
 ParamListItem::ParamListItem()
 {
@@ -67,6 +69,22 @@ Config *ParamListItem::getConfig() const
 	else
 	{
 		return config;
+	}
+}
+
+void ParamListItem::ShowInfo() const
+{
+	if( param )
+	{
+		qDebug()	<< " /*----------------Parameter-Info--------------*/\n"
+					<< "Name = "	<< param->getName() << "\n"
+					<< "Data = "	<< param->getData() << "\n"
+					<< "Owner = "	<< ( (param->getOwner()) ? param->getOwner()->getName() : QString("No owner") ) << "\n"
+					<< "/*------------------End-of-Info---------------*/";
+	}
+	else
+	{
+		qDebug() << "Error! No param detected!";
 	}
 }
 

@@ -3,18 +3,25 @@
 #include <QDragMoveEvent>
 #include <QDropEvent>
 #include <QDebug>
+#include <QMenu>
 
 #include "configlist.h"
 #include "paramlistitem.h"
+#include "mainwindow.h"
 
-ConfigList::ConfigList()
+ConfigList::ConfigList(QWidget *parent)
 {
+	this->setParent( parent );
 	setSelectionMode( QAbstractItemView::ExtendedSelection	);
 	setDragDropMode(  QAbstractItemView::InternalMove	);
 	setDropIndicatorShown( true );
+	setContextMenuPolicy(Qt::CustomContextMenu);
+	connect(this, SIGNAL(customContextMenuRequested(QPoint)),
+			this, SLOT(ShowContextMenu(QPoint)));
 }
 
-ConfigList::ConfigList(Group *group) : ConfigList()
+ConfigList::ConfigList(Group *group, QWidget *parent) :
+	ConfigList( parent )
 {
 	if( group->hasData() )
 	{
@@ -109,6 +116,33 @@ QMimeData *ConfigList::mimeData(const QList<QListWidgetItem *> items) const
 	return data;
 }
 
+void ConfigList::ShowContextMenu(QPoint pos)
+{
+	QMenu menu;
+	QPoint globalPos = mapToGlobal(pos);
+	menu.addAction( "Show info", this, SLOT( ShowItemInfo() ) );
+	menu.addAction( "New value", this, SLOT( CreateNewGroup() ) );
+	menu.exec(globalPos);
+}
+
+void ConfigList::ShowItemInfo()
+{
+	for( int i = 0; i < selectedItems().count(); ++i )
+	{
+		dynamic_cast<ParamListItem *>(selectedItems().at( i ))->ShowInfo();
+	}
+}
+
+void ConfigList::CreateNewGroup()
+{
+	MainWindow	*window	 = dynamic_cast<MainWindow *>(parent());
+	Manager		*manager = window->getManager();
+
+	Group *group = new Group(group->getButtonTitle(), getParams(), window);
+	window->addGroup( group );
+	emit(group->paramEdited());
+}
+
 Group *ConfigList::getGroup() const
 {
 	return group;
@@ -117,6 +151,17 @@ Group *ConfigList::getGroup() const
 void ConfigList::setGroup(Group *value)
 {
 	group = value;
+}
+
+QVector<Param *> ConfigList::getParams() const
+{
+	QVector<Param *> result;
+	for( int i = 0; i < selectedItems().count(); ++i )
+	{
+		result.append( dynamic_cast<ParamListItem *>(selectedItems().at( i ))->getParam() );
+	}
+
+	return result;
 }
 
 

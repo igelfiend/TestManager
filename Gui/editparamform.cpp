@@ -66,6 +66,19 @@ void EditParamForm::setDataType(const StringType &value)
 	data_type = value;
 }
 
+void EditParamForm::addConnection(auto con)
+{
+	connections << con;
+}
+
+void EditParamForm::clearConnections()
+{
+	foreach (auto var, connections)
+	{
+		QObject::disconnect(var);
+	}
+}
+
 QVector<QVector<QString> > EditParamForm::getTableData() const
 {
 	QVector< QVector <QString> > result;
@@ -113,4 +126,9 @@ QVector<QVector<QString> > EditParamForm::getTableData() const
 		}
 	}
 	return result;
+}
+
+QList<QMetaObject::Connection> EditParamForm::getConnections() const
+{
+	return connections;
 }
