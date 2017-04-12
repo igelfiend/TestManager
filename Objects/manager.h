@@ -29,6 +29,7 @@ public:
 	void setConfigInfo(ConfigInfo *value);
 
 	void setWindow(MainWindow *value);
+	MainWindow	*getWindow() const;
 
 	EditParamForm *getEditForm() const;
 

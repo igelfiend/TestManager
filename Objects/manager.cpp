@@ -179,6 +179,11 @@ void Manager::setWindow(MainWindow *value)
 	window = value;
 }
 
+MainWindow *Manager::getWindow() const
+{
+	return window;
+}
+
 EditParamForm *Manager::getEditForm() const
 {
 	return edit_form;

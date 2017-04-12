@@ -30,7 +30,8 @@ SOURCES += main.cpp\
     Objects/param.cpp \
     Objects/test.cpp \
     Objects/test_info.cpp \
-    Gui/tableparam.cpp
+    Gui/tableparam.cpp \
+    Objects/comparator.cpp
 
 HEADERS  += utils.h \
     Gui/configlist.h \
@@ -43,7 +44,8 @@ HEADERS  += utils.h \
     Objects/param.h \
     Objects/test.h \
     Objects/test_info.h \
-    Gui/tableparam.h
+    Gui/tableparam.h \
+    Objects/comparator.h
 
 FORMS    += Gui/mainwindow.ui \
     Gui/editparamform.ui

@@ -20,6 +20,7 @@
 #include "utils.h"
 #include "group.h"
 #include "paramlistitem.h"
+#include "comparator.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -105,6 +106,13 @@ void MainWindow::init()
 			ui->comboBoxParameters->setCurrentIndex( 0 );
 		}
 	}
+
+	comparator = new Comparator( manager, ui->LayoutCompareConfig );
+
+	connect( ui->toolButtonPlus,	SIGNAL(clicked(bool)),
+			 comparator,			SLOT(addBlock(bool)));
+	connect( ui->toolButtonMinus,	SIGNAL(clicked(bool)),
+			 comparator,			SLOT(removeBlock(bool)));
 }
 
 QListWidget *MainWindow::getListModes()
@@ -297,6 +305,7 @@ void MainWindow::on_pushButton_3_clicked()
 	}
 
     manager->Load(devices, modes);
+	comparator->update();
 	emit(ui->comboBoxParameters->currentIndexChanged( ui->comboBoxParameters->currentIndex() ));
 
 //	manager->ShowLoadedData();
@@ -451,6 +460,11 @@ Manager *MainWindow::getManager() const
 	return manager;
 }
 
+QDockWidget *MainWindow::getDockWidgetComparator() const
+{
+	return ui->dockWidgetComparator;
+}
+
 void MainWindow::on_pushButtonNext_clicked()
 {
 	if( ui->comboBoxParameters->currentIndex() < ui->comboBoxParameters->count()-1 )
@@ -480,4 +494,12 @@ void MainWindow::on_pushButtonNextTest_clicked()
 	{
 		ui->comboBoxTests->setCurrentIndex( ui->comboBoxTests->currentIndex() + 1 );
 	}
+}
+
+void MainWindow::on_pushButtonCompare_clicked()
+{
+	QRect r = ui->dockWidgetComparator->geometry();
+	r.setHeight( 70 );
+	ui->dockWidgetComparator->setGeometry( r );
+	this->resize(this->width(), this->minimumHeight());
 }
