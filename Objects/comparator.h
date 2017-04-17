@@ -21,6 +21,7 @@ public:
 	~Comparator();
 
 	void	update();
+	void	execute();
 
 public slots:
 	void	addBlock(bool);
@@ -42,6 +43,7 @@ public:
 	~CompareBlock();
 
 	void	update();
+	Config	*getConfig() const;
 private:
 	Comparator	*comparator;
 	QComboBox	*combobox;

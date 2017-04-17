@@ -11,6 +11,8 @@
 #include <QBoxLayout>
 #include <QLabel>
 #include <QFile>
+#include <QMessageBox>
+#include <QCloseEvent>
 
 #include "manager.h"
 #include "test_info.h"
@@ -22,6 +24,7 @@
 #include "paramlistitem.h"
 #include "comparator.h"
 
+#define COL_COUNT 5
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -132,11 +135,11 @@ TestParam *MainWindow::getCurrentParam() const
 	return getCurrentTest()->getParam( name_param );
 }
 
-void MainWindow::addGroup(Group *group)
+void MainWindow::addGroup(BaseGroup *group)
 {
 	ui->gridLayout->addLayout( group->getContainer(), group_coord.x, group_coord.y, 1, 1 );
 
-	if ( group_coord.y == 7 )
+	if ( group_coord.y == COL_COUNT )
 	{
 		group_coord.y = 0;
 		group_coord.x++;
@@ -147,6 +150,81 @@ void MainWindow::addGroup(Group *group)
 	}
 
 	groups.append( group );
+}
+
+void MainWindow::addCompareGroups(QVector<CompareGroup *> groups)
+{
+	group_coord.x++;
+	group_coord.y = 0;
+
+	for( int i = 0; i < groups.count(); ++i )
+	{
+		addGroup( groups.at( i ) );
+	}
+
+//	if( group_coord.y == COL_COUNT )
+//	{
+//		group_coord.x++;
+//		group_coord.y = 0;
+//	}
+
+//	QFrame *line;
+//	line = new QFrame(this);
+//	line->setFrameShape(QFrame::HLine);
+//	line->setFrameShadow(QFrame::Sunken);
+
+//	group_coord.x++;
+//	group_coord.y = 0;
+//	ui->gridLayout->addWidget( line, group_coord.x, group_coord.y, 1, (COL_COUNT+1) );
+	//	group_coord.x++;
+}
+
+void MainWindow::addHeader(QString text, int level )
+{
+	QLabel *label_test	= new QLabel( text );
+
+	QFont f1( "Arial", 12, QFont::Bold);
+	QFont f2( "Arial", 12, QFont::Normal );
+	QFont f3( "Times New Roman", 8, QFont::Normal );
+
+	switch( level )
+	{
+	case 1:
+		label_test->setFont( f1 );
+		label_test->setStyleSheet( "QLabel { color : red; }" );
+		break;
+	case 2:
+		label_test->setFont( f2 );
+		label_test->setStyleSheet( "QLabel { color : green; }" );
+		break;
+	default:
+		label_test->setFont( f3 );
+		label_test->setStyleSheet( "QLabel { color : black; }" );
+	}
+
+	group_coord.x++;
+	group_coord.y = 0;
+
+	ui->gridLayout->addWidget(label_test,	group_coord.x,	group_coord.y,	1, 1);
+
+	group_coord.x++;
+	group_coord.y = 0;
+}
+
+void MainWindow::addHLine()
+{
+	QFrame *line;
+	line = new QFrame(this);
+	line->setFrameShape(QFrame::HLine);
+	line->setFrameShadow(QFrame::Sunken);
+
+	group_coord.x++;
+	group_coord.y = 0;
+
+	ui->gridLayout->addWidget( line, group_coord.x,	group_coord.y,	1, (COL_COUNT+1) );
+
+	group_coord.x++;
+	group_coord.y = 0;
 }
 
 void MainWindow::clearGroups()
@@ -170,6 +248,8 @@ void MainWindow::clearGroups()
 	groups.clear();
 
 	group_coord = { 0, 0 };
+
+	Utils::clearLayout(ui->gridLayout);
 }
 
 void MainWindow::loadGroups()
@@ -187,13 +267,6 @@ void MainWindow::loadGroups()
 	{
 		configs.append( manager->getConfig( i ) );
 	}
-
-	struct LocalGroup
-	{
-		QString title;
-		QVector< Config* >	configs;
-		QVector< Param* >	params;
-	};
 
 	QVector<  LocalGroup > groups;
 	LocalGroup no_tests;
@@ -498,8 +571,42 @@ void MainWindow::on_pushButtonNextTest_clicked()
 
 void MainWindow::on_pushButtonCompare_clicked()
 {
-	QRect r = ui->dockWidgetComparator->geometry();
-	r.setHeight( 70 );
-	ui->dockWidgetComparator->setGeometry( r );
-	this->resize(this->width(), this->minimumHeight());
+//	QRect r = ui->dockWidgetComparator->geometry();
+//	r.setHeight( 70 );
+//	ui->dockWidgetComparator->setGeometry( r );
+//	this->resize(this->width(), this->minimumHeight());
+
+//	QPushButton	*button = new QPushButton("Testing Tests");
+//	ui->LayoutScrollArea->addWidget(button);
+
+//	QVector<Param *> conf;
+//	conf.append( manager->getConfig( 0 )->getItem( 0 )->getParam( 0 ) );
+//	Group *gr = new Group("Test", conf, this);
+//	addGroup(gr);
+
+	clearGroups();
+	comparator->execute();
+}
+
+void MainWindow::closeEvent(QCloseEvent *event)
+{
+	if( !manager->isChanged() )
+	{
+		return;
+	}
+
+	event->ignore();
+	int result = QMessageBox::question(this, "Close Confirmation", "Save changes?", QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel);
+	switch( result )
+	{
+	case QMessageBox::Yes:
+		manager->Save();
+		event->accept();
+		break;
+	case QMessageBox::No:
+		event->accept();
+		break;
+	case QMessageBox::Cancel:
+		return;
+	}
 }

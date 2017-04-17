@@ -288,6 +288,11 @@ QString Utils::spacesToTabs(QString str)
 
 void Utils::clearLayout(QLayout *layout)
 {
+	if( layout->count() == 0 )
+	{
+		return;
+	}
+
 	while( QLayoutItem *item = layout->takeAt( 0 ) )
 	{
 		if( item->widget() )

@@ -25,17 +25,15 @@
 Group::Group()
 {
 	group_param	= nullptr;
-	container	= nullptr;
 	button		= nullptr;
 	list		= nullptr;
 	lb			= nullptr;
 }
 
-Group::Group(QString title, QVector<Config *> configs, MainWindow *window) : Group()
+Group::Group(QString title, QVector<Config *> configs, MainWindow *window) :
+	BaseGroup( configs, window )
 {
-	this->configs	= configs;
-	this->window	= window;
-	this->has_data	= false;
+	initPtr();
 
 	container	= new QVBoxLayout;
 	lb			= new QLabel(title);
@@ -51,11 +49,11 @@ Group::Group(QString title, QVector<Config *> configs, MainWindow *window) : Gro
 	container->addWidget(list);
 }
 
-Group::Group(QString title, QVector<Param *> params, MainWindow *window) : Group()
+Group::Group(QString title, QVector<Param *> params, MainWindow *window) :
+	BaseGroup( params, window )
 {
-	this->params	= params;
-	this->window	= window;
-	this->has_data	= true;
+	initPtr();
+
 	if( params.count() > 0 )
 	{
 		this->group_param	= new Param( params.at( 0 ) );
@@ -81,7 +79,6 @@ Group::Group(QString title, QVector<Param *> params, MainWindow *window) : Group
 		edit_form->clearConnections();
 		edit_form->getConnections() <<  connect( edit_form, edit_form->accepted, this, editAccepted ) ;
 	}
-	param_info = window->getCurrentParam();
 
 	container->addWidget( button );
 	container->addWidget( list   );
@@ -99,84 +96,19 @@ Group::~Group()
 		delete button;
 	}
 	delete list;
-	delete container;
-}
-
-void Group::addConfigs(QVector<Config *> conf_array)
-{
-	configs.append( conf_array );
-}
-
-void Group::addParams(QVector<Param *> param_array)
-{
-	params.append( param_array );
-}
-
-bool Group::removeConfig(Config *conf)
-{
-	for( int i = 0; i < configs.count(); ++i )
-	{
-		if( configs.at( i ) == conf )
-		{
-			configs.removeAt( i );
-			return true;
-		}
-	}
-	return false;
-}
-
-bool Group::removeParam(Param *param)
-{
-	for( int i = 0; i < params.count(); ++i )
-	{
-		if( params.at( i ) == param )
-		{
-			params.removeAt( i );
-			return true;
-		}
-	}
-	return false;
-}
-
-void Group::removeConfigs(QVector<Config *> conf_vector)
-{
-	for( int i = 0; i < conf_vector.count(); ++i )
-	{
-		removeConfig( conf_vector.at( i ) );
-	}
-}
-
-void Group::removeParams(QVector<Param *> param_vector)
-{
-	for( int i = 0; i < param_vector.count(); ++i )
-	{
-		removeParam( param_vector.at( i ) );
-	}
-}
-
-int Group::getParamsCount() const
-{
-	return params.count();
-}
-
-QBoxLayout *Group::getContainer() const
-{
-	return container;
-}
-
-bool Group::hasData() const
-{
-	return has_data;
-}
-
-TestParam *Group::getParamInfo() const
-{
-	return param_info;
 }
 
 QString Group::getButtonTitle() const
 {
 	return button->text();
+}
+
+void Group::initPtr()
+{
+	lb			= nullptr;
+	list		= nullptr;
+	button		= nullptr;
+	container	= nullptr;
 }
 
 Param *Group::getGroupParam() const
@@ -330,4 +262,202 @@ void Group::editAccepted()
 	{
 		button->setText( new_data );
 	}
+}
+
+BaseGroup::BaseGroup()
+{
+	param_info	= nullptr;
+	container	= nullptr;
+	has_data	= false;
+	window		= nullptr;
+}
+
+BaseGroup::BaseGroup(QVector<Config *> configs, MainWindow *window)
+{
+	has_data	= false;
+	param_info	= window->getCurrentParam();
+	this->configs	= configs;
+	this->window	= window;
+}
+
+BaseGroup::BaseGroup(QVector<Param *> params, MainWindow *window)
+{
+	has_data	= true;
+	param_info	= window->getCurrentParam();
+	this->params	= params;
+	this->window	= window;
+}
+
+BaseGroup::~BaseGroup()
+{
+	Utils::clearLayout( container );
+	delete container;
+	foreach (auto var, connections)
+	{
+		QObject::disconnect( var );
+	}
+}
+
+void BaseGroup::addConfigs(QVector<Config *> conf_array)
+{
+	configs.append( conf_array );
+}
+
+void BaseGroup::addParams(QVector<Param *> param_array)
+{
+	params.append( param_array );
+}
+
+bool BaseGroup::removeConfig(Config *conf)
+{
+	for( int i = 0; i < configs.count(); ++i )
+	{
+		if( configs.at( i ) == conf )
+		{
+			configs.removeAt( i );
+			return true;
+		}
+	}
+	return false;
+}
+
+bool BaseGroup::removeParam(Param *param)
+{
+	for( int i = 0; i < params.count(); ++i )
+	{
+		if( params.at( i ) == param )
+		{
+			params.removeAt( i );
+			return true;
+		}
+	}
+	return false;
+}
+
+void BaseGroup::removeConfigs(QVector<Config *> conf_vector)
+{
+	for( int i = 0; i < conf_vector.count(); ++i )
+	{
+		removeConfig( conf_vector.at( i ) );
+	}
+}
+
+void BaseGroup::removeParams(QVector<Param *> param_vector)
+{
+	for( int i = 0; i < param_vector.count(); ++i )
+	{
+		removeParam( param_vector.at( i ) );
+	}
+}
+
+int BaseGroup::getParamsCount() const
+{
+	return params.count();
+}
+
+bool BaseGroup::hasData() const
+{
+	return has_data;
+}
+
+QBoxLayout *BaseGroup::getContainer() const
+{
+	return container;
+}
+
+TestParam *BaseGroup::getParamInfo() const
+{
+	return param_info;
+}
+
+Group *BaseGroup::toGroup()
+{
+	return dynamic_cast<Group *>( this );
+}
+
+CompareGroup *BaseGroup::toCompareGroup()
+{
+	return dynamic_cast<CompareGroup *>( this );
+}
+
+CompareGroup::CompareGroup()
+{
+
+}
+
+CompareGroup::CompareGroup( QString textarea_text, QVector<Config *> configs, MainWindow *window):
+	BaseGroup( configs, window )
+{
+	QString title;
+	for( int i = 0; i < configs.count(); ++i )
+	{
+		title += configs.at( i )->getFullName() + ",";
+		if( (i+1) % 3 == 0 )
+		{
+			title += "\n";
+		}
+		else
+		{
+			title += " ";
+		}
+	}
+	title.remove( title.length() - 2, 2 );
+
+	label		= new QLabel( title );
+	container	= new QVBoxLayout;
+	textarea	= new QPlainTextEdit( textarea_text );
+
+	container->addWidget( label );
+	container->addWidget( textarea );
+}
+
+CompareGroup::CompareGroup(QVector<Param *> params, MainWindow *window):
+	BaseGroup( params, window )
+{
+	QString title;
+	for( int i = 0; i < params.count(); ++i )
+	{
+		title += params.at( i )->getConfig()->getFullName() + ",";
+		if( (i+1) % 3 == 0 )
+		{
+			title += "\n";
+		}
+		else
+		{
+			title += " ";
+		}
+	}
+	title.remove( title.length() - 2, 2 );
+
+	QString content = "";
+	if( params.count() == 0 )
+	{
+		content = "";
+	}
+	else
+	{
+		content = params.at( 0 )->getData();
+	}
+
+	label		= new QLabel( title );
+	container	= new QVBoxLayout;
+	textarea	= new QPlainTextEdit( content );
+
+
+	QFont font = textarea->document()->defaultFont();
+	QFontMetrics metrics = QFontMetrics(font);
+	QSize textSize = metrics.size( 0, textarea->toPlainText() );
+
+	int height	= textSize.height() + 30;
+	int width	= textSize.width() + 30;
+
+	textarea->setMinimumSize( width, height );
+
+	container->addWidget( label );
+	container->addWidget( textarea );
+}
+
+CompareGroup::~CompareGroup()
+{
+
 }

@@ -46,16 +46,16 @@ public:
 	TestInfo( QString name );
 	~TestInfo();
 
-        TestParam	*getParam( int index );
-        TestParam	*getParam( QString name );
-        void            addParam( TestParam *param );
+	TestParam	*getParam( int index );
+	TestParam	*getParam( QString name );
+	void	addParam( TestParam *param );
 	int		getParamCount();
 
 	QString getName() const;
 
 private:
 	QString name;
-        QList< TestParam *> params;
+	QList< TestParam *> params;
 
 };
 

@@ -19,13 +19,24 @@ class Manager;
 class ConfigInfo;
 class TestInfo;
 class Group;
+class BaseGroup;
+class CompareGroup;
 class Comparator;
+class Config;
+class Param;
 
 struct TestParam;
 struct coord
 {
 	int x;
 	int y;
+};
+
+struct LocalGroup
+{
+	QString title;
+	QVector< Config* >	configs;
+	QVector< Param* >	params;
 };
 
 class MainWindow : public QMainWindow
@@ -44,7 +55,10 @@ public:
 	TestInfo	*getCurrentTest()	const;
 	TestParam	*getCurrentParam()	const;
 
-	void	addGroup(Group *group);
+	void	addGroup(BaseGroup *group);
+	void	addCompareGroups(QVector<CompareGroup *> groups);
+	void	addHeader(QString text, int level = 1 );
+	void	addHLine();
 	void	clearGroups();
 	void	loadGroups();
 
@@ -70,13 +84,14 @@ private slots:
 	void on_pushButtonCompare_clicked();
 
 private:
+	void closeEvent(QCloseEvent *event);
 	void createStatusBar();
 	Ui::MainWindow	*ui;
 	ConfigInfo	*info;
 	Comparator	*comparator;
 	Manager		*manager;
 	coord	group_coord;
-	QVector< Group* > groups;
+	QVector< BaseGroup* > groups;
 	Group * no_test_group;
 	Group * no_param_group;
 };

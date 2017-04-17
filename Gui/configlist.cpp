@@ -12,6 +12,11 @@
 ConfigList::ConfigList(QWidget *parent)
 {
 	this->setParent( parent );
+	this->parent = parent;
+//	MainWindow	*window	 = dynamic_cast<MainWindow *>(this->parent());
+//	Manager		*manager = window->getManager();
+//	QObject	*obj = this->parent();
+
 	setSelectionMode( QAbstractItemView::ExtendedSelection	);
 	setDragDropMode(  QAbstractItemView::InternalMove	);
 	setDropIndicatorShown( true );
@@ -33,6 +38,13 @@ ConfigList::ConfigList(Group *group, QWidget *parent) :
 		setDragEnabled( false );
 		setAcceptDrops( false );
 	}
+
+	this->setMinimumSize( 70, 120 );
+	if( !group->hasData() )
+	{
+		this->setMaximumWidth( 150 );
+	}
+//	this->setMaximumSize( 150, 120 );
 }
 
 
@@ -116,6 +128,11 @@ QMimeData *ConfigList::mimeData(const QList<QListWidgetItem *> items) const
 	return data;
 }
 
+QWidget *ConfigList::getParent() const
+{
+	return parent;
+}
+
 void ConfigList::ShowContextMenu(QPoint pos)
 {
 	QMenu menu;
@@ -135,12 +152,19 @@ void ConfigList::ShowItemInfo()
 
 void ConfigList::CreateNewGroup()
 {
-	MainWindow	*window	 = dynamic_cast<MainWindow *>(parent());
-	Manager		*manager = window->getManager();
+	MainWindow	*window	 = dynamic_cast<MainWindow *>( getParent() );
 
-	Group *group = new Group(group->getButtonTitle(), getParams(), window);
-	window->addGroup( group );
-	emit(group->paramEdited());
+	Group *new_group = new Group(group->getButtonTitle(), getParams(), window);
+	window->addGroup( new_group );
+	group->removeParams( getParams() );
+
+	QList<QListWidgetItem *> items = selectedItems();
+	for( int i = 0; i < items.count(); ++i )
+	{
+		delete items[ i ];
+	}
+
+	emit(new_group->paramEdited());
 }
 
 Group *ConfigList::getGroup() const

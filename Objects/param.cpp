@@ -189,7 +189,7 @@ void Param::updateParams(QVector<Param *> params, QString data)
 				child = child.nextSibling();
 			}
 
-			if( params.at( i )->getConfig() )
+			if( ( params.at( i )->getOwner() ) && (params.at( i )->getConfig() ) )
 			{
 				params.at( i )->getConfig()->setChagned( true );
 			}
