@@ -18,6 +18,7 @@ enum StringType
 };
 
 class Param;
+class Manager;
 
 class Utils
 {
@@ -35,6 +36,7 @@ public:
 	static	StringType getStringType(QString str);
 	static	QString spacesToTabs(QString str);
 	static	void	clearLayout( QLayout *layout );
+	static	void	fixAccuracyTestRange( const QString &test_name, Manager *manager );
 
 private:
 	static QVector< QString > StringToVector(QString str);

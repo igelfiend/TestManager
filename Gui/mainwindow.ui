@@ -76,6 +76,13 @@
      <height>20</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menuFixes">
+    <property name="title">
+     <string>Fixes</string>
+    </property>
+    <addaction name="actionFix_range_in_attenuator"/>
+   </widget>
+   <addaction name="menuFixes"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <attribute name="toolBarArea">
@@ -452,6 +459,16 @@
     </layout>
    </widget>
   </widget>
+  <action name="actionFix_range_in_attenuator">
+   <property name="text">
+    <string>Fix range in attenuator</string>
+   </property>
+  </action>
+  <action name="actionTest_1">
+   <property name="text">
+    <string>Test 1</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources/>

@@ -293,4 +293,17 @@
 			<column name="Specification"/>
 		</param>
 	</test>
+	<test name="GagingConnectorsV2">
+		<param path="config/connectors" name="connectors" type="table" format="array"/>
+		<param path="config/ports" name="ports" type="complex"/>
+	</test>
+	<test name="MeasurementAccuracyAcm">
+		<param path="config/min_freq" name="min_freq" type="simple"/>
+		<param path="config/max_freq" name="max_freq" type="simple"/>
+		<param path="config/key_dev_list" name="key_dev_list" type="table" format="array"/>
+		<param path="config/count_ports" name="count_ports" type="simple"/>
+		<param path="config/count_meas" name="count_meas" type="simple"/>
+		<param path="config/calibration" name="calibration bands" type="complex"/>
+		<param path="config/grades" name="grades bands" type="complex"/>
+	</test>
 </tests>

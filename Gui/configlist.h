@@ -18,14 +18,14 @@ class ConfigList : public QListWidget
 	Q_OBJECT
 public:
 	ConfigList(QWidget *parent);
-	ConfigList(Group *group , QWidget *parent = nullptr);
+	ConfigList(Group *group , QWidget *parent = nullptr);	// Конструктор на основе группы
 
 	Group	*getGroup() const;
 	void	setGroup(Group *value);
 
-	QVector<Param *> getParams() const;
+	QVector<Param *> getParams() const;		// Получить параметры выделенных элементов
 
-	QWidget *getParent() const;
+	QWidget *getParent() const;				// Получить родителя
 
 public slots:
 	void	ShowContextMenu(QPoint pos);

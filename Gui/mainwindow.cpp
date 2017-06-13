@@ -89,6 +89,10 @@ void MainWindow::init()
 	item->setCheckState(Qt::Unchecked);
 	ui->listWidgetModes->addItem(item);
 
+	item = new QListWidgetItem("periodic_demo");
+	item->setCheckState(Qt::Unchecked);
+	ui->listWidgetModes->addItem(item);
+
 
 	for( int i = 0; i < info->getTestsCount(); ++i )
 	{
@@ -608,5 +612,17 @@ void MainWindow::closeEvent(QCloseEvent *event)
 		break;
 	case QMessageBox::Cancel:
 		return;
+	}
+}
+
+void MainWindow::on_actionFix_range_in_attenuator_triggered()
+{
+	QStringList tests  = QStringList() << "AccuracyTest"
+									   << "AccuracyTestUncorrectedAndStabilities"
+									   << "HighLowReflection";
+
+	foreach( QString test, tests )
+	{
+		Utils::fixAccuracyTestRange( test, manager );
 	}
 }
