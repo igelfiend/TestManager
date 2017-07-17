@@ -21,7 +21,7 @@ public:
 
 	Param	*getParam(int index) const;
 	Param	*getParam(QString param_name) const;
-	QString	getName() const;
+	virtual QString	getName() const;
 	Config	*getConfig()const;
 	Test	*toTest();
 	Main	*toMain();
@@ -61,8 +61,6 @@ public:
 //	void init();
 	void setTemplateDir(QString path);
 	void setInstructionPath(QString path);
-
-	const QString getName();
 
 private:
 	QString name;

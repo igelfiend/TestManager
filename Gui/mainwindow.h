@@ -84,6 +84,7 @@ private slots:
 	void on_pushButtonCompare_clicked();
 
 	void on_actionFix_range_in_attenuator_triggered();
+	void on_actionAdd_equip_to_periodic_triggered();
 
 private:
 	void closeEvent(QCloseEvent *event);

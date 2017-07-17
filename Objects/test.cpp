@@ -29,11 +29,6 @@ void Test::setInstructionPath(QString path)
 	instruction_path = path;
 }
 
-const QString Test::getName()
-{
-	return name;
-}
-
 Item::Item(QString name, Config *config, QDomNode root)
 {
 	this->name = name;
@@ -150,7 +145,7 @@ void Item::ShowAllParams()
 	qDebug() << "------------" << name << "------------";
 	for( int i = 0; i < params.size(); ++i )
 	{
-		qDebug() << params[ i ]->getName() << ":" << params[ i ]->getData();
+		qDebug() << params[ i ]->getName() << ":" << params[ i ]->getData().toStdString().c_str();
 	}
 
 }

@@ -306,4 +306,37 @@
 		<param path="config/calibration" name="calibration bands" type="complex"/>
 		<param path="config/grades" name="grades bands" type="complex"/>
 	</test>
+	<test name="AccuracyMeasurement304TR">
+		<param path="instruction_name" name="instruction_name" type="simple"/>
+		<param path="config/count_ports" name="count_ports" type="simple"/>
+		<param path="config/noise_floor/source_ports" name="noise_floor/source_ports" type="simple"/>
+		<param path="config/noise_floor/trace_format" name="noise_floor/trace_format" type="simple"/>
+		<param path="config/noise_floor/bands" name="noise_floor bands" type="complex"/>
+		<param path="config/measurement" name="measurement bands" type="complex"/>
+		<param path="config/calculation/uncorrected/directivity" name="calculation directivity" type="bracket_matrix">
+			<column name="Min freq"/>
+			<column name="Max freq"/>
+			<column name="value"/>
+		</param>
+		<param path="config/calculation/uncorrected/source_match" name="calculation source_match" type="bracket_matrix">
+			<column name="Min freq"/>
+			<column name="Max freq"/>
+			<column name="value"/>
+		</param>
+		<param path="config/calculation/uncorrected/load_match" name="calculation load_match" type="bracket_matrix">
+			<column name="Min freq"/>
+			<column name="Max freq"/>
+			<column name="value"/>
+		</param>
+		<param path="config/calculation/residual/directivity" name="calculation directivity" type="bracket_matrix">
+			<column name="Min freq"/>
+			<column name="Max freq"/>
+		</param>
+		<param path="config/calculation/residual/source_match" name="calculation source_match" type="bracket_matrix">
+			<column name="Min freq"/>
+			<column name="Max freq"/>
+		</param>
+		<param path="config/calculation/residual/reflection" name="reflection bands" type="complex"/>
+		<param path="config/calculation/residual/transmission" name="transmission bands" type="complex"/>
+	</test>
 </tests>

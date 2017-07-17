@@ -4,6 +4,7 @@
 #include <QDebug>
 #include <QWidget>
 #include <QChar>
+#include <QDomElement>
 
 #include "utils.h"
 #include "param.h"
@@ -386,6 +387,220 @@ void Utils::fixAccuracyTestRange(const QString &test_name, Manager *manager)
 			prevFreq = endFreq;
 		}
 		qDebug() << QString("fixAccuracyTestRange::in config %1 fixed").arg( conf->getFullName() );
+	}
+}
+
+void Utils::addEquipToPerformance( Manager *manager)
+{
+	qDebug() << "addEquipToPerformance::started()";
+	QStringList N_devices;
+	N_devices		<< "R54"		<< "R60"		<< "R140"		<< "R160"
+					<< "S5048"		<< "S5065"		<< "S5085"		<< "TR1300"
+					<< "TR5048"		<< "Obzor304"	<< "Obzor804"	<< "Obzor808"
+					<< "Obzor814"	<< "C1205"		<< "C1207"		<< "C1209_01"
+					<< "C1209_02"	<< "C1214"		<< "C1409"		<< "C2209"
+					<< "C2409"		<< "C4209"		<< "C4409";
+
+	QStringList mm35_devices;
+	mm35_devices	<< "RP180_01"	<< "RP180_02"	<<  "RP180_03"	<< "C1420"
+					<< "RP5"		<< "RP60"		<< "C1220"		<< "C2220"
+					<< "C2420"		<< "C4220"		<< "C4420";
+
+	QStringList N75_devices;
+	N75_devices << "S7530" << "TR7530";
+
+	QStringList N_and_35mm_devices;
+	N_and_35mm_devices << "R180";
+
+	for( int i = 0; i < manager->getConfigsCount(); ++i )
+	{
+		QString dev_name = manager->getConfig( i )->getMain()->getParam( "device_info/device" )->getData();
+		QStringList dev_list;
+
+		Config	*conf		= manager->getConfig( i );
+		qDebug() << "addEquipToPerformance::processed configuration: " << conf->getFullName();
+
+		for( int j = 0; j < conf->getItemsCount(); ++j )
+		{
+			qDebug() << "addEquipToPerformance::dev list: " << dev_list;
+			Test	*test	= conf->getItem( j )->toTest();
+			if( !test ) continue;
+
+			QDomElement config_node = test->getRoot().firstChildElement("config");
+			qDebug() << "addEquipToPerformance::processed test: " << test->getName();
+//			qDebug() << "addEquipToPerformance::with params: ";
+//			test->ShowAllParams();
+
+			//  -------------------------- Frequency Accuracy ------------------------
+			if( test->getName().contains( "FrequencyAccuracy", Qt::CaseInsensitive ) )
+			{
+				insertNodeAndAddToList( config_node, dev_list, "key_dev_list", "freqCounter,spectrumAn" );
+			}
+			// --------------------------- Power Accuracy ----------------------------
+			else if( test->getName().contains( "PowerAccuracy", Qt::CaseInsensitive ) )
+			{
+				if( mm35_devices.indexOf( dev_name ) != -1 )
+				{
+					insertNodeAndAddToList( config_node, dev_list, "key_dev_list", "powerSensor_Z52" );
+				}
+				else
+				{
+					insertNodeAndAddToList( config_node, dev_list, "key_dev_list", "powerSensor_Z51" );
+				}
+			}
+			// ---------- Harmonic Distortion & NonHarmonicSpurious -------------------
+			else if( test->getName().contains( "HarmonicDistortion",  Qt::CaseInsensitive ) ||
+					 test->getName().contains( "NonHarmonicSpurious", Qt::CaseInsensitive ) )
+			{
+				insertNodeAndAddToList( config_node, dev_list, "key_dev_list", "spectrumAn" );
+			}
+			// ----- Transmission coefficient magnitude and phase accuracy test -------
+			else if( test->getName().contains( "TransCoeffMagPhAcc", Qt::CaseInsensitive ) )
+			{
+				if( dev_name == "Obzor304" )
+				{
+					insertNodeAndAddToList( config_node, dev_list, "key_dev_list", "att20_typeN,att40_typeN,att60_typeN" );
+				}
+				else if( N75_devices.indexOf( dev_name ) != -1 )
+				{
+					insertNodeAndAddToList( config_node, dev_list, "key_dev_list", "att20_typeN75,att40_typeN75" );
+				}
+				else if( mm35_devices.indexOf( dev_name ) != -1 )
+				{
+					insertNodeAndAddToList( config_node, dev_list, "key_dev_list", "att20_35mm,att40_35mm" );
+				}
+				else
+				{
+					insertNodeAndAddToList( config_node, dev_list, "key_dev_list", "att20_typeN,att40_typeN" );
+				}
+			}
+			// ----- Reflection Coefficient Magnitude and Phase Accuracy Test ---------
+			else if( test->getName().contains( "ReflCoeffMagPhAcc", Qt::CaseInsensitive ) )
+			{
+				if( N75_devices.indexOf( dev_name ) != -1 )
+				{
+					insertNodeAndAddToList( config_node, dev_list, "key_dev_list", "airline25ohm_typeN75" );
+				}
+				else if( mm35_devices.indexOf( dev_name ) != -1 )
+				{
+					insertNodeAndAddToList( config_node, dev_list, "key_dev_list", "airline25ohm_35mm" );
+				}
+				else
+				{
+					insertNodeAndAddToList( config_node, dev_list, "key_dev_list", "airline25ohm_typeN" );
+				}
+			}
+			// ---------------------------- Accuracy Measurement -----------------------
+			else if( test->getName().contains( "AccuracyMeasurement", Qt::CaseInsensitive ) )
+			{
+				if( N75_devices.indexOf( dev_name ) != -1 )
+				{
+					insertNodeAndAddToList( config_node, dev_list, "key_dev_list", "calKit_typeN75" );
+				}
+				else if( mm35_devices.indexOf( dev_name ) != -1 )
+				{
+					insertNodeAndAddToList( config_node, dev_list, "key_dev_list", "calKit_35mm" );
+				}
+				else
+				{
+					insertNodeAndAddToList( config_node, dev_list, "key_dev_list", "calKit_typeN" );
+				}
+			}
+			// -------------------- Accuracy Test High and Low Reflection --------------
+			else if( test->getName().contains( "HighLowReflection", Qt::CaseInsensitive ) )
+			{
+				if( N_and_35mm_devices.indexOf( dev_name ) != -1 )
+				{
+					insertNodeAndAddToList( config_node, dev_list, "key_dev_list", "att40_typeN,att40_35mm,"
+																				   "short_typeN_male,short_typeN_female,"
+																				   "short_35mm_female,short_35mm_male" );
+				}
+				else if( mm35_devices.indexOf( dev_name ) != -1 )
+				{
+					insertNodeAndAddToList( config_node, dev_list, "key_dev_list", "att40_35mm,short_35mm_female" );
+				}
+				else
+				{
+					insertNodeAndAddToList( config_node, dev_list, "key_dev_list", "att40_typeN,short_typeN_male,short_typeN_female" );
+				}
+			}
+		}
+
+		qDebug() << "addEquipToPerformance::Inserting Equip block()";
+		for( int j = 0; j < conf->getItemsCount(); ++j )
+		{
+			Item *test	= conf->getItem( j );
+			qDebug() << "addEquipToPerformance::\tChecked test: " << test->getName();
+
+			if( test->getName() == "MainTable" )
+			{
+				qDebug() << "addEquipToPerformance::\t\tMain part found:   " << test->getName();
+				QDomNode prf_node = test->getRoot().parentNode();
+				qDebug() << "addEquipToPerformance::\t\tParent node found: " << prf_node.toElement().tagName();
+				QDomDocument d = prf_node.ownerDocument();
+				prf_node.insertAfter( createEquipItem( dev_list, d ), test->getRoot() );
+				break;
+			}
+		}
+		conf->setChagned( true );
+		manager->setChanged( true );
+	}
+	qDebug() << "addEquipToPerformance::finished()";
+
+}
+
+void Utils::insertNodeAndAddToList(QDomNode &target, QStringList &target_list, const QString &node_name, const QString &data)
+{
+	insertNode( target, node_name, data );
+	addElementsToList( target_list, data );
+}
+
+void Utils::insertNode(QDomNode &target, const QString &node_name, const QString &data)
+{
+
+	QDomElement new_node = target.ownerDocument().createElement( node_name );
+
+	new_node.appendChild( target.ownerDocument().createTextNode( data ) );
+	if( target.childNodes().count() > 0 )
+	{
+		QDomNode first_node = target.firstChild();
+		target.insertBefore( new_node, first_node );
+	}
+	else
+	{
+		target.appendChild( new_node );
+	}
+}
+
+QDomNode Utils::createEquipItem(const QStringList &dev_list, QDomDocument &doc)
+{
+	QDomElement equip = doc.createElement( "item" );
+	equip.setAttribute( "name_template",	"Equipment" );
+	equip.setAttribute( "version_template", "1" );
+	equip.setAttribute( "idd", "Equipment" );
+
+	insertNode( equip, "dir", "templates/Equipment/Equipment_version_1" );
+
+	QDomElement config = doc.createElement( "config" );
+	equip.appendChild( config );
+
+	insertNode( config, "key_dev_list", dev_list.join( ',' ) );
+
+	equip.appendChild( doc.createElement( "initialization" ) );
+	qDebug() << "Utils::createEquipItem::item created with: " << dev_list;
+	return equip;
+}
+
+void Utils::addElementsToList(QStringList &target_list, const QString &data)
+{
+	QStringList data_list = data.split(",");
+	foreach( QString str, data_list )
+	{
+		str = str.trimmed();
+		if( target_list.indexOf( str ) == -1 )
+		{
+			target_list << str;
+		}
 	}
 }
 

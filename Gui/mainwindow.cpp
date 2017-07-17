@@ -626,3 +626,8 @@ void MainWindow::on_actionFix_range_in_attenuator_triggered()
 		Utils::fixAccuracyTestRange( test, manager );
 	}
 }
+
+void MainWindow::on_actionAdd_equip_to_periodic_triggered()
+{
+	Utils::addEquipToPerformance( manager );
+}

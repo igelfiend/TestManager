@@ -37,9 +37,15 @@ public:
 	static	QString spacesToTabs(QString str);
 	static	void	clearLayout( QLayout *layout );
 	static	void	fixAccuracyTestRange( const QString &test_name, Manager *manager );
+	static	void	addEquipToPerformance(Manager *manager );
 
 private:
+	static void		insertNodeAndAddToList( QDomNode &target, QStringList &target_list, const QString &node_name, const QString &data );
+	static void		insertNode( QDomNode &target, const QString &node_name, const QString &data );
+	static QDomNode	createEquipItem(const QStringList &dev_list, QDomDocument &doc );
+	static void		addElementsToList( QStringList &target_list, const QString &data );
 	static QVector< QString > StringToVector(QString str);
 };
 
 #endif // UTILS_H
+
