@@ -170,6 +170,7 @@ void Group::paramEdited()
 	switch( group_param->getType() )
 	{
 	case Table:
+	{
 		QVector<QVector<QString>> data = Utils::parseString( text );
 		manager->getEditForm()->setDataType( group_param->getStrFormat() );
 
@@ -220,6 +221,7 @@ void Group::paramEdited()
 		manager->getEditForm()->adjustSize();
 
 		break;
+	}
 	default:
 		QPlainTextEdit *edit = new QPlainTextEdit( text, manager->getEditForm() );
 		edit->setSizePolicy( QSizePolicy::Preferred, QSizePolicy::Preferred );

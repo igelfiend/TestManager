@@ -380,7 +380,7 @@ void Utils::fixAccuracyTestRange(const QString &test_name, const QString &versio
 					count_points_node.appendChild( txt_node );
 				}
 
-				conf->setChagned( true );
+				conf->setChanged( true );
 				manager->setChanged( true );
 			}
 
@@ -557,7 +557,7 @@ void Utils::addEquipToPerformance( Manager *manager)
 				method = method.nextSibling();
 			}
 		}
-		conf->setChagned( true );
+		conf->setChanged( true );
 		manager->setChanged( true );
 	}
 	qDebug() << "addEquipToPerformance::finished()";

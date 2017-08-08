@@ -45,7 +45,7 @@ public:
 	void	setPath(const QString &value);
 
 	bool	isChanged() const;
-	void	setChagned( bool flag );
+	void	setChanged( bool flag );
 
 private:
 	QString	device;
