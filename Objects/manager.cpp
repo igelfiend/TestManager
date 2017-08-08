@@ -89,7 +89,7 @@ void Manager::Load(QStringList devices, QStringList modes)
 			qDebug() << path << "loaded!";
 			config_file->close();
 
-			Config * config = new Config( devices.at( i ), modes.at( j ), config_dom );
+			Config *config = new Config( devices.at( i ), modes.at( j ), config_dom );
 			config->setManager( this );
 			config->setPath( path );
 			config->init();
@@ -126,7 +126,7 @@ void Manager::Save()
 //			str << Utils::spacesToTabs( doc.toString() );
 			doc.save( str, 4 );
 			file.close();
-			configs.at( i )->setChagned( false );
+			configs.at( i )->setChanged( false );
 		}
 		else
 		{
@@ -196,7 +196,7 @@ bool Manager::isChanged() const
 
 void Manager::setChanged(bool value)
 {
-	window->statusBar()->showMessage( "Data chagned! Press Save to confirm changes" );
+	window->statusBar()->showMessage( "Data changed! Press Save to confirm changes" );
 	changed = value;
 }
 

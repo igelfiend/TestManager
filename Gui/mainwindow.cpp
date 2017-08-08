@@ -93,10 +93,11 @@ void MainWindow::init()
 	item->setCheckState(Qt::Unchecked);
 	ui->listWidgetModes->addItem(item);
 
-
+	combobox_tests.clear();
 	for( int i = 0; i < info->getTestsCount(); ++i )
 	{
-		ui->comboBoxTests->addItem( info->getTest( i )->getName() );
+		ui->comboBoxTests->addItem( info->getTest( i )->getVersionedName() );
+		combobox_tests << QPair< QString, QString >( info->getTest( i )->getName(), info->getTest( i )->getVersion() );
 	}
 
 	if( ui->comboBoxTests->count() > 0 )
@@ -129,8 +130,8 @@ QListWidget *MainWindow::getListModes()
 
 TestInfo *MainWindow::getCurrentTest() const
 {
-	QString name_test = ui->comboBoxTests->currentText();
-	return manager->getConfigInfo()->getTest( name_test );
+	uint curr_index = ui->comboBoxTests->currentIndex();
+	return manager->getConfigInfo()->getTest( combobox_tests.at( curr_index ).first, combobox_tests.at( curr_index ).second );
 }
 
 TestParam *MainWindow::getCurrentParam() const
@@ -258,11 +259,14 @@ void MainWindow::clearGroups()
 
 void MainWindow::loadGroups()
 {
-	QString test_name	= ui->comboBoxTests->currentText();
+	uint current_index	=  ui->comboBoxTests->currentIndex();
+	QString test_name	= combobox_tests.at( current_index ).first;
+	QString version		= combobox_tests.at( current_index ).second;
 	QString param_name	= ui->comboBoxParameters->currentText();
 
-	qDebug() << "Test:  " << test_name;
-	qDebug() << "Param: " << param_name;
+	qDebug() << "Test:    " << test_name;
+	qDebug() << "Version: " << version;
+	qDebug() << "Param:   " << param_name;
 
 	QVector< Config* >	configs;
 
@@ -284,7 +288,7 @@ void MainWindow::loadGroups()
 	{
 		LocalGroup group;
 
-		Item * test	= configs.at( 0 )->getItem( test_name );
+		Item * test	= configs.at( 0 )->getItem( test_name, version );
 		if( !test )
 		{
 			no_tests.configs.append( configs.at( 0 ) );
@@ -298,6 +302,7 @@ void MainWindow::loadGroups()
 //			qDebug() << "No such param in test";
 //			qDebug() << "Test has:";
 //			test->ShowAllParams();
+
 			no_params.configs.append(configs.at( 0 ));
 			configs.removeAt( 0 );
 			continue;
@@ -315,14 +320,15 @@ void MainWindow::loadGroups()
 		group.params.append( param );
 		for(int i = 1; i < configs.count(); ++i )
 		{
-			if( ( !configs.at( i )->getItem( test_name ) ) || ( !configs.at( i )->getItem( test_name )->getParam( param_name  ) ) )
+			if( ( !configs.at( i )->getItem( test_name, version ) ) ||
+				( !configs.at( i )->getItem( test_name, version )->getParam( param_name  ) ) )
 			{
 				continue;
 			}
 
-			if( param->compare( configs.at( i )->getItem( test_name )->getParam( param_name )))
+			if( param->compare( configs.at( i )->getItem( test_name, version )->getParam( param_name )))
 			{
-				group.params.append( configs.at( i )->getItem( test_name )->getParam( param_name ) );
+				group.params.append( configs.at( i )->getItem( test_name, version )->getParam( param_name ) );
 				configs.removeAt( i-- );
 			}
 		}
@@ -463,66 +469,6 @@ void MainWindow::on_pushButtonCheckAvailable_clicked()
 
 void MainWindow::on_pushButtonSave_clicked()
 {
-//	QString str = "[[1, 2, 3, 4],[5, 6, 7, 8]]";
-//	QString str2 = "[1, 2, 3, 4],[5, 6, 7, 8]";
-//	QString str3 = "[1, 2, 3, 4, 5, 6, 7, 8]";
-//	QString str4 = "1, 2, 3, 4, 5, 6, 7, 8";
-
-//	qDebug() << "----STR1----";
-//	QVector<QVector< QString >> result = Utils::parseString(str);
-//	for( int i = 0; i < result.count(); ++i )
-//	{
-//		for( int j = 0; j < result.at( i ).count(); ++j )
-//		{
-//			qDebug() << result[ i ][ j ];
-//		}
-//		qDebug() << "---------------";
-//	}
-//	qDebug() << "--CONVERT BACK--";
-//	qDebug() << Utils::saveToString(result, StringType::BracketsMatrix);
-//	qDebug() << "---------------";
-//	qDebug() << "----STR2------";
-//	result = Utils::parseString(str2);
-//	for( int i = 0; i < result.count(); ++i )
-//	{
-//		for( int j = 0; j < result.at( i ).count(); ++j )
-//		{
-//			qDebug() << result[ i ][ j ];
-//		}
-//		qDebug() << "-------------";
-//	}
-//	qDebug() << "--CONVERT BACK--";
-//	qDebug() << Utils::saveToString(result, StringType::Matrix);
-//	qDebug() << "-------------";
-//	qDebug() << "----STR3----";
-//	result = Utils::parseString(str3);
-//	for( int i = 0; i < result.count(); ++i )
-//	{
-//		for( int j = 0; j < result.at( i ).count(); ++j )
-//		{
-//			qDebug() << result[ i ][ j ];
-//		}
-//		qDebug() << "-------------";
-//	}
-//	qDebug() << "--CONVERT BACK--";
-//	qDebug() << Utils::saveToString(result, StringType::BracketsArray);
-//	qDebug() << "-------------";
-//	qDebug() << "----STR4----";
-//	result = Utils::parseString(str4);
-//	for( int i = 0; i < result.count(); ++i )
-//	{
-//		for( int j = 0; j < result.at( i ).count(); ++j )
-//		{
-//			qDebug() << result[ i ][ j ];
-//		}
-//		qDebug() << "-------------";
-//	}
-//	qDebug() << "--CONVERT BACK--";
-//	qDebug() << Utils::saveToString(result, StringType::Array);
-//	qDebug() << "-------------";
-//	qDebug() << "-------------";
-
-
 	manager->Save();
 }
 
@@ -621,9 +567,13 @@ void MainWindow::on_actionFix_range_in_attenuator_triggered()
 									   << "AccuracyTestUncorrectedAndStabilities"
 									   << "HighLowReflection";
 
-	foreach( QString test, tests )
+	QStringList versions = QStringList() << "1.0"
+										 << "1.0"
+										 << "1.0";
+
+	for( int i = 0; i < tests.count(); ++i )
 	{
-		Utils::fixAccuracyTestRange( test, manager );
+		Utils::fixAccuracyTestRange( tests[ i ], versions[ i ], manager );
 	}
 }
 

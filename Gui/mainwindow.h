@@ -95,6 +95,7 @@ private:
 	Manager		*manager;
 	coord	group_coord;
 	QVector< BaseGroup* > groups;
+	QVector< QPair< QString, QString > > combobox_tests;
 	Group * no_test_group;
 	Group * no_param_group;
 };

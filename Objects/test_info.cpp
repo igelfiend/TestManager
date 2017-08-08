@@ -52,7 +52,7 @@ void ConfigInfo::init()
 
 	while( !test_node.isNull() )
 	{
-		TestInfo * test = new TestInfo(test_node.attribute("name", ""));
+		TestInfo *test = new TestInfo( test_node.attribute("name", ""), test_node.attribute("version_template", "") );
 		QDomElement param_node = test_node.firstChildElement("param");
 
 		while( !param_node.isNull() )
@@ -138,11 +138,12 @@ TestInfo *ConfigInfo::getTest(int index) const
 	return nullptr;
 }
 
-TestInfo *ConfigInfo::getTest(QString name) const
+TestInfo *ConfigInfo::getTest( const QString &name, const QString &version ) const
 {
 	for( int i = 0; i < tests.count(); ++i )
 	{
-		if( tests.at( i )->getName() == name )
+		if( ( tests.at( i )->getName()	  == name ) &&
+			( tests.at( i )->getVersion() == version ) )
 		{
 			return tests.at( i );
 		}
@@ -163,21 +164,6 @@ Manager *ConfigInfo::getManager() const
 void ConfigInfo::setManager(Manager *value)
 {
 	manager = value;
-}
-
-TestInfo::TestInfo()
-{
-
-}
-
-TestInfo::TestInfo(QString name)
-{
-	this->name = name;
-}
-
-TestInfo::~TestInfo()
-{
-
 }
 
 TestParam *TestInfo::getParam( int index)
@@ -214,6 +200,16 @@ int TestInfo::getParamCount()
 QString TestInfo::getName() const
 {
 	return name;
+}
+
+QString TestInfo::getVersion() const
+{
+	return version;
+}
+
+QString TestInfo::getVersionedName() const
+{
+	return QString( "%1 %2" ).arg( name ).arg( version );
 }
 
 

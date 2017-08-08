@@ -61,11 +61,12 @@ void Comparator::execute()
 
 		//----Checking included test in stored tests
 		QString name_test = info->getTest( i )->getName();
+		QString version = info->getTest( i )->getVersion();
 
 		QVector<Config *>	valid_configs;
 		for( int j = 0; j < configs.count(); ++j )
 		{
-			if( configs.at( j )->getItem( name_test ) )
+			if( configs.at( j )->getItem( name_test, version ) )
 			{
 				valid_configs.append( configs.at( j ) );
 			}
@@ -95,7 +96,7 @@ void Comparator::execute()
 			QVector<Param *> valid_params;
 			for( int k = 0; k < valid_configs.count(); ++k )
 			{
-				Param *param = valid_configs.at( k )->getItem( name_test )->getParam( name_param );
+				Param *param = valid_configs.at( k )->getItem( name_test, version )->getParam( name_param );
 				if( param )
 				{
 					valid_params.append( param );

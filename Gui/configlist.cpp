@@ -13,6 +13,7 @@ ConfigList::ConfigList(QWidget *parent)
 {
 	this->setParent( parent );
 	this->parent = parent;
+	fAddingGroup = false;
 //	MainWindow	*window	 = dynamic_cast<MainWindow *>(this->parent());
 //	Manager		*manager = window->getManager();
 //	QObject	*obj = this->parent();
@@ -128,6 +129,11 @@ QMimeData *ConfigList::mimeData(const QList<QListWidgetItem *> items) const
 	return data;
 }
 
+bool ConfigList::isAddingGroup() const
+{
+	return fAddingGroup;
+}
+
 QWidget *ConfigList::getParent() const
 {
 	return parent;
@@ -152,6 +158,7 @@ void ConfigList::ShowItemInfo()
 
 void ConfigList::CreateNewGroup()
 {
+	fAddingGroup = true;
 	MainWindow	*window	 = dynamic_cast<MainWindow *>( getParent() );
 
 	Group *new_group = new Group(group->getButtonTitle(), getParams(), window);
@@ -159,12 +166,14 @@ void ConfigList::CreateNewGroup()
 	group->removeParams( getParams() );
 
 	QList<QListWidgetItem *> items = selectedItems();
+
+	emit(new_group->paramEdited());
+
 	for( int i = 0; i < items.count(); ++i )
 	{
 		delete items[ i ];
 	}
-
-	emit(new_group->paramEdited());
+	fAddingGroup = false;
 }
 
 Group *ConfigList::getGroup() const

@@ -36,7 +36,7 @@ public:
 	static	StringType getStringType(QString str);
 	static	QString spacesToTabs(QString str);
 	static	void	clearLayout( QLayout *layout );
-	static	void	fixAccuracyTestRange( const QString &test_name, Manager *manager );
+	static	void	fixAccuracyTestRange(const QString &test_name, const QString &version, Manager *manager );
 	static	void	addEquipToPerformance(Manager *manager );
 
 private:

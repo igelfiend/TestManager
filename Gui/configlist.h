@@ -27,6 +27,8 @@ public:
 
 	QWidget *getParent() const;				// Получить родителя
 
+	bool isAddingGroup() const;
+
 public slots:
 	void	ShowContextMenu(QPoint pos);
 	void	ShowItemInfo();
@@ -42,6 +44,7 @@ protected:
 private:
 	Group	*group;
 	QWidget	*parent;
+	bool	fAddingGroup;
 };
 
 

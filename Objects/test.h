@@ -19,6 +19,7 @@ public:
 	virtual	void init();
 	void	addParam(Param * param);
 
+	QString getVersion() const;
 	Param	*getParam(int index) const;
 	Param	*getParam(QString param_name) const;
 	virtual QString	getName() const;
@@ -29,14 +30,17 @@ public:
 	bool removeParam(int index);
 	bool removeParam(QString param_name);
 
+	void setVersion(const QString &value);
+
 	const QDomNode getRoot() const;
 
 	void ShowAllParams();
 
 
 protected:
-	QString	name;
-	Config	*config;
+	QString		name;
+	QString		version;
+	Config		*config;
 	QDomNode	root;
 	QList<Param *> params;
 };
@@ -55,16 +59,19 @@ private:
 class Test: public Item
 {
 public:
-	Test(QString name, Config * config, QDomNode root);
+	Test(QString name, Config *config, QDomNode root);
 	virtual ~Test();
 
 //	void init();
-	void setTemplateDir(QString path);
-	void setInstructionPath(QString path);
+	void setTemplateDir(const QString &path);
+	void setInstructionPath(const QString &path);
+	void setKeyName(const QString &value);
+
+
+	QString getKeyName() const;
 
 private:
-	QString name;
-	QString version;
+	QString key_name;
 	QString template_dir;
 	QString instruction_path;
 };

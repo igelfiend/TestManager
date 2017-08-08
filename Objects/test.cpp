@@ -19,14 +19,34 @@ Test::~Test()
 
 }
 
-void Test::setTemplateDir(QString path)
+void Test::setTemplateDir(const QString &path)
 {
 	template_dir = path;
 }
 
-void Test::setInstructionPath(QString path)
+void Test::setInstructionPath(const QString &path)
 {
 	instruction_path = path;
+}
+
+QString Item::getVersion() const
+{
+	return version;
+}
+
+QString Test::getKeyName() const
+{
+	return key_name;
+}
+
+void Test::setKeyName(const QString &value)
+{
+	key_name = value;
+}
+
+void Item::setVersion(const QString &value)
+{
+	version = value;
 }
 
 Item::Item(QString name, Config *config, QDomNode root)
@@ -46,8 +66,8 @@ Item::~Item()
 
 void Item::init()
 {
-	ConfigInfo * info = config->getManager()->getConfigInfo();
-	TestInfo * test = info->getTest( name );
+	ConfigInfo	*info = config->getManager()->getConfigInfo();
+	TestInfo	*test = info->getTest( name, version );
 
 	if( !test )
 	{

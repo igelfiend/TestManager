@@ -118,6 +118,10 @@ Param *Group::getGroupParam() const
 
 void Group::rowChanged(int row)
 {
+	if( list->isAddingGroup() )
+	{
+		return;
+	}
 	qDebug() << "Selected " << row << " row";
 	if( row != -1 )
 	{
@@ -154,7 +158,7 @@ void Group::paramEdited()
 		return;
 	}
 
-	Manager *manager	= params.at( 0 )->getOwner()->getConfig()->getManager();
+	Manager *manager	= params.first()->getOwner()->getConfig()->getManager();
 	QString	text		= group_param->getData();
 
 	Utils::clearLayout( manager->getEditForm()->getLayout() );
@@ -166,8 +170,6 @@ void Group::paramEdited()
 	switch( group_param->getType() )
 	{
 	case Table:
-	{
-
 		QVector<QVector<QString>> data = Utils::parseString( text );
 		manager->getEditForm()->setDataType( group_param->getStrFormat() );
 
@@ -202,11 +204,11 @@ void Group::paramEdited()
 		plus->setSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum );
 		plus->setMaximumWidth( 50 );
 
-		connections << QObject::connect(plus,	SIGNAL(clicked(bool)),
-										table,	SLOT(insertRowWhereSelected(bool)));
+		connections << QObject::connect( plus,	SIGNAL(clicked(bool)),
+										 table,	SLOT(insertRowWhereSelected(bool)));
 
-		connections << QObject::connect(minus,	SIGNAL(clicked(bool)),
-										table,	SLOT(removeRowWhereSelected(bool)));
+		connections << QObject::connect( minus,	SIGNAL(clicked(bool)),
+										 table,	SLOT(removeRowWhereSelected(bool)));
 
 
 		qDebug() << "Columns = " << columns;
@@ -218,7 +220,6 @@ void Group::paramEdited()
 		manager->getEditForm()->adjustSize();
 
 		break;
-	}
 	default:
 		QPlainTextEdit *edit = new QPlainTextEdit( text, manager->getEditForm() );
 		edit->setSizePolicy( QSizePolicy::Preferred, QSizePolicy::Preferred );

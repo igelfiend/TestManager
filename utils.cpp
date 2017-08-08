@@ -309,7 +309,7 @@ void Utils::clearLayout(QLayout *layout)
 	}
 }
 
-void Utils::fixAccuracyTestRange(const QString &test_name, Manager *manager)
+void Utils::fixAccuracyTestRange(const QString &test_name, const QString &version, Manager *manager)
 {
 	qDebug() << "fixAccuracyTestRange::started()";
 	qDebug() << "fixAccuracyTestRange::test name: " << test_name;
@@ -317,7 +317,7 @@ void Utils::fixAccuracyTestRange(const QString &test_name, Manager *manager)
 	for( int i = 0; i < conf_count; ++i )
 	{
 		Config	*conf		= manager->getConfig( i );
-		Test	*conf_test	= conf->getItem( test_name )->toTest();
+		Test	*conf_test	= conf->getItem( test_name, version )->toTest();
 		if( !conf_test )
 		{
 			qDebug() << QString("fixAccuracyTestRange::in config %1 no item %2").arg( conf->getFullName() ).arg( test_name );
@@ -526,6 +526,7 @@ void Utils::addEquipToPerformance( Manager *manager)
 			}
 		}
 
+		// ---------------- Insert Equip Item in prf file -------------------------------
 		qDebug() << "addEquipToPerformance::Inserting Equip block()";
 		for( int j = 0; j < conf->getItemsCount(); ++j )
 		{
@@ -540,6 +541,20 @@ void Utils::addEquipToPerformance( Manager *manager)
 				QDomDocument d = prf_node.ownerDocument();
 				prf_node.insertAfter( createEquipItem( dev_list, d ), test->getRoot() );
 				break;
+			}
+		}
+
+		// ---------------- Add Equipment if there is some select_methods ----------------
+		QDomNode main_root = conf->getMain()->getRoot();
+		QDomElement select_method = main_root.firstChildElement( "select_method" );
+		if( !select_method.isNull() )
+		{
+			QDomNode method = select_method.firstChild();
+			while( !method.isNull() )
+			{
+				QDomElement tests = method.firstChildElement( "tests" );
+				tests.firstChild().setNodeValue( tests.text() + ",Equipment" );
+				method = method.nextSibling();
 			}
 		}
 		conf->setChagned( true );
@@ -576,7 +591,7 @@ QDomNode Utils::createEquipItem(const QStringList &dev_list, QDomDocument &doc)
 {
 	QDomElement equip = doc.createElement( "item" );
 	equip.setAttribute( "name_template",	"Equipment" );
-	equip.setAttribute( "version_template", "1" );
+	equip.setAttribute( "version_template", "1.0" );
 	equip.setAttribute( "idd", "Equipment" );
 
 	insertNode( equip, "dir", "templates/Equipment/Equipment_version_1" );

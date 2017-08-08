@@ -31,7 +31,7 @@ public:
 	int	getItemsCount()	const;
 
 	Item	*getItem(int index) const;
-	Item	*getItem(QString name) const;
+	Item	*getItem(const QString &name, const QString &version) const;
 
 	QString getFullName() const;
 	void	printParams();

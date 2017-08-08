@@ -8,7 +8,7 @@
 enum ParamType
 {
 	Simple,
-        Table,
+	Table,
 	Complex
 };
 
@@ -26,7 +26,7 @@ public:
 	void	init();
 
 	TestInfo    *getTest( int index ) const;
-	TestInfo    *getTest( QString name ) const;
+	TestInfo    *getTest(const QString &name , const QString &version) const;
 
 	int	getTestsCount() const;
 
@@ -42,19 +42,23 @@ private:
 class TestInfo
 {
 public:
-	TestInfo();
-	TestInfo( QString name );
-	~TestInfo();
+	TestInfo(){}
+	TestInfo( const QString &_name, const QString &_version ):
+		name( _name ), version( _version ){}
+	~TestInfo(){}
 
 	TestParam	*getParam( int index );
 	TestParam	*getParam( QString name );
-	void	addParam( TestParam *param );
-	int		getParamCount();
+	int			getParamCount();
+	QString		getName() const;
+	QString		getVersion() const;
+	QString		getVersionedName() const;
 
-	QString getName() const;
+	void		addParam( TestParam *param );
 
 private:
 	QString name;
+	QString version;
 	QList< TestParam *> params;
 
 };

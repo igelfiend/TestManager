@@ -148,7 +148,7 @@ void Param::updateParams(QVector<Param *> params, QString data)
 
 			if( ( params.at( i )->getOwner() ) && (params.at( i )->getConfig() ) )
 			{
-				params.at( i )->getConfig()->setChagned( true );
+				params.at( i )->getConfig()->setChanged( true );
 			}
 		}
 	}
@@ -191,7 +191,7 @@ void Param::updateParams(QVector<Param *> params, QString data)
 
 			if( ( params.at( i )->getOwner() ) && (params.at( i )->getConfig() ) )
 			{
-				params.at( i )->getConfig()->setChagned( true );
+				params.at( i )->getConfig()->setChanged( true );
 			}
 		}
 	}

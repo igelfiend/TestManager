@@ -77,6 +77,9 @@
     </rect>
    </property>
    <widget class="QMenu" name="menuFixes">
+    <property name="styleSheet">
+     <string notr="true">content: none;</string>
+    </property>
     <property name="title">
      <string>Fixes</string>
     </property>

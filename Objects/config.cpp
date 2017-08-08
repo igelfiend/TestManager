@@ -33,7 +33,9 @@ void Config::init()
 		}
 		else
 		{
-			Test * test = new Test(node.toElement().attribute("idd"), this, node);
+			Test * test = new Test( node.toElement().attribute( "idd" ), this, node );
+			test->setVersion( node.toElement().attribute( "version_template" ) );
+			test->setKeyName( node.toElement().attribute( "key", "" ) );
 			items.append(test);
 		}
 		node = node.nextSibling();
@@ -96,8 +98,7 @@ bool Config::removeTest(QString test_name)
 {
 	for( int i = 1; i < items.size(); ++i)
 	{
-		Test * test = items.at( i )->toTest();
-		if (test->getName() == test_name)
+		if (items.at( i )->getName() == test_name)
 		{
 			items.removeAt( i );
 			return true;
@@ -125,11 +126,12 @@ Item *Config::getItem(int index) const
 	return nullptr;
 }
 
-Item *Config::getItem(QString name) const
+Item *Config::getItem( const QString &name, const QString &version ) const
 {
 	for( int i = 0; i < items.count(); ++i )
 	{
-		if( items.at( i )->getName() == name )
+		if( ( items.at( i )->getName()	  == name ) &&
+			( items.at( i )->getVersion() == version ) )
 		{
 			return items.at( i );
 		}
@@ -186,7 +188,7 @@ bool Config::isChanged() const
 	return changed;
 }
 
-void Config::setChagned(bool flag)
+void Config::setChanged(bool flag)
 {
 	changed = flag;
 }
