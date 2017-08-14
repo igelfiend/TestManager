@@ -5,6 +5,8 @@
 #include <QObject>
 #include <QPushButton>
 
+#include <utils.h>
+
 class QString;
 class QBoxLayout;
 class QLabel;
@@ -73,8 +75,10 @@ private:
 	void	initPtr();
 	Param	*group_param;
 	QLabel	*lb;
+
 	QPushButton *button;
 	ConfigList	*list;
+	FIELDS	fields;
 
 public slots:
 	void	rowChanged( int row );

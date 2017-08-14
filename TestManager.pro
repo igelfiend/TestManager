@@ -31,7 +31,8 @@ SOURCES += main.cpp\
     Objects/test.cpp \
     Objects/test_info.cpp \
     Gui/tableparam.cpp \
-    Objects/comparator.cpp
+    Objects/comparator.cpp \
+    Gui/spoilergroupbox.cpp
 
 HEADERS  += utils.h \
     Gui/configlist.h \
@@ -45,7 +46,8 @@ HEADERS  += utils.h \
     Objects/test.h \
     Objects/test_info.h \
     Gui/tableparam.h \
-    Objects/comparator.h
+    Objects/comparator.h \
+    Gui/spoilergroupbox.h
 
 FORMS    += Gui/mainwindow.ui \
     Gui/editparamform.ui

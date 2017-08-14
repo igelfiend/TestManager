@@ -7,6 +7,8 @@
 #include <QVector>
 #include <QLayout>
 
+#define FIELDS QVector< QPair< QDomNode, QTextEdit* > >
+
 enum StringType
 {
 	Array,
@@ -19,6 +21,9 @@ enum StringType
 
 class Param;
 class Manager;
+class SpoilerGroupBox;
+class QGroupBox;
+class QTextEdit;
 
 class Utils
 {
@@ -36,8 +41,15 @@ public:
 	static	StringType getStringType(QString str);
 	static	QString spacesToTabs(QString str);
 	static	void	clearLayout( QLayout *layout );
+	static QDomText TextInside( QDomNode node );
+	static void		removeChilds(QDomNode &node );
+
 	static	void	fixAccuracyTestRange(const QString &test_name, const QString &version, Manager *manager );
+
 	static	void	addEquipToPerformance(Manager *manager );
+
+	static	bool	NodeIsFieldType( const QDomNode &node );
+	static	SpoilerGroupBox	*NodeToGroupBox(const QDomNode &node, FIELDS &fields);
 
 private:
 	static void		insertNodeAndAddToList( QDomNode &target, QStringList &target_list, const QString &node_name, const QString &data );

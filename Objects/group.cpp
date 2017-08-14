@@ -10,6 +10,8 @@
 #include <QDebug>
 #include <QTableWidget>
 #include <QHeaderView>
+#include <QGroupBox>
+#include <QScrollArea>
 
 #include "config.h"
 #include "param.h"
@@ -18,9 +20,9 @@
 #include "editparamform.h"
 #include "mainwindow.h"
 #include "configlist.h"
-#include "utils.h"
 #include "test_info.h"
 #include "tableparam.h"
+#include "spoilergroupbox.h"
 
 Group::Group()
 {
@@ -222,7 +224,21 @@ void Group::paramEdited()
 
 		break;
 	}
+	case Complex:
+	{
+		qDebug() << "Complex case";
+		fields.clear();
+		SpoilerGroupBox *gbox	= Utils::NodeToGroupBox( group_param->getNode(), fields );
+		QScrollArea *area		= new QScrollArea();
+		area->setWidgetResizable( true );
+		area->setWidget( gbox );
+		manager->getEditForm()->getLayout()->addWidget( area );
+//		manager->getEditForm()->setMinimumSize( 600, 800 );
+
+		break;
+	}
 	default:
+		qDebug() << "Default case";
 		QPlainTextEdit *edit = new QPlainTextEdit( text, manager->getEditForm() );
 		edit->setSizePolicy( QSizePolicy::Preferred, QSizePolicy::Preferred );
 		edit->setMinimumSize( 500, 300 );
@@ -251,18 +267,39 @@ void Group::editAccepted()
 	}
 
 	manager->setChanged( true );
-	EditParamForm	*edit_form	= manager->getEditForm();
-	QString			new_data	= edit_form->getText();
-	qDebug() << "NEW DATA: " << new_data;
 
 	QVector<Param *> params_all;
 	params_all.append( params );
 	params_all.append( group_param );
 
-	Param::updateParams( params_all, new_data );
-
-	if( params_all.at( 0 )->getType() != ParamType::Complex )
+	QString new_data;
+	if( param_info->getParamType() == Complex )
 	{
+		for( int i = 0; i < fields.count(); ++i )
+		{
+			QString content = fields[ i ].second->toPlainText();
+			QDomText txt = fields[ i ].first.ownerDocument().createTextNode( content );
+			Utils::removeChilds( fields[ i ].first );
+
+			fields[ i ].first.appendChild( txt );
+		}
+
+		QString str;
+		QTextStream s(&str);
+		group_param->getNode().save(s, QDomNode::CDATASectionNode);
+
+		qDebug() << "Updated node: ";
+		qDebug() << str.toStdString().c_str();
+
+		Param::updateParams( params_all, str );
+	}
+	else
+	{
+		EditParamForm	*edit_form	= manager->getEditForm();
+		new_data	= edit_form->getText();
+		qDebug() << "NEW DATA: " << new_data;
+
+		Param::updateParams( params_all, new_data );
 		button->setText( new_data );
 	}
 }
@@ -449,7 +486,7 @@ CompareGroup::CompareGroup(QVector<Param *> params, MainWindow *window):
 
 	QFont font = textarea->document()->defaultFont();
 	QFontMetrics metrics = QFontMetrics(font);
-	QSize textSize = metrics.size( 0, textarea->toPlainText() );
+	QSize textSize		 = metrics.size( 0, textarea->toPlainText() );
 
 	int height	= textSize.height() + 30;
 	int width	= textSize.width() + 30;

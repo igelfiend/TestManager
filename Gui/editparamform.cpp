@@ -12,6 +12,7 @@ EditParamForm::EditParamForm(QWidget *parent) :
 	ui(new Ui::EditParamForm)
 {
 	ui->setupUi(this);
+	this->setWindowFlags(this->windowFlags() | Qt::WindowMinMaxButtonsHint);
 }
 
 EditParamForm::~EditParamForm()
@@ -34,6 +35,9 @@ QString EditParamForm::getText() const
 	case Table:
 		result = Utils::saveToString( getTableData(), data_type );
 		return result;
+
+	case Complex:
+		return QString();
 
 	default:
 		QPlainTextEdit *edit = dynamic_cast<QPlainTextEdit *>( ui->verticalLayout_3->itemAt( 0 )->widget() );

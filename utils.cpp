@@ -5,10 +5,16 @@
 #include <QWidget>
 #include <QChar>
 #include <QDomElement>
+#include <QGroupBox>
+#include <QTextEdit>
+#include <QFormLayout>
+#include <QLabel>
 
 #include "utils.h"
 #include "param.h"
 #include "manager.h"
+#include "spoilergroupbox.h"
+
 
 Utils::Utils()
 {
@@ -309,6 +315,20 @@ void Utils::clearLayout(QLayout *layout)
 	}
 }
 
+QDomText Utils::TextInside(QDomNode node)
+{
+	QDomNodeList nodes = node.childNodes();
+	for( int i = 0; i < nodes.count(); ++i )
+	{
+		if( nodes.at( i ).isText() )
+		{
+			return nodes.at( i ).toText();
+		}
+	}
+
+	return QDomText();
+}
+
 void Utils::fixAccuracyTestRange(const QString &test_name, const QString &version, Manager *manager)
 {
 	qDebug() << "fixAccuracyTestRange::started()";
@@ -564,6 +584,67 @@ void Utils::addEquipToPerformance( Manager *manager)
 
 }
 
+bool Utils::NodeIsFieldType(const QDomNode &node)
+{
+	qDebug() << "checking node " << node.toElement().tagName();
+	bool fIsField = true;
+
+	QDomNodeList children = node.childNodes();
+	for( int i = 0; i < children.count(); ++i )
+	{
+		if( !children.at( i ).isComment() && !children.at( i ).isText() )
+		{
+			qDebug() << "at " << i << " not comment and not text";
+			fIsField = false;
+			break;
+		}
+	}
+
+	return fIsField;
+}
+
+SpoilerGroupBox *Utils::NodeToGroupBox( const QDomNode &node, FIELDS &fields )
+{
+	QString title	= node.toElement().tagName();
+	SpoilerGroupBox *gbox = new SpoilerGroupBox( title );
+//	gbox->setCheckable( true );
+//	gbox->setStyleSheet( "QGroupBox "
+//						 "{"
+//							"border: 1px solid gray;"
+//							"border-radius: 3px;"
+//							"padding: 10px;	"
+//						 "}" );
+	QFormLayout *gbox_layout = new QFormLayout();
+	gbox->setLayout( gbox_layout );
+
+	QDomNodeList children = node.childNodes();
+	for( int i = 0; i < children.count(); ++i )
+	{
+		if( NodeIsFieldType( children.at( i ) ) )
+		{
+			qDebug() << "data in text node: " << TextInside( children.at( i ) ).data();
+			QTextEdit *edit	= new QTextEdit( TextInside( children.at( i ) ).data(), gbox );
+			edit->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding );
+			edit->setMaximumHeight( 25 );
+			edit->setMinimumHeight( 25 );
+
+			gbox_layout->addRow( children.at( i ).toElement().tagName(), edit );
+
+			QPair< QDomNode, QTextEdit* > field;
+			field.first		= children.at( i );
+			field.second	= edit;
+
+			fields << field;
+		}
+		else
+		{
+			gbox_layout->addRow( NodeToGroupBox( children.at( i ), fields ) );
+		}
+	}
+
+	return gbox;
+}
+
 void Utils::insertNodeAndAddToList(QDomNode &target, QStringList &target_list, const QString &node_name, const QString &data)
 {
 	insertNode( target, node_name, data );
@@ -584,6 +665,16 @@ void Utils::insertNode(QDomNode &target, const QString &node_name, const QString
 	else
 	{
 		target.appendChild( new_node );
+	}
+}
+
+void Utils::removeChilds(QDomNode &node)
+{
+	QDomNodeList nodes = node.childNodes();
+	while(!nodes.isEmpty())
+	{
+	   QDomNode child = nodes.at(0);
+	   node.removeChild( child );
 	}
 }
 
