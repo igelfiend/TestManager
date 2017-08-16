@@ -24,6 +24,7 @@ class CompareGroup;
 class Comparator;
 class Config;
 class Param;
+class Item;
 
 struct TestParam;
 struct coord
@@ -37,6 +38,7 @@ struct LocalGroup
 	QString title;
 	QVector< Config* >	configs;
 	QVector< Param* >	params;
+	QVector< Item* >	items;
 };
 
 class MainWindow : public QMainWindow

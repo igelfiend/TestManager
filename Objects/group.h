@@ -17,6 +17,7 @@ class QPlainTextEdit;
 
 class Config;
 class Param;
+class Item;
 class MainWindow;
 class TestParam;
 class TableParam;
@@ -65,6 +66,7 @@ class Group: public BaseGroup
 public:
 	Group();
 	Group(QString title, QVector< Config* >	configs,	MainWindow *window);
+	Group(QString title, QVector< Item* >	tests,		MainWindow *window);
 	Group(QString title, QVector< Param* >	params,		MainWindow *window);
 	~Group();
 

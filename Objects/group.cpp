@@ -1,4 +1,3 @@
-#include "group.h"
 
 #include <QString>
 #include <QBoxLayout>
@@ -15,7 +14,9 @@
 
 #include "config.h"
 #include "param.h"
+#include "test.h"
 #include "paramlistitem.h"
+#include "group.h"
 #include "manager.h"
 #include "editparamform.h"
 #include "mainwindow.h"
@@ -51,6 +52,27 @@ Group::Group(QString title, QVector<Config *> configs, MainWindow *window) :
 	container->addWidget(list);
 }
 
+Group::Group(QString title, QVector<Item *> tests, MainWindow *window)
+{
+	initPtr();
+
+	container	= new QVBoxLayout;
+	lb			= new QLabel(title);
+	list		= new ConfigList( this, window );
+
+	list->setGroup( this );
+	for( int i = 0; i < tests.count(); ++i )
+	{
+		QString key = ( tests.at( i )->getKeyName().length() != 0 )
+						? QString(" [%1]").arg( tests.at( i )->getKeyName() )
+						: QString();
+		list->addItem( tests.at( i )->getConfig()->getFullName() + key );
+	}
+
+	container->addWidget(lb);
+	container->addWidget(list);
+}
+
 Group::Group(QString title, QVector<Param *> params, MainWindow *window) :
 	BaseGroup( params, window )
 {
@@ -69,7 +91,10 @@ Group::Group(QString title, QVector<Param *> params, MainWindow *window) :
 	list->setGroup( this );
 	for( int i = 0; i < params.count(); ++i )
 	{
-		ParamListItem * item = new ParamListItem(params.at( i )->getOwner()->getConfig()->getFullName(), list, params.at( i ));
+		QString key =	( params.at( i )->getOwner()->getKeyName().length() != 0 )
+						? QString(" [%1]").arg( params.at( i )->getOwner()->getKeyName() )
+						: "";
+		ParamListItem * item = new ParamListItem(params.at( i )->getOwner()->getConfig()->getFullName() + key, list, params.at( i ));
 		list->addItem( item );
 	}
 
@@ -102,7 +127,14 @@ Group::~Group()
 
 QString Group::getButtonTitle() const
 {
-	return button->text();
+	if( button )
+	{
+		return button->text();
+	}
+	else
+	{
+		return QString();
+	}
 }
 
 void Group::initPtr()

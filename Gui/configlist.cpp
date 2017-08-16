@@ -94,7 +94,10 @@ void ConfigList::dropEvent(QDropEvent *event)
 			qDebug() << "Total params:  " << group->getParamsCount();
 			for( int i = 0; i < params.count(); ++i )
 			{
-				ParamListItem * item = new ParamListItem( params.at( i )->getConfig()->getFullName(), this, params.at( i ) );
+				QString key =	( params.at( i )->getOwner()->getKeyName().length() != 0 )
+								? QString(" [%1]").arg( params.at( i )->getOwner()->getKeyName() )
+								: "";
+				ParamListItem * item = new ParamListItem( params.at( i )->getConfig()->getFullName() + key, this, params.at( i ) );
 				addItem( item );
 			}
 
@@ -158,17 +161,22 @@ void ConfigList::ShowItemInfo()
 
 void ConfigList::CreateNewGroup()
 {
+	qDebug() << "Creating start";
 	fAddingGroup = true;
 	MainWindow	*window	 = dynamic_cast<MainWindow *>( getParent() );
 
+	qDebug() << "Initing new group";
 	Group *new_group = new Group(group->getButtonTitle(), getParams(), window);
+	qDebug() << "Adding new group";
 	window->addGroup( new_group );
 	group->removeParams( getParams() );
 
 	QList<QListWidgetItem *> items = selectedItems();
 
+	qDebug() << "Edit params";
 	emit(new_group->paramEdited());
 
+	qDebug() << "Deleting items";
 	for( int i = 0; i < items.count(); ++i )
 	{
 		delete items[ i ];
@@ -188,12 +196,14 @@ void ConfigList::setGroup(Group *value)
 
 QVector<Param *> ConfigList::getParams() const
 {
+	qDebug() << "getParams started";
 	QVector<Param *> result;
 	for( int i = 0; i < selectedItems().count(); ++i )
 	{
 		result.append( dynamic_cast<ParamListItem *>(selectedItems().at( i ))->getParam() );
 	}
 
+	qDebug() << "params returned";
 	return result;
 }
 

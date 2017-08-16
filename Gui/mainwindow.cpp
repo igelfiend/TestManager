@@ -276,7 +276,8 @@ void MainWindow::loadGroups()
 		configs.append( manager->getConfig( i ) );
 	}
 
-	QVector<  LocalGroup > groups;
+	QVector< LocalGroup >	groups;
+	QVector< Item * >		all_tests;
 	LocalGroup no_tests;
 	LocalGroup no_params;
 
@@ -286,15 +287,71 @@ void MainWindow::loadGroups()
 	int param_indx	= 1;		// Temprary for naming  Complex units
 	while( configs.count() > 0 )
 	{
-		LocalGroup group;
 
-		Item * test	= configs.at( 0 )->getItem( test_name, version );
-		if( !test )
+		QVector<Item *> tests = configs.at( 0 )->getItems( test_name, version );
+
+		if( tests.count() == 0 )
 		{
 			no_tests.configs.append( configs.at( 0 ) );
 			configs.removeAt( 0 );
 			continue;
 		}
+
+		all_tests << tests;
+		configs.removeAt( 0 );
+	}
+
+	while( all_tests.count() > 0 )
+	{
+		LocalGroup group;
+
+		Param *param = all_tests.at( 0 )->getParam( param_name );
+		if( !param )
+		{
+			no_params.items.append( all_tests.at( 0 ) );
+			all_tests.removeAt( 0 );
+			continue;
+		}
+
+		if( param->getType() != ParamType::Complex )
+		{
+			group.title = param->getData();
+		}
+		else
+		{
+			group.title = QString::number( param_indx++ );
+		}
+
+		group.params.append( param );
+		for(int i = 1; i < all_tests.count(); ++i )
+		{
+			Item *checked_item = all_tests.at( i );
+			if( ( !checked_item ) || ( !checked_item->getParam( param_name  ) ) )
+			{
+				continue;
+			}
+
+			if( param->compare( checked_item->getParam( param_name ) ) )
+			{
+				group.params.append( checked_item->getParam( param_name ) );
+				all_tests.removeAt( i-- );
+			}
+		}
+
+		all_tests.removeAt( 0 );
+		groups.append(group);
+	}
+
+	/*
+	while( configs.count() > 0 )
+	{
+//		Item * test	= configs.at( 0 )->getItem( test_name, version );
+//		if( !test )
+//		{
+//			no_tests.configs.append( configs.at( 0 ) );
+//			configs.removeAt( 0 );
+//			continue;
+//		}
 
 		Param * param = test->getParam( param_name );
 		if( !param )
@@ -336,6 +393,7 @@ void MainWindow::loadGroups()
 		configs.removeAt( 0 );
 		groups.append(group);
 	}
+	*/
 
 	for( int i = 0; i < groups.count(); ++i )
 	{
@@ -348,9 +406,9 @@ void MainWindow::loadGroups()
 		no_test_group	= new Group( no_tests.title,	no_tests.configs,	this );
 		ui->verticalLayoutNoData->addLayout( no_test_group->getContainer() );
 	}
-	if( no_params.configs.count() > 0 )
+	if( no_params.items.count() > 0 )
 	{
-		no_param_group	= new Group( no_params.title,	no_params.configs,	this );
+		no_param_group	= new Group( no_params.title,	no_params.items,	this );
 		ui->verticalLayoutNoData->addLayout( no_param_group->getContainer() );
 	}
 }

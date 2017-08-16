@@ -34,12 +34,12 @@ QString Item::getVersion() const
 	return version;
 }
 
-QString Test::getKeyName() const
+QString Item::getKeyName() const
 {
 	return key_name;
 }
 
-void Test::setKeyName(const QString &value)
+void Item::setKeyName(const QString &value)
 {
 	key_name = value;
 }

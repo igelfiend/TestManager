@@ -31,7 +31,10 @@ public:
 	bool removeParam(QString param_name);
 
 	void setVersion(const QString &value);
+	void setKeyName(const QString &value);
 
+
+	QString getKeyName() const;
 	const QDomNode getRoot() const;
 
 	void ShowAllParams();
@@ -39,6 +42,7 @@ public:
 
 protected:
 	QString		name;
+	QString		key_name;
 	QString		version;
 	Config		*config;
 	QDomNode	root;
@@ -65,13 +69,8 @@ public:
 //	void init();
 	void setTemplateDir(const QString &path);
 	void setInstructionPath(const QString &path);
-	void setKeyName(const QString &value);
-
-
-	QString getKeyName() const;
 
 private:
-	QString key_name;
 	QString template_dir;
 	QString instruction_path;
 };

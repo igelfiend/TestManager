@@ -126,17 +126,32 @@ Item *Config::getItem(int index) const
 	return nullptr;
 }
 
-Item *Config::getItem( const QString &name, const QString &version ) const
+Item *Config::getItem(const QString &name, const QString &version , const QString &key) const
 {
 	for( int i = 0; i < items.count(); ++i )
 	{
-		if( ( items.at( i )->getName()	  == name ) &&
-			( items.at( i )->getVersion() == version ) )
+		if( ( items.at( i )->getName()	  == name	 ) &&
+			( items.at( i )->getVersion() == version ) &&
+			( items.at( i )->getKeyName() == key	 ) )
 		{
 			return items.at( i );
 		}
 	}
 	return nullptr;
+}
+
+QVector<Item *> Config::getItems(const QString &name, const QString &version) const
+{
+	QVector< Item * > result;
+	for( int i = 0; i < items.count(); ++i )
+	{
+		if( ( items.at( i )->getName()	  == name ) &&
+			( items.at( i )->getVersion() == version ) )
+		{
+			result << items[ i ];
+		}
+	}
+	return result;
 }
 
 QString Config::getFullName() const
