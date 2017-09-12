@@ -36,8 +36,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
 	group_coord = { 0, 0 };
 
-	no_test_group = nullptr;
-	no_param_group = nullptr;
+	no_test_group	= nullptr;
+	no_param_group	= nullptr;
 
 	init();
 }

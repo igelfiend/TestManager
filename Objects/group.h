@@ -29,6 +29,7 @@ class BaseGroup: public QObject
 public:
 	BaseGroup();
 	BaseGroup( QVector< Config* >	configs,	MainWindow *window );
+	BaseGroup( QVector< Item* >		items,		MainWindow *window );
 	BaseGroup( QVector< Param* >	params,		MainWindow *window );
 	virtual ~BaseGroup();
 
@@ -57,6 +58,7 @@ protected:
 	TestParam	*param_info;
 	QVector< Config* >	configs;
 	QVector< Param* >	params;
+	QVector< Item* >	items;
 	QList<QMetaObject::Connection>	connections;
 };
 

@@ -29,16 +29,19 @@ ConfigList::ConfigList(QWidget *parent)
 ConfigList::ConfigList(Group *group, QWidget *parent) :
 	ConfigList( parent )
 {
-	if( group->hasData() )
-	{
-		setDragEnabled( true );
-		setAcceptDrops( true );
-	}
-	else
-	{
-		setDragEnabled( false );
-		setAcceptDrops( false );
-	}
+	setDragEnabled( true );
+	setAcceptDrops( true );
+
+//	if( group->hasData() )
+//	{
+//		setDragEnabled( true );
+//		setAcceptDrops( true );
+//	}
+//	else
+//	{
+//		setDragEnabled( false );
+//		setAcceptDrops( false );
+//	}
 
 	this->setMinimumSize( 70, 120 );
 	if( !group->hasData() )
@@ -51,7 +54,8 @@ ConfigList::ConfigList(Group *group, QWidget *parent) :
 
 void ConfigList::dragEnterEvent(QDragEnterEvent *event)
 {
-	if ( dynamic_cast<const ConfigMime *>( event->mimeData() )->hasConfigs() )
+	const ConfigMime *conf_mime = dynamic_cast<const ConfigMime *>( event->mimeData() );
+	if( conf_mime->hasConfigs() )
 	{
 		event->acceptProposedAction();
 	}
@@ -63,8 +67,10 @@ void ConfigList::dragEnterEvent(QDragEnterEvent *event)
 
 void ConfigList::dragMoveEvent(QDragMoveEvent *event)
 {
-	if (dynamic_cast<const ConfigMime *>( event->mimeData() )->hasConfigs() )
+	const ConfigMime *conf_mime = dynamic_cast<const ConfigMime *>( event->mimeData() );
+	if( conf_mime->hasConfigs() )
 	{
+		qDebug() << "move is ok";
 		event->acceptProposedAction();
 	}
 	else
@@ -82,7 +88,7 @@ void ConfigList::dropEvent(QDropEvent *event)
 {
 	ConfigMime * mime = dynamic_cast<ConfigMime *>( const_cast<QMimeData *>( event->mimeData() ) );
 
-	if( ( event->source() != this ) && ( mime->hasConfigs() ) )
+	if( ( event->source() != this ) && mime->hasConfigs() )
 	{
 		Group * src_group = dynamic_cast<ConfigList *>(event->source())->getGroup();
 
@@ -107,7 +113,7 @@ void ConfigList::dropEvent(QDropEvent *event)
 		else
 		{
 			QVector<Config *> configs = mime->getConfigs();
-			if (!configs.isEmpty())
+			if ( !configs.isEmpty() )
 			{
 				group->addConfigs( configs );
 				for( int i = 0; i < configs.count(); ++i )
@@ -244,7 +250,7 @@ QVector<Config *> ConfigMime::getConfigs() const
 
 bool ConfigMime::hasConfigs() const
 {
-	if( configs.count() > 0 )
+	if( !configs.isEmpty() )
 	{
 		return true;
 	}
@@ -256,7 +262,19 @@ bool ConfigMime::hasConfigs() const
 
 bool ConfigMime::hasParams() const
 {
-	if( params.count() > 0 )
+	if( !params.isEmpty() )
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+bool ConfigMime::hasTests() const
+{
+	if( !items.isEmpty() )
 	{
 		return true;
 	}

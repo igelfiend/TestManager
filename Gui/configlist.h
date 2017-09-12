@@ -61,11 +61,13 @@ public:
 
 	bool	hasConfigs()	const;
 	bool	hasParams()		const;
+	bool	hasTests()		const;
 
 private:
 	ConfigList	*config_list;
 	QList<QListWidgetItem *>	items;
 	QVector<Config *>	configs;
+	QVector<Item *>		tests;
 	QVector<Param *>	params;
 
 };

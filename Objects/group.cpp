@@ -45,6 +45,10 @@ Group::Group(QString title, QVector<Config *> configs, MainWindow *window) :
 	list->setGroup( this );
 	for( int i = 0; i < configs.count(); ++i )
 	{
+		Param *t_param = nullptr;
+		ParamListItem * item = new ParamListItem(params.at( i )->getOwner()->getConfig()->getFullName(), list, t_param );
+		list->addItem( item );
+
 		list->addItem( configs.at( i )->getFullName() );
 	}
 
@@ -52,7 +56,8 @@ Group::Group(QString title, QVector<Config *> configs, MainWindow *window) :
 	container->addWidget(list);
 }
 
-Group::Group(QString title, QVector<Item *> tests, MainWindow *window)
+Group::Group(QString title, QVector<Item *> tests, MainWindow *window):
+	BaseGroup( tests, window )
 {
 	initPtr();
 
@@ -66,7 +71,11 @@ Group::Group(QString title, QVector<Item *> tests, MainWindow *window)
 		QString key = ( tests.at( i )->getKeyName().length() != 0 )
 						? QString(" [%1]").arg( tests.at( i )->getKeyName() )
 						: QString();
-		list->addItem( tests.at( i )->getConfig()->getFullName() + key );
+		Param *t_param = nullptr;
+		ParamListItem * item = new ParamListItem( tests.at( i )->getConfig()->getFullName() + key, list, t_param );
+		list->addItem( item );
+
+//		list->addItem( tests.at( i )->getConfig()->getFullName() + key );
 	}
 
 	container->addWidget(lb);
@@ -349,6 +358,14 @@ BaseGroup::BaseGroup(QVector<Config *> configs, MainWindow *window)
 	has_data	= false;
 	param_info	= window->getCurrentParam();
 	this->configs	= configs;
+	this->window	= window;
+}
+
+BaseGroup::BaseGroup(QVector<Item *> items, MainWindow *window)
+{
+	has_data	= false;
+	param_info	= window->getCurrentParam();
+	this->items	= items;
 	this->window	= window;
 }
 

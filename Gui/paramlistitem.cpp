@@ -8,29 +8,33 @@
 
 ParamListItem::ParamListItem()
 {
-	config	= nullptr;
-	param	= nullptr;
-	item	= nullptr;
+	initPtr();
+//	config	= nullptr;
+//	param	= nullptr;
+//	item	= nullptr;
 }
 
 ParamListItem::ParamListItem(QString text, QListWidget *parent, Param *param) :
 	QListWidgetItem(text, parent, ItemType::UserType)
 {
-	ParamListItem();
+//	ParamListItem();
+	initPtr();
 	this->param = param;
 }
 
 ParamListItem::ParamListItem(QString text, QListWidget *parent, Item *item) :
 	QListWidgetItem(text, parent, ItemType::UserType)
 {
-	ParamListItem();
+//	ParamListItem();
+	initPtr();
 	this->item = item;
 }
 
 ParamListItem::ParamListItem(QString text, QListWidget *parent, Config *config) :
 	QListWidgetItem(text, parent, ItemType::UserType)
 {
-	ParamListItem();
+//	ParamListItem();
+	initPtr();
 	this->config = config;
 }
 
@@ -86,6 +90,13 @@ void ParamListItem::ShowInfo() const
 	{
 		qDebug() << "Error! No param detected!";
 	}
+}
+
+void ParamListItem::initPtr()
+{
+	config	= nullptr;
+	param	= nullptr;
+	item	= nullptr;
 }
 
 void ParamListItem::setParam(Param *value)

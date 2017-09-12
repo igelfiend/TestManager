@@ -28,6 +28,7 @@ public:
 
 
 protected:
+	inline void	initPtr();
 	Param	*param;
 	Config	*config;
 	Item	*item;
