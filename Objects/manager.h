@@ -2,6 +2,7 @@
 #define MANAGER_H
 #include <QDomElement>
 #include <QList>
+#include <QWidget>
 
 class QStringList;
 class QString;
@@ -28,7 +29,8 @@ public:
 
 	void setConfigInfo(ConfigInfo *value);
 
-	void setWindow(MainWindow *value);
+    void setWindow( MainWindow *value );
+    void setEditForm( QWidget *form );
 	MainWindow	*getWindow() const;
 
 	EditParamForm *getEditForm() const;

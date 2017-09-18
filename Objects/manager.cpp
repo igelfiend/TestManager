@@ -176,7 +176,12 @@ void Manager::setConfigInfo(ConfigInfo *value)
 
 void Manager::setWindow(MainWindow *value)
 {
-	window = value;
+    window = value;
+}
+
+void Manager::setEditForm(QWidget *form)
+{
+
 }
 
 MainWindow *Manager::getWindow() const

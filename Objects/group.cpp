@@ -46,7 +46,7 @@ Group::Group(QString title, QVector<Config *> configs, MainWindow *window) :
 	for( int i = 0; i < configs.count(); ++i )
 	{
 		Param *t_param = nullptr;
-		ParamListItem * item = new ParamListItem(params.at( i )->getOwner()->getConfig()->getFullName(), list, t_param );
+        ParamListItem * item = new ParamListItem(configs.at( i )->getFullName(), list, t_param );
 		list->addItem( item );
 
 		list->addItem( configs.at( i )->getFullName() );
