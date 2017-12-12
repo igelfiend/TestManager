@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1012</width>
-    <height>668</height>
+    <width>1066</width>
+    <height>912</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -44,8 +44,8 @@
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>657</width>
-           <height>587</height>
+           <width>711</width>
+           <height>831</height>
           </rect>
          </property>
          <layout class="QGridLayout" name="gridLayout_2">
@@ -72,7 +72,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1012</width>
+     <width>1066</width>
      <height>20</height>
     </rect>
    </property>
@@ -111,7 +111,7 @@
    <property name="minimumSize">
     <size>
      <width>274</width>
-     <height>250</height>
+     <height>300</height>
     </size>
    </property>
    <property name="windowTitle">
@@ -126,6 +126,12 @@
       <layout class="QVBoxLayout" name="verticalLayout">
        <item>
         <widget class="QListWidget" name="listWidgetDevices">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>150</height>
+          </size>
+         </property>
          <property name="font">
           <font>
            <pointsize>8</pointsize>
@@ -189,10 +195,22 @@
   </widget>
   <widget class="QDockWidget" name="dockWidget_7">
    <property name="sizePolicy">
-    <sizepolicy hsizetype="Fixed" vsizetype="Minimum">
+    <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
      <horstretch>0</horstretch>
      <verstretch>0</verstretch>
     </sizepolicy>
+   </property>
+   <property name="minimumSize">
+    <size>
+     <width>276</width>
+     <height>291</height>
+    </size>
+   </property>
+   <property name="maximumSize">
+    <size>
+     <width>524287</width>
+     <height>300</height>
+    </size>
    </property>
    <property name="windowTitle">
     <string>Modes</string>
@@ -210,7 +228,7 @@
           <bool>true</bool>
          </property>
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+          <sizepolicy hsizetype="Fixed" vsizetype="Minimum">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
@@ -218,7 +236,7 @@
          <property name="maximumSize">
           <size>
            <width>2560</width>
-           <height>80</height>
+           <height>500</height>
           </size>
          </property>
          <property name="font">
@@ -280,6 +298,19 @@
         <string>Save</string>
        </property>
       </widget>
+     </item>
+     <item>
+      <spacer name="verticalSpacer">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>40</height>
+        </size>
+       </property>
+      </spacer>
      </item>
     </layout>
    </widget>
@@ -459,6 +490,19 @@
         </layout>
        </item>
       </layout>
+     </item>
+     <item>
+      <spacer name="verticalSpacer_2">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>40</height>
+        </size>
+       </property>
+      </spacer>
      </item>
     </layout>
    </widget>

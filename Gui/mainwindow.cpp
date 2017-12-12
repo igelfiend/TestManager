@@ -13,6 +13,8 @@
 #include <QFile>
 #include <QMessageBox>
 #include <QCloseEvent>
+#include <QSettings>
+#include <QTextCodec>
 
 #include "manager.h"
 #include "test_info.h"
@@ -67,31 +69,56 @@ MainWindow::~MainWindow()
 
 void MainWindow::init()
 {
-	QDir path("../../release/devices");
+    QSettings settings( "settings.ini", QSettings::IniFormat );
+    settings.setIniCodec( QTextCodec::codecForName("Windows-1251") );
+
+    QStringList config_devs;
+    QMap< QString, bool > config_devs_flagged;
+    settings.beginGroup( "DEVICES" );
+    {
+        config_devs = settings.allKeys();
+        foreach( QString dev, config_devs )
+        {
+            config_devs_flagged[ dev ] = settings.value( dev, false ).toBool();
+        }
+    }
+    settings.endGroup();
+
+    QDir path("../../release/devices");
 	QStringList devices = path.entryList(QDir::Dirs);
 
 	for (int i = 2; i < devices.size(); ++i)
 	{
-		QListWidgetItem * item = new QListWidgetItem(devices[i]);
-		item->setCheckState(Qt::Unchecked);
+        QListWidgetItem * item = new QListWidgetItem( devices[ i ] );
+
+        if( config_devs.contains( devices[ i ], Qt::CaseInsensitive ) )
+        {
+            item->setCheckState( ( config_devs_flagged[ devices[ i ] ] )
+                                    ? Qt::Checked
+                                    : Qt::Unchecked );
+        }
+        else
+        {
+            item->setCheckState(Qt::Unchecked);
+        }
 		ui->listWidgetDevices->addItem(item);
 	}
 
-	QListWidgetItem * item = new QListWidgetItem("periodic");
-	item->setCheckState(Qt::Unchecked);
-	ui->listWidgetModes->addItem(item);
 
-	item = new QListWidgetItem("periodic_ru");
-	item->setCheckState(Qt::Unchecked);
-	ui->listWidgetModes->addItem(item);
-
-	item = new QListWidgetItem("factory_cmt");
-	item->setCheckState(Qt::Unchecked);
-	ui->listWidgetModes->addItem(item);
-
-	item = new QListWidgetItem("periodic_demo");
-	item->setCheckState(Qt::Unchecked);
-	ui->listWidgetModes->addItem(item);
+    QStringList verifications;
+    QListWidgetItem * item;
+    settings.beginGroup( "MODES" );
+    {
+        verifications = settings.allKeys();
+        foreach( QString verif, verifications )
+        {
+            item = new QListWidgetItem( verif );
+            bool checked = settings.value( verif, false ).toBool();
+            item->setCheckState( ( checked ) ? Qt::Checked : Qt::Unchecked );
+            ui->listWidgetModes->addItem( item );
+        }
+    }
+    settings.endGroup();
 
 	combobox_tests.clear();
 	for( int i = 0; i < info->getTestsCount(); ++i )
@@ -598,6 +625,39 @@ void MainWindow::on_pushButtonCompare_clicked()
 
 void MainWindow::closeEvent(QCloseEvent *event)
 {
+    QSettings settings( "settings.ini", QSettings::IniFormat );
+    settings.setIniCodec( QTextCodec::codecForName("Windows-1251") );
+
+    settings.beginGroup( "DEVICES" );
+    {
+        int dev_count = ui->listWidgetDevices->count();
+        for( int i = 0; i < dev_count; ++i )
+        {
+            bool result     = ( ui->listWidgetDevices->item( i )->checkState() == Qt::Checked )
+                                ? true
+                                : false;
+            QString devname = ui->listWidgetDevices->item( i )->text();
+
+            settings.setValue( devname, result );
+        }
+    }
+    settings.endGroup();
+
+    settings.beginGroup( "MODES" );
+    {
+        int mode_count = ui->listWidgetModes->count();
+        for( int i = 0; i < mode_count; ++i )
+        {
+            bool result      = ( ui->listWidgetModes->item( i )->checkState() == Qt::Checked )
+                                ? true
+                                : false;
+            QString modename = ui->listWidgetModes->item( i )->text();
+
+            settings.setValue( modename, result );
+        }
+    }
+    settings.endGroup();
+
 	if( !manager->isChanged() )
 	{
 		return;
