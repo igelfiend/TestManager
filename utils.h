@@ -48,6 +48,8 @@ public:
 
 	static	void	addEquipToPerformance(Manager *manager );
 
+    static  void    fixPowerAccuracyNaming( Manager *manager );
+
 	static	bool	NodeIsFieldType( const QDomNode &node );
 	static	SpoilerGroupBox	*NodeToGroupBox(const QDomNode &node, FIELDS &fields);
 

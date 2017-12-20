@@ -85,6 +85,7 @@
     </property>
     <addaction name="actionFix_range_in_attenuator"/>
     <addaction name="actionAdd_equip_to_periodic"/>
+    <addaction name="actionFix_PowerAccuracy_naming"/>
    </widget>
    <addaction name="menuFixes"/>
   </widget>
@@ -520,6 +521,11 @@
   <action name="actionAdd_equip_to_periodic">
    <property name="text">
     <string>Add equip to periodic</string>
+   </property>
+  </action>
+  <action name="actionFix_PowerAccuracy_naming">
+   <property name="text">
+    <string>Fix PowerAccuracy naming</string>
    </property>
   </action>
  </widget>

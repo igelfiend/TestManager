@@ -27,6 +27,7 @@
 #include "comparator.h"
 
 #define COL_COUNT 5
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -697,5 +698,11 @@ void MainWindow::on_actionFix_range_in_attenuator_triggered()
 
 void MainWindow::on_actionAdd_equip_to_periodic_triggered()
 {
-	Utils::addEquipToPerformance( manager );
+    Utils::addEquipToPerformance( manager );
+}
+
+void MainWindow::on_actionFix_PowerAccuracy_naming_triggered()
+{
+    qDebug() << "Clicked";
+    Utils::fixPowerAccuracyNaming( manager )   ;
 }

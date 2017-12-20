@@ -584,6 +584,42 @@ void Utils::addEquipToPerformance( Manager *manager)
 
 }
 
+void Utils::fixPowerAccuracyNaming(Manager *manager)
+{
+    int config_count = manager->getConfigsCount();
+    for( int i = 0; i < config_count; ++i )
+    {
+        Config *conf    = manager->getConfig( i );
+        Item *mainTest  = conf->getMain();
+        Param *method_param = mainTest->getParam( "select_method" );
+        if( method_param == nullptr )
+        {
+            continue;
+        }
+
+        QDomNode node = method_param->getNode();
+
+        QDomElement method = node.firstChildElement( "method" );
+        while( !method.isNull() )
+        {
+            QDomElement tests_node = method.firstChildElement( "tests" );
+            QString tests = tests_node.text();
+            if( tests.contains( "PowerAccuracy,", Qt::CaseInsensitive ) )
+            {
+                tests = tests.replace( "PowerAccuracy,", "PowerAccuracyV2," );
+                qDebug() << "Replaced: " << QString( "%1 : PowerAccuracy -> PowerAccuracyV2" )
+                                            .arg( conf->getFullName() );
+
+                tests_node.firstChild().toText().setData( tests );
+                manager->setChanged( true );
+                conf->setChanged( true );
+            }
+
+            method = method.nextSiblingElement( "method" );
+        }
+    }
+}
+
 bool Utils::NodeIsFieldType(const QDomNode &node)
 {
 	qDebug() << "checking node " << node.toElement().tagName();

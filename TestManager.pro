@@ -50,4 +50,4 @@ HEADERS  += utils.h \
     Gui/spoilergroupbox.h
 
 FORMS    += Gui/mainwindow.ui \
-    Gui/editparamform.ui
+            Gui/editparamform.ui
