@@ -25,6 +25,7 @@
 #include "group.h"
 #include "paramlistitem.h"
 #include "comparator.h"
+#include "AddNewTestDialog.h"
 
 #define COL_COUNT 5
 
@@ -426,17 +427,20 @@ void MainWindow::loadGroups()
 	for( int i = 0; i < groups.count(); ++i )
 	{
 		Group	*group = new Group( groups.at( i ).title, groups.at( i ).params, this );
+        group->setGroupType( Group::Normal );
 		addGroup( group );
 	}
 
 	if( no_tests.configs.count() > 0 )
 	{
 		no_test_group	= new Group( no_tests.title,	no_tests.configs,	this );
+        no_test_group->setGroupType( Group::NoTest );
 		ui->verticalLayoutNoData->addLayout( no_test_group->getContainer() );
 	}
 	if( no_params.items.count() > 0 )
 	{
 		no_param_group	= new Group( no_params.title,	no_params.items,	this );
+        no_param_group->setGroupType( Group::NoParameter );
 		ui->verticalLayoutNoData->addLayout( no_param_group->getContainer() );
 	}
 }
@@ -705,4 +709,26 @@ void MainWindow::on_actionFix_PowerAccuracy_naming_triggered()
 {
     qDebug() << "Clicked";
     Utils::fixPowerAccuracyNaming( manager )   ;
+}
+
+void MainWindow::on_actionAdd_test_triggered()
+{
+    qDebug() << "adding test";
+    AddNewTestDialog add_test;
+    if(add_test.exec() == QDialog::Accepted)
+    {
+        qDebug() << "Text: " << add_test.getTemplateCode();
+        Utils::addTestToConfigs( add_test.getTemplateCode(),
+                                 add_test.isInsertAtFirst(),
+                                 add_test.getPrevTest(), manager );
+    }
+    else
+    {
+        qDebug() << "Dialog rejected";
+    };
+}
+
+void MainWindow::on_actionAdd_Select_Method_to_Configs_triggered()
+{
+    Utils::addSelectMethodToConfigs( manager );
 }

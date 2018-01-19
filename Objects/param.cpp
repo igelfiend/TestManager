@@ -22,11 +22,13 @@ Param::Param(QString name, QDomNode node, ParamType p_type, StringType str_type)
 Param::Param(Param *param):
 	Param()
 {
+    qDebug() << "param constructor started";
 	name	= param->name;
-	node	= param->node.cloneNode( true );
+    node	= param->node.cloneNode( true );
 	type	= param->type;
 //	owner	= param->owner;
 	str_format	= param->str_format;
+    qDebug() << "param constructor ended";
 
 }
 

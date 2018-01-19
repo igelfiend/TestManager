@@ -64,8 +64,16 @@ protected:
 
 class Group: public BaseGroup
 {
+
 	Q_OBJECT
 public:
+    enum GroupType
+    {
+        Normal = 0,
+        NoTest = 1,
+        NoParameter = 2
+    };
+
 	Group();
 	Group(QString title, QVector< Config* >	configs,	MainWindow *window);
 	Group(QString title, QVector< Item* >	tests,		MainWindow *window);
@@ -75,14 +83,18 @@ public:
 	Param		*getGroupParam() const;
 	QString		getButtonTitle() const;
 
-private:
-	void	initPtr();
-	Param	*group_param;
-	QLabel	*lb;
+    GroupType getGroupType() const;
+    void setGroupType(const GroupType &value);
 
-	QPushButton *button;
+private:
+    void	initPtr();
+    Param	*group_param;
+    QLabel	*lb;
+
+    QPushButton *button;
 	ConfigList	*list;
 	FIELDS	fields;
+    GroupType group_type;
 
 public slots:
 	void	rowChanged( int row );

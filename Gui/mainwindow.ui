@@ -86,8 +86,16 @@
     <addaction name="actionFix_range_in_attenuator"/>
     <addaction name="actionAdd_equip_to_periodic"/>
     <addaction name="actionFix_PowerAccuracy_naming"/>
+    <addaction name="actionAdd_Select_Method_to_Configs"/>
+   </widget>
+   <widget class="QMenu" name="menuTests">
+    <property name="title">
+     <string>Tests</string>
+    </property>
+    <addaction name="actionAdd_test"/>
    </widget>
    <addaction name="menuFixes"/>
+   <addaction name="menuTests"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <attribute name="toolBarArea">
@@ -526,6 +534,16 @@
   <action name="actionFix_PowerAccuracy_naming">
    <property name="text">
     <string>Fix PowerAccuracy naming</string>
+   </property>
+  </action>
+  <action name="actionAdd_test">
+   <property name="text">
+    <string>Add test</string>
+   </property>
+  </action>
+  <action name="actionAdd_Select_Method_to_Configs">
+   <property name="text">
+    <string>Add Select Method to Configs</string>
    </property>
   </action>
  </widget>

@@ -172,7 +172,20 @@ void ConfigList::CreateNewGroup()
 	MainWindow	*window	 = dynamic_cast<MainWindow *>( getParent() );
 
 	qDebug() << "Initing new group";
-	Group *new_group = new Group(group->getButtonTitle(), getParams(), window);
+    Group *new_group = nullptr;
+    if( group->getGroupType() == Group::Normal )
+    {
+        new_group = new Group(group->getButtonTitle(), getParams(), window);
+    }
+    else if( group->getGroupType() == Group::NoParameter )
+    {
+        new_group = new Group(group->getButtonTitle(), getConfigs(), window);
+    }
+    else
+    {
+        qDebug() << "ConfigList::CreateNewGroup(): Trying to create new group from no-test";
+        return;
+    }
 	qDebug() << "Adding new group";
 	window->addGroup( new_group );
 	group->removeParams( getParams() );
@@ -210,7 +223,23 @@ QVector<Param *> ConfigList::getParams() const
 	}
 
 	qDebug() << "params returned";
-	return result;
+    qDebug() << "params count: " << result.count();
+    return result;
+}
+
+QVector<Config *> ConfigList::getConfigs() const
+{
+    qDebug() << "getConfigs started";
+    QVector<Config *> result;
+    for( int i = 0; i < selectedItems().count(); ++i )
+    {
+        Param *param = dynamic_cast<ParamListItem *>(selectedItems().at( i ))->getParam();
+        result.append( param->getConfig() );
+    }
+
+    qDebug() << "configs returned";
+    qDebug() << "configs count: " << result.count();
+    return result;
 }
 
 

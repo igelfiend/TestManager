@@ -9,6 +9,7 @@
 #include <QTextEdit>
 #include <QFormLayout>
 #include <QLabel>
+#include <QMessageBox>
 
 #include "utils.h"
 #include "param.h"
@@ -618,6 +619,90 @@ void Utils::fixPowerAccuracyNaming(Manager *manager)
             method = method.nextSiblingElement( "method" );
         }
     }
+}
+
+void Utils::addSelectMethodToConfigs(Manager *manager)
+{
+    int config_count = manager->getConfigsCount();
+    bool fChanged = false;
+
+    for( int i = 0; i < config_count; ++i )
+    {
+        Item *mainElement = manager->getConfig( i )->getMain();
+
+        if( !mainElement->getParam( "select_method" ) )
+        {
+            QDomNode mainRoot = mainElement->getRoot();
+
+            QDomDocument d;
+            QDomElement methodNode = d.createElement( "select_method" );
+
+            mainRoot.appendChild( methodNode );
+            manager->getConfig( i )->setChanged( true );
+            fChanged = true;
+        }
+    }
+    manager->setChanged( fChanged );
+}
+
+void Utils::addTestToConfigs( const QString &test_code, bool fInsertFirst, const QString &prevTestName, Manager *manager )
+{
+    bool fChanged = false;
+    QString errorStr;
+    int errorLine;
+    int errorColumn;
+    QDomDocument test_dom;
+    if( !test_dom.setContent( test_code, true, &errorStr, &errorLine, &errorColumn ) )
+    {
+
+        QMessageBox mbox;
+        mbox.setText( QString( " XML error:\n Error line: %1"
+                               "\n Error column: %2"
+                               "\n Error str: %3").arg( errorLine   )
+                                                  .arg( errorColumn )
+                                                  .arg( errorStr    ) );
+        mbox.exec();
+        return;
+    }
+
+    int configs_count = manager->getConfigsCount();
+    for( int i = 0; i < configs_count; ++i )
+    {
+        Config *config = manager->getConfig( i );
+        qDebug() << "current config: " << config->getFullName();
+
+        QDomNode prevNode;
+
+        if( fInsertFirst )
+        {
+            Item *mainElement = config->getMain();
+            if( !mainElement )
+            {
+                qDebug() << "Main not found";
+                continue;
+            }
+
+            prevNode = mainElement->getRoot();
+        }
+        else
+        {
+            Test *prevTest = config->getTest( prevTestName );
+            if( !prevTest )
+            {
+                qDebug() << "Test not found";
+                continue;
+            }
+            prevNode = prevTest->getRoot();
+        }
+
+        QDomNode parentNode = prevNode.parentNode();
+        parentNode.insertAfter( test_dom.cloneNode( true ), prevNode );
+        config->setChanged( true );
+        fChanged = true;
+    }
+
+    manager->setChanged( fChanged );
+    qDebug() << "Insertion done";
 }
 
 bool Utils::NodeIsFieldType(const QDomNode &node)

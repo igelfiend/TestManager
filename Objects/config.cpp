@@ -165,7 +165,15 @@ void Config::printParams()
 	{
 		qDebug() << "\nParams for item[" << i << "]:";
 		items[ i ]->ShowAllParams();
-	}
+    }
+}
+
+void Config::printTestList()
+{
+    for( int i = 0; i < items.count(); ++i )
+    {
+        qDebug() << "Test: " << items[ i ]->getName() << " " << items[ i ]->getVersion();
+    }
 }
 
 QDomElement Config::getRoot() const

@@ -88,6 +88,8 @@ private slots:
 	void on_actionFix_range_in_attenuator_triggered();
 	void on_actionAdd_equip_to_periodic_triggered();
     void on_actionFix_PowerAccuracy_naming_triggered();
+    void on_actionAdd_test_triggered();
+    void on_actionAdd_Select_Method_to_Configs_triggered();
 
 private:
 	void closeEvent(QCloseEvent *event);

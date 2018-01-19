@@ -49,6 +49,9 @@ public:
 	static	void	addEquipToPerformance(Manager *manager );
 
     static  void    fixPowerAccuracyNaming( Manager *manager );
+    static  void    addSelectMethodToConfigs( Manager *manager );
+
+    static  void    addTestToConfigs( const QString &test_code, bool fInsertFirst, const QString &prevTest, Manager *manager );
 
 	static	bool	NodeIsFieldType( const QDomNode &node );
 	static	SpoilerGroupBox	*NodeToGroupBox(const QDomNode &node, FIELDS &fields);

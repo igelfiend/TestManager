@@ -36,6 +36,7 @@ public:
 
 	QString getFullName() const;
 	void	printParams();
+    void    printTestList();
 	QDomElement		getRoot() const;
 	QDomDocument	getRootDocument() const;
 

@@ -85,6 +85,7 @@ Group::Group(QString title, QVector<Item *> tests, MainWindow *window):
 Group::Group(QString title, QVector<Param *> params, MainWindow *window) :
 	BaseGroup( params, window )
 {
+    qDebug() << "Group constructor(params based)";
 	initPtr();
 
 	if( params.count() > 0 )
@@ -92,17 +93,20 @@ Group::Group(QString title, QVector<Param *> params, MainWindow *window) :
 		this->group_param	= new Param( params.at( 0 ) );
 	}
 
+    qDebug() << "group param setted";
 	container	= new QVBoxLayout;
 	button		= new QPushButton( title );
 	list		= new ConfigList( this, window );
 
 	button->setFlat( true );
 	list->setGroup( this );
+    qDebug() << "Cycle started";
 	for( int i = 0; i < params.count(); ++i )
 	{
 		QString key =	( params.at( i )->getOwner()->getKeyName().length() != 0 )
 						? QString(" [%1]").arg( params.at( i )->getOwner()->getKeyName() )
 						: "";
+        qDebug() << "New paramlist item created";
 		ParamListItem * item = new ParamListItem(params.at( i )->getOwner()->getConfig()->getFullName() + key, list, params.at( i ));
 		list->addItem( item );
 	}
@@ -118,6 +122,7 @@ Group::Group(QString title, QVector<Param *> params, MainWindow *window) :
 
 	container->addWidget( button );
 	container->addWidget( list   );
+    qDebug() << "Group constructor ends(params based)";
 }
 
 Group::~Group()
@@ -154,16 +159,26 @@ void Group::initPtr()
 	container	= nullptr;
 }
 
+Group::GroupType Group::getGroupType() const
+{
+    return group_type;
+}
+
+void Group::setGroupType(const GroupType &value)
+{
+    group_type = value;
+}
+
 Param *Group::getGroupParam() const
 {
-	return group_param;
+    return group_param;
 }
 
 void Group::rowChanged(int row)
 {
-	if( list->isAddingGroup() )
-	{
-		return;
+    if( list->isAddingGroup() )
+    {
+        return;
 	}
 	qDebug() << "Selected " << row << " row";
 	if( row != -1 )

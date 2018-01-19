@@ -23,7 +23,8 @@ public:
 	Group	*getGroup() const;
 	void	setGroup(Group *value);
 
-	QVector<Param *> getParams() const;		// Получить параметры выделенных элементов
+    QVector<Param  *> getParams()  const;		// Получить параметры выделенных элементов
+    QVector<Config *> getConfigs() const;       // Получить конфигурации выделенных элементов
 
 	QWidget *getParent() const;				// Получить родителя
 
