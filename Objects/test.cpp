@@ -10,31 +10,40 @@
 #include "test_info.h"
 #include "utils.h"
 
-Test::Test(QString name, Config *config, QDomNode root):Item(name, config, root)
-{
-}
+Test::Test(const QString &name, Config *config, const QDomNode &root):Item(name, config, root)
+{}
 
-Test::~Test()
-{
-
-}
-
-void Test::setTemplateDir(QString path)
+void Test::setTemplateDir(const QString &path)
 {
 	template_dir = path;
 }
 
-void Test::setInstructionPath(QString path)
+void Test::setInstructionPath(const QString &path)
 {
 	instruction_path = path;
 }
 
-const QString Test::getName()
+QString Item::getVersion() const
 {
-	return name;
+	return version;
 }
 
-Item::Item(QString name, Config *config, QDomNode root)
+QString Item::getKeyName() const
+{
+	return key_name;
+}
+
+void Item::setKeyName(const QString &value)
+{
+	key_name = value;
+}
+
+void Item::setVersion(const QString &value)
+{
+	version = value;
+}
+
+Item::Item(const QString &name, Config *config, const QDomNode &root)
 {
 	this->name = name;
 	this->config = config;
@@ -43,16 +52,14 @@ Item::Item(QString name, Config *config, QDomNode root)
 
 Item::~Item()
 {
-	for( int i = 0; i < params.count(); ++i )
-	{
-		delete params.at( i );
-	}
+    qDeleteAll( params );
+    params.clear();
 }
 
 void Item::init()
 {
-	ConfigInfo * info = config->getManager()->getConfigInfo();
-	TestInfo * test = info->getTest( name );
+	ConfigInfo	*info = config->getManager()->getConfigInfo();
+	TestInfo	*test = info->getTest( name, version );
 
 	if( !test )
 	{
@@ -95,7 +102,7 @@ Param *Item::getParam(int index) const
 	return nullptr;
 }
 
-Param *Item::getParam(QString param_name) const
+Param *Item::getParam(const QString &param_name) const
 {
 	for( int i = 0; i < params.count(); ++i )
 	{
@@ -117,7 +124,7 @@ bool Item::removeParam(int index)
 	return false;
 }
 
-bool Item::removeParam(QString param_name)
+bool Item::removeParam(const QString &param_name)
 {
 	for( int i = 0; i < params.count(); ++i )
 	{
@@ -150,7 +157,7 @@ void Item::ShowAllParams()
 	qDebug() << "------------" << name << "------------";
 	for( int i = 0; i < params.size(); ++i )
 	{
-		qDebug() << params[ i ]->getName() << ":" << params[ i ]->getData();
+		qDebug() << params[ i ]->getName() << ":" << params[ i ]->getData().toStdString().c_str();
 	}
 
 }
@@ -166,12 +173,5 @@ Config *Item::getConfig() const
 }
 
 
-Main::Main(QString name, Config *config, QDomNode root):Item(name, config, root)
-{
-
-}
-
-Main::~Main()
-{
-
-}
+Main::Main(const QString &name, Config *config, const QDomNode &root):Item(name, config, root)
+{}

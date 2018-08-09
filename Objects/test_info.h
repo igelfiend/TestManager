@@ -8,7 +8,7 @@
 enum ParamType
 {
 	Simple,
-        Table,
+	Table,
 	Complex
 };
 
@@ -21,12 +21,11 @@ class ConfigInfo
 {
 public:
 	ConfigInfo(Manager *manager);
-	~ConfigInfo();
 
 	void	init();
 
 	TestInfo    *getTest( int index ) const;
-	TestInfo    *getTest( QString name ) const;
+	TestInfo    *getTest(const QString &name , const QString &version) const;
 
 	int	getTestsCount() const;
 
@@ -42,20 +41,23 @@ private:
 class TestInfo
 {
 public:
-	TestInfo();
-	TestInfo( QString name );
-	~TestInfo();
+	TestInfo(){}
+	TestInfo( const QString &_name, const QString &_version ):
+		name( _name ), version( _version ){}
 
-        TestParam	*getParam( int index );
-        TestParam	*getParam( QString name );
-        void            addParam( TestParam *param );
-	int		getParamCount();
+	TestParam	*getParam( int index );
+    TestParam	*getParam( const QString &name );
+	int			getParamCount();
+	QString		getName() const;
+	QString		getVersion() const;
+	QString		getVersionedName() const;
 
-	QString getName() const;
+	void		addParam( TestParam *param );
 
 private:
 	QString name;
-        QList< TestParam *> params;
+	QString version;
+	QList< TestParam *> params;
 
 };
 
@@ -64,9 +66,8 @@ class TestParam
 {
 public:
     TestParam();
-    TestParam( QString path, QString name, ParamType type );
-	TestParam( QString path, QString name, ParamType type, StringType str_type, QStringList column_names );
-    ~TestParam();
+    TestParam( const QString &path, const QString &name, ParamType type );
+    TestParam( const QString &path, const QString &name, ParamType type, StringType str_type, const QStringList &column_names );
 
     QString     getPath()   const;
     QString     getName()   const;

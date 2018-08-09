@@ -14,9 +14,9 @@ class ParamListItem : public QListWidgetItem
 {
 public:
 	ParamListItem();
-	ParamListItem(QString text, QListWidget *parent = 0, Param	*param	= nullptr);
-	ParamListItem(QString text, QListWidget *parent = 0, Item	*item	= nullptr);
-	ParamListItem(QString text, QListWidget *parent = 0, Config	*config	= nullptr);
+    ParamListItem(const QString &text, QListWidget *parent = 0, Param	*param	= nullptr);
+    ParamListItem(const QString &text, QListWidget *parent = 0, Item	*item	= nullptr);
+    ParamListItem(const QString &text, QListWidget *parent = 0, Config	*config	= nullptr);
 	~ParamListItem();
 
 	void	setParam(Param *value);
@@ -24,9 +24,11 @@ public:
 	Param	*getParam()		const;
 	Item	*getItem()		const;
 	Config	*getConfig()	const;
+	void	ShowInfo()		const;
 
 
 protected:
+	inline void	initPtr();
 	Param	*param;
 	Config	*config;
 	Item	*item;

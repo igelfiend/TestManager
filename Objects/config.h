@@ -13,7 +13,7 @@ class Manager;
 class Config
 {
 public:
-	Config(QString device, QString type, QDomDocument document);
+    Config(const QString &device, const QString &type, const QDomDocument &document);
 	~Config();
 
 	void	init();
@@ -22,19 +22,21 @@ public:
 
 	Item	*getMain() const;
 	Test	*getTest(int index) const;
-	Test	*getTest(QString test_name) const;
+    Test	*getTest(const QString &test_name) const;
 
 	bool	removeTest(int index);
-	bool	removeTest(QString test_name);
+    bool	removeTest(const QString &test_name);
 
 	int	getTestCount()	const;
 	int	getItemsCount()	const;
 
 	Item	*getItem(int index) const;
-	Item	*getItem(QString name) const;
+	Item	*getItem(const QString &name, const QString &version, const QString &key = QString() ) const;
+	QVector< Item * > getItems( const QString &name, const QString &version ) const;
 
 	QString getFullName() const;
 	void	printParams();
+    void    printTestList();
 	QDomElement		getRoot() const;
 	QDomDocument	getRootDocument() const;
 
@@ -44,9 +46,13 @@ public:
 	QString getPath() const;
 	void	setPath(const QString &value);
 
+	bool	isChanged() const;
+	void	setChanged( bool flag );
+
 private:
 	QString	device;
 	QString type;
+	bool	changed;
 	QString	path;
 	Manager	* manager;
 	QDomDocument	root;

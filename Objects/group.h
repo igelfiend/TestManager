@@ -5,26 +5,33 @@
 #include <QObject>
 #include <QPushButton>
 
+#include <utils.h>
+
 class QString;
 class QBoxLayout;
 class QLabel;
 class QListWidget;
 class ConfigList;
 class QTableWidget;
+class QPlainTextEdit;
 
 class Config;
 class Param;
+class Item;
 class MainWindow;
 class TestParam;
+class TableParam;
+class Group;
+class CompareGroup;
 
-class Group : public QObject
+class BaseGroup: public QObject
 {
-	Q_OBJECT
 public:
-	Group();
-	Group(QString title, QVector< Config* >	configs,	MainWindow *window);
-	Group(QString title, QVector< Param* >	params,		MainWindow *window);
-	~Group();
+	BaseGroup();
+	BaseGroup( QVector< Config* >	configs,	MainWindow *window );
+	BaseGroup( QVector< Item* >		items,		MainWindow *window );
+	BaseGroup( QVector< Param* >	params,		MainWindow *window );
+	virtual ~BaseGroup();
 
 	void	addConfigs( QVector<Config *> conf_array );
 	void	addParams( QVector<Param *> param_array );
@@ -34,37 +41,79 @@ public:
 
 	void	removeConfigs( QVector<Config *>	conf_vector );
 	void	removeParams( QVector<Param *>		param_vector );
-	Param	*getGroupParam() const;
+	int		getParamsCount() const;
 
+	bool	hasData() const;
 	QBoxLayout	*getContainer() const;
+	TestParam	*getParamInfo() const;
+
+	Group			*toGroup();
+	CompareGroup	*toCompareGroup();
 
 
-	bool hasData() const;
-
-	TestParam *getParamInfo() const;
-
-private:
-	bool	has_data;
-	Param	*group_param;
-	QLabel	*lb;
-	QBoxLayout	*container;
-	QPushButton *button;
-	ConfigList	*list;
+protected:
+	bool		has_data;
 	MainWindow	*window;
+	QBoxLayout	*container;
 	TestParam	*param_info;
-	QTableWidget		*table;
 	QVector< Config* >	configs;
 	QVector< Param* >	params;
+	QVector< Item* >	items;
 	QList<QMetaObject::Connection>	connections;
+};
 
+class Group: public BaseGroup
+{
 
+	Q_OBJECT
+public:
+    enum GroupType
+    {
+        Normal = 0,
+        NoTest = 1,
+        NoParameter = 2
+    };
+
+	Group();
+    Group(const QString &title, QVector< Config* >	configs,	MainWindow *window);
+    Group(const QString &title, QVector< Item* >	tests,		MainWindow *window);
+    Group(const QString &title, QVector< Param* >	params,		MainWindow *window);
+	~Group();
+
+	Param		*getGroupParam() const;
+	QString		getButtonTitle() const;
+
+    GroupType getGroupType() const;
+    void setGroupType(const GroupType &value);
+
+private:
+    void	initPtr();
+    Param	*group_param;
+    QLabel	*lb;
+
+    QPushButton *button;
+	ConfigList	*list;
+	FIELDS	fields;
+    GroupType group_type;
 
 public slots:
 	void	rowChanged( int row );
 	void	paramEdited();
 	void	editAccepted();
-	void	insertRowInTable( bool );
-	void	removeRowInTable( bool );
 };
+
+class CompareGroup: public BaseGroup
+{
+	Q_OBJECT
+public:
+	CompareGroup();
+    CompareGroup(const QString &textarea_text, QVector< Config* >	configs,	MainWindow *window );
+	CompareGroup( QVector< Param* >		params,		MainWindow *window );
+	~CompareGroup();
+private:
+	QLabel		*label;
+	QPlainTextEdit	*textarea;
+};
+
 
 #endif // GROUP_H

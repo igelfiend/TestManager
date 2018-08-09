@@ -1,41 +1,45 @@
 #include "paramlistitem.h"
-
 #include "param.h"
 #include "test.h"
 #include "config.h"
 
+#include <QDebug>
+
+
 ParamListItem::ParamListItem()
 {
-	config	= nullptr;
-	param	= nullptr;
-	item	= nullptr;
+	initPtr();
+//	config	= nullptr;
+//	param	= nullptr;
+//	item	= nullptr;
 }
 
-ParamListItem::ParamListItem(QString text, QListWidget *parent, Param *param) :
+ParamListItem::ParamListItem(const QString &text, QListWidget *parent, Param *param) :
 	QListWidgetItem(text, parent, ItemType::UserType)
 {
-	ParamListItem();
+//	ParamListItem();
+	initPtr();
 	this->param = param;
 }
 
-ParamListItem::ParamListItem(QString text, QListWidget *parent, Item *item) :
+ParamListItem::ParamListItem(const QString &text, QListWidget *parent, Item *item) :
 	QListWidgetItem(text, parent, ItemType::UserType)
 {
-	ParamListItem();
+//	ParamListItem();
+	initPtr();
 	this->item = item;
 }
 
-ParamListItem::ParamListItem(QString text, QListWidget *parent, Config *config) :
+ParamListItem::ParamListItem(const QString &text, QListWidget *parent, Config *config) :
 	QListWidgetItem(text, parent, ItemType::UserType)
 {
-	ParamListItem();
+//	ParamListItem();
+	initPtr();
 	this->config = config;
 }
 
 ParamListItem::~ParamListItem()
-{
-
-}
+{}
 
 Param *ParamListItem::getParam() const
 {
@@ -68,6 +72,29 @@ Config *ParamListItem::getConfig() const
 	{
 		return config;
 	}
+}
+
+void ParamListItem::ShowInfo() const
+{
+	if( param )
+	{
+		qDebug()	<< " /*----------------Parameter-Info--------------*/\n"
+					<< "Name = "	<< param->getName() << "\n"
+					<< "Data = "	<< param->getData() << "\n"
+					<< "Owner = "	<< ( (param->getOwner()) ? param->getOwner()->getName() : QString("No owner") ) << "\n"
+					<< "/*------------------End-of-Info---------------*/";
+	}
+	else
+	{
+		qDebug() << "Error! No param detected!";
+	}
+}
+
+void ParamListItem::initPtr()
+{
+	config	= nullptr;
+	param	= nullptr;
+	item	= nullptr;
 }
 
 void ParamListItem::setParam(Param *value)

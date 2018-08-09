@@ -2,6 +2,7 @@
 #define MANAGER_H
 #include <QDomElement>
 #include <QList>
+#include <QWidget>
 
 class QStringList;
 class QString;
@@ -21,21 +22,23 @@ public:
 
 	ConfigInfo *	getConfigInfo() const;
 	bool	isLoaded() const;
-	void	Load( QStringList devices, QStringList modes );
+    void	Load( const QStringList &devices, const QStringList &modes );
 	void	Save();
 	void	Clear();
 	void	ShowLoadedData();
 
 	void setConfigInfo(ConfigInfo *value);
 
-	void setWindow(MainWindow *value);
+    void setWindow( MainWindow *value );
+    void setEditForm( QWidget *form );
+	MainWindow	*getWindow() const;
 
 	EditParamForm *getEditForm() const;
 
 	bool	isChanged() const;
 	void	setChanged(bool value);
 
-	void	setBarText( QString text );
+    void	setBarText( const QString &text );
 
 private:
 	bool	loaded;

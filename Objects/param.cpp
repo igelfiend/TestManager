@@ -7,10 +7,11 @@
 
 Param::Param()
 {
-
+	owner = nullptr;
 }
 
-Param::Param(QString name, QDomNode node, ParamType p_type, StringType str_type)
+Param::Param(const QString &name, const QDomNode &node, ParamType p_type, StringType str_type):
+	Param()
 {
 	this->name	= name;
 	this->node	= node;
@@ -18,12 +19,17 @@ Param::Param(QString name, QDomNode node, ParamType p_type, StringType str_type)
 	this->str_format	= str_type;
 }
 
-Param::Param(Param *param)
+Param::Param(Param *param):
+	Param()
 {
+    qDebug() << "param constructor started";
 	name	= param->name;
-	node	= param->node.cloneNode( true );
+    node	= param->node.cloneNode( true );
 	type	= param->type;
+//	owner	= param->owner;
 	str_format	= param->str_format;
+    qDebug() << "param constructor ended";
+
 }
 
 bool Param::compare(Param *param)
@@ -104,7 +110,7 @@ void Param::setType(const ParamType &value)
 	type = value;
 }
 
-void Param::updateParams(QVector<Param *> params, QString data)
+void Param::updateParams(QVector<Param *> params, const QString &data)
 {
 	if( params.count() == 0 )
 	{
@@ -140,6 +146,11 @@ void Param::updateParams(QVector<Param *> params, QString data)
 					QDomText txt = params.at( i )->getNode().toDocument().createTextNode( data );
 					params.at( i )->getNode().appendChild( txt );
 				}
+			}
+
+			if( ( params.at( i )->getOwner() ) && (params.at( i )->getConfig() ) )
+			{
+				params.at( i )->getConfig()->setChanged( true );
 			}
 		}
 	}
@@ -178,6 +189,11 @@ void Param::updateParams(QVector<Param *> params, QString data)
 			{
 				old_node.appendChild( child.cloneNode( true ) );
 				child = child.nextSibling();
+			}
+
+			if( ( params.at( i )->getOwner() ) && (params.at( i )->getConfig() ) )
+			{
+				params.at( i )->getConfig()->setChanged( true );
 			}
 		}
 	}

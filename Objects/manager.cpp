@@ -31,10 +31,8 @@ Manager::Manager(MainWindow *parent)
 
 Manager::~Manager()
 {
-	for( int i = 0; i < configs.count(); ++i )
-	{
-		delete configs.at( i );
-	}
+    qDeleteAll( configs );
+    configs.clear();
 }
 
 Config *Manager::getConfig(int index) const
@@ -61,7 +59,7 @@ bool Manager::isLoaded() const
 	return loaded;
 }
 
-void Manager::Load(QStringList devices, QStringList modes)
+void Manager::Load(const QStringList &devices, const QStringList &modes)
 {
 	for (int i = 0; i < devices.size(); ++i)
 	{
@@ -89,7 +87,7 @@ void Manager::Load(QStringList devices, QStringList modes)
 			qDebug() << path << "loaded!";
 			config_file->close();
 
-			Config * config = new Config( devices.at( i ), modes.at( j ), config_dom );
+			Config *config = new Config( devices.at( i ), modes.at( j ), config_dom );
 			config->setManager( this );
 			config->setPath( path );
 			config->init();
@@ -109,10 +107,13 @@ void Manager::Save()
 	}
 
 	qDebug() << "Manager::Save() : Start";
-	QTime t;
-	t.start();
 	for( int i = 0; i < configs.count(); ++i)
 	{
+		if( !configs.at( i )->isChanged() )
+		{
+			continue;
+		}
+
 		qDebug() << "Saving path: " << configs.at( i )->getPath();
 		QFile file( configs.at( i )->getPath() );
 		if( file.open( QIODevice::WriteOnly ) )
@@ -123,6 +124,7 @@ void Manager::Save()
 //			str << Utils::spacesToTabs( doc.toString() );
 			doc.save( str, 4 );
 			file.close();
+			configs.at( i )->setChanged( false );
 		}
 		else
 		{
@@ -172,7 +174,17 @@ void Manager::setConfigInfo(ConfigInfo *value)
 
 void Manager::setWindow(MainWindow *value)
 {
-	window = value;
+    window = value;
+}
+
+void Manager::setEditForm(QWidget *form)
+{
+    edit_form = dynamic_cast< EditParamForm* >( form );
+}
+
+MainWindow *Manager::getWindow() const
+{
+	return window;
 }
 
 EditParamForm *Manager::getEditForm() const
@@ -187,11 +199,11 @@ bool Manager::isChanged() const
 
 void Manager::setChanged(bool value)
 {
-	window->statusBar()->showMessage( "Data chagned! Press Save to confirm changes" );
+	window->statusBar()->showMessage( "Data changed! Press Save to confirm changes" );
 	changed = value;
 }
 
-void Manager::setBarText(QString text)
+void Manager::setBarText(const QString &text)
 {
 	window->statusBar()->showMessage( text );
 }

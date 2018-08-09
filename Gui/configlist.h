@@ -10,27 +10,42 @@
 
 class QMimeData;
 class ConfigMime;
+class ParamListItem;
 
 
 class ConfigList : public QListWidget
 {
 	Q_OBJECT
 public:
-	ConfigList();
-	ConfigList( Group *group );
+	ConfigList(QWidget *parent);
+	ConfigList(Group *group , QWidget *parent = nullptr);	// Конструктор на основе группы
 
 	Group	*getGroup() const;
 	void	setGroup(Group *value);
 
+    QVector<Param  *> getParams()  const;		// Получить параметры выделенных элементов
+    QVector<Config *> getConfigs() const;       // Получить конфигурации выделенных элементов
+
+	QWidget *getParent() const;				// Получить родителя
+
+	bool isAddingGroup() const;
+
+public slots:
+    void	ShowContextMenu(const QPoint &pos);
+	void	ShowItemInfo();
+	void	CreateNewGroup();
+
 protected:
-	void dragEnterEvent(QDragEnterEvent *event);
-	void dragMoveEvent(QDragMoveEvent *event);
-	void dragLeaveEvent(QDragLeaveEvent *event);
-	void dropEvent(QDropEvent *event);
-	QMimeData *mimeData(const QList<QListWidgetItem *> items) const;
+	void	dragEnterEvent(QDragEnterEvent *event);
+	void	dragMoveEvent(QDragMoveEvent *event);
+	void	dragLeaveEvent(QDragLeaveEvent *event);
+	void	dropEvent(QDropEvent *event);
+	QMimeData	*mimeData(const QList<QListWidgetItem *> items) const;
 
 private:
 	Group	*group;
+	QWidget	*parent;
+	bool	fAddingGroup;
 };
 
 
@@ -47,11 +62,13 @@ public:
 
 	bool	hasConfigs()	const;
 	bool	hasParams()		const;
+	bool	hasTests()		const;
 
 private:
 	ConfigList	*config_list;
 	QList<QListWidgetItem *>	items;
 	QVector<Config *>	configs;
+	QVector<Item *>		tests;
 	QVector<Param *>	params;
 
 };

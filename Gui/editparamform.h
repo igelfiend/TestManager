@@ -4,6 +4,7 @@
 #include <QDialog>
 #include <QDialogButtonBox>
 #include <QBoxLayout>
+#include <QObject>
 #include "utils.h"
 
 class Group;
@@ -20,7 +21,7 @@ public:
 	explicit EditParamForm(QWidget *parent = 0);
 	~EditParamForm();
 
-	void	setText( QString text );
+    void	setText( const QString &text );
 	QString	getText() const;
 
 	QBoxLayout *getLayout() const;
@@ -31,13 +32,19 @@ public:
 	StringType getDataType() const;
 	void	setDataType(const StringType &value);
 
+	void	addConnection(auto con);
+	void	clearConnections();
+
+
+	QList<QMetaObject::Connection> getConnections() const;
 
 private:
 	QVector< QVector< QString > > getTableData() const;
 
-	Ui::EditParamForm *ui;
-	Group * caller;
-	StringType data_type;
+	StringType	data_type;
+	Group		*caller;
+	Ui::EditParamForm	*ui;
+	QList<QMetaObject::Connection>	connections;
 };
 
 #endif // EDITPARAMFORM_H

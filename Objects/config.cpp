@@ -5,7 +5,7 @@
 
 #include <QDebug>
 
-Config::Config(QString device, QString type, QDomDocument document)
+Config::Config(const QString &device, const QString &type, const QDomDocument &document)
 {
 	this->device = device;
 	this->type = type;
@@ -14,10 +14,8 @@ Config::Config(QString device, QString type, QDomDocument document)
 
 Config::~Config()
 {
-	for( int i = 0; i < items.count(); ++i )
-	{
-		delete items.at( i );
-	}
+    qDeleteAll(items);
+    items.clear();
 }
 
 void Config::init()
@@ -33,7 +31,9 @@ void Config::init()
 		}
 		else
 		{
-			Test * test = new Test(node.toElement().attribute("idd"), this, node);
+			Test * test = new Test( node.toElement().attribute( "idd" ), this, node );
+			test->setVersion( node.toElement().attribute( "version_template" ) );
+			test->setKeyName( node.toElement().attribute( "key", "" ) );
 			items.append(test);
 		}
 		node = node.nextSibling();
@@ -69,7 +69,7 @@ Test *Config::getTest(int index) const
 	return nullptr;
 }
 
-Test *Config::getTest(QString test_name) const
+Test *Config::getTest(const QString &test_name) const
 {
 	for( int i = 1; i < items.size(); ++i)
 	{
@@ -92,12 +92,11 @@ bool Config::removeTest(int index)
 	return false;
 }
 
-bool Config::removeTest(QString test_name)
+bool Config::removeTest(const QString &test_name)
 {
 	for( int i = 1; i < items.size(); ++i)
 	{
-		Test * test = items.at( i )->toTest();
-		if (test->getName() == test_name)
+		if (items.at( i )->getName() == test_name)
 		{
 			items.removeAt( i );
 			return true;
@@ -125,16 +124,32 @@ Item *Config::getItem(int index) const
 	return nullptr;
 }
 
-Item *Config::getItem(QString name) const
+Item *Config::getItem(const QString &name, const QString &version , const QString &key) const
 {
 	for( int i = 0; i < items.count(); ++i )
 	{
-		if( items.at( i )->getName() == name )
+		if( ( items.at( i )->getName()	  == name	 ) &&
+			( items.at( i )->getVersion() == version ) &&
+			( items.at( i )->getKeyName() == key	 ) )
 		{
 			return items.at( i );
 		}
 	}
 	return nullptr;
+}
+
+QVector<Item *> Config::getItems(const QString &name, const QString &version) const
+{
+	QVector< Item * > result;
+	for( int i = 0; i < items.count(); ++i )
+	{
+		if( ( items.at( i )->getName()	  == name ) &&
+			( items.at( i )->getVersion() == version ) )
+		{
+			result << items[ i ];
+		}
+	}
+	return result;
 }
 
 QString Config::getFullName() const
@@ -148,7 +163,15 @@ void Config::printParams()
 	{
 		qDebug() << "\nParams for item[" << i << "]:";
 		items[ i ]->ShowAllParams();
-	}
+    }
+}
+
+void Config::printTestList()
+{
+    for( int i = 0; i < items.count(); ++i )
+    {
+        qDebug() << "Test: " << items[ i ]->getName() << " " << items[ i ]->getVersion();
+    }
 }
 
 QDomElement Config::getRoot() const
@@ -179,5 +202,15 @@ QString Config::getPath() const
 void Config::setPath(const QString &value)
 {
 	path = value;
+}
+
+bool Config::isChanged() const
+{
+	return changed;
+}
+
+void Config::setChanged(bool flag)
+{
+	changed = flag;
 }
 

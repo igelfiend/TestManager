@@ -15,11 +15,6 @@ ConfigInfo::ConfigInfo( Manager *manager )
 	init();
 }
 
-ConfigInfo::~ConfigInfo()
-{
-
-}
-
 void ConfigInfo::init()
 {
 	qDebug() << "Initialisation configuration of tests...";
@@ -52,7 +47,7 @@ void ConfigInfo::init()
 
 	while( !test_node.isNull() )
 	{
-		TestInfo * test = new TestInfo(test_node.attribute("name", ""));
+		TestInfo *test = new TestInfo( test_node.attribute("name", ""), test_node.attribute("version_template", "") );
 		QDomElement param_node = test_node.firstChildElement("param");
 
 		while( !param_node.isNull() )
@@ -138,11 +133,12 @@ TestInfo *ConfigInfo::getTest(int index) const
 	return nullptr;
 }
 
-TestInfo *ConfigInfo::getTest(QString name) const
+TestInfo *ConfigInfo::getTest( const QString &name, const QString &version ) const
 {
 	for( int i = 0; i < tests.count(); ++i )
 	{
-		if( tests.at( i )->getName() == name )
+		if( ( tests.at( i )->getName()	  == name ) &&
+			( tests.at( i )->getVersion() == version ) )
 		{
 			return tests.at( i );
 		}
@@ -165,30 +161,16 @@ void ConfigInfo::setManager(Manager *value)
 	manager = value;
 }
 
-TestInfo::TestInfo()
-{
-
-}
-
-TestInfo::TestInfo(QString name)
-{
-	this->name = name;
-}
-
-TestInfo::~TestInfo()
-{
-
-}
-
 TestParam *TestInfo::getParam( int index)
 {
 	if( index < params.count() )
 	{
 		return params.at( index );
 	}
+	return nullptr;
 }
 
-TestParam *TestInfo::getParam(QString name)
+TestParam *TestInfo::getParam(const QString &name)
 {
 	for( int i = 0; i < params.count(); ++i )
 	{
@@ -215,8 +197,18 @@ QString TestInfo::getName() const
 	return name;
 }
 
+QString TestInfo::getVersion() const
+{
+	return version;
+}
 
-TestParam::TestParam(QString path, QString name, ParamType type)
+QString TestInfo::getVersionedName() const
+{
+	return QString( "%1 %2" ).arg( name ).arg( version );
+}
+
+
+TestParam::TestParam(const QString &path, const QString &name, ParamType type)
 {
 	this->path	= path;
 	this->name	= name;
@@ -224,18 +216,13 @@ TestParam::TestParam(QString path, QString name, ParamType type)
 	this->string_type	= StringType::None;
 }
 
-TestParam::TestParam(QString path, QString name, ParamType type, StringType str_type, QStringList column_names)
+TestParam::TestParam(const QString &path, const QString &name, ParamType type, StringType str_type, const QStringList &column_names)
 {
 	this->path	= path;
 	this->name	= name;
 	this->param_type	= type;
 	this->column_names	= column_names;
 	this->string_type	= str_type;
-}
-
-TestParam::~TestParam()
-{
-
 }
 
 QString TestParam::getPath() const

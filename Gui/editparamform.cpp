@@ -12,6 +12,7 @@ EditParamForm::EditParamForm(QWidget *parent) :
 	ui(new Ui::EditParamForm)
 {
 	ui->setupUi(this);
+	this->setWindowFlags(this->windowFlags() | Qt::WindowMinMaxButtonsHint);
 }
 
 EditParamForm::~EditParamForm()
@@ -19,7 +20,7 @@ EditParamForm::~EditParamForm()
 	delete ui;
 }
 
-void EditParamForm::setText(QString text)
+void EditParamForm::setText(const QString &text)
 {
 	QPlainTextEdit *edit = dynamic_cast<QPlainTextEdit *>( ui->verticalLayout_3->itemAt( 0 )->widget() );
 	edit->setPlainText( text );
@@ -34,6 +35,9 @@ QString EditParamForm::getText() const
 	case Table:
 		result = Utils::saveToString( getTableData(), data_type );
 		return result;
+
+	case Complex:
+		return QString();
 
 	default:
 		QPlainTextEdit *edit = dynamic_cast<QPlainTextEdit *>( ui->verticalLayout_3->itemAt( 0 )->widget() );
@@ -64,6 +68,19 @@ StringType EditParamForm::getDataType() const
 void EditParamForm::setDataType(const StringType &value)
 {
 	data_type = value;
+}
+
+void EditParamForm::addConnection(auto con)
+{
+	connections << con;
+}
+
+void EditParamForm::clearConnections()
+{
+	foreach (auto var, connections)
+	{
+		QObject::disconnect(var);
+	}
 }
 
 QVector<QVector<QString> > EditParamForm::getTableData() const
@@ -113,4 +130,9 @@ QVector<QVector<QString> > EditParamForm::getTableData() const
 		}
 	}
 	return result;
+}
+
+QList<QMetaObject::Connection> EditParamForm::getConnections() const
+{
+	return connections;
 }
