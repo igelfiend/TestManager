@@ -87,9 +87,15 @@ private slots:
 
 	void on_actionFix_range_in_attenuator_triggered();
 	void on_actionAdd_equip_to_periodic_triggered();
+    void on_actionFix_equip_order_in_periodic_triggered();
     void on_actionFix_PowerAccuracy_naming_triggered();
     void on_actionAdd_test_triggered();
     void on_actionAdd_Select_Method_to_Configs_triggered();
+    void on_actionAdd_Select_Print_to_Configs_triggered();
+    void on_actionAdd_Print_File_to_Configs_triggered();
+    void on_actionReplace_color_in_Svg_triggered();
+    void on_actionReplace_color_on_origin_Svg_triggered();
+    void on_actionFix_Freq_Acc_Svg_triggered();
 
 private:
 	void closeEvent(QCloseEvent *event);

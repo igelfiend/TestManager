@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include <QApplication>
 #include <QDebug>
+#include <QDomDocument>
 int main(int argc, char *argv[])
 {
 	QStringList paths = QCoreApplication::libraryPaths();

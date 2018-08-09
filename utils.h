@@ -47,14 +47,37 @@ public:
 	static	void	fixAccuracyTestRange(const QString &test_name, const QString &version, Manager *manager );
 
 	static	void	addEquipToPerformance(Manager *manager );
+    static  void    fixEquipOrderInPeriodic( Manager *manager );
 
     static  void    fixPowerAccuracyNaming( Manager *manager );
-    static  void    addSelectMethodToConfigs( Manager *manager );
+    static  void    addTagToMain(Manager *manager , const QString &tag_name, const QString &paste_after = QString() );
 
     static  void    addTestToConfigs( const QString &test_code, bool fInsertFirst, const QString &prevTest, Manager *manager );
 
 	static	bool	NodeIsFieldType( const QDomNode &node );
 	static	SpoilerGroupBox	*NodeToGroupBox(const QDomNode &node, FIELDS &fields);
+    static  bool    ReplaceInFile(const QString &src_filename, const QString &tgt_filename, const QMap< QString, QString > replace_map);
+    static  bool    ReplaceColorInSvgs(const QString &dev_dir_path, const QMap<QString, QString> &replace_map, bool fReplaceOrigin, QWidget *parent );
+
+    //!
+    //! \brief FixSvgStyle Process all svgs
+    //! \param img_foulder Name pics foulder
+    //! \param pic_size Area of pic_block
+    //! \param style Stylename
+    //! \param css_string Css for settings Stylename in CDATA block
+    //! \return True if success
+    //!
+    static  bool    FixSvgStyle( const QString &img_foulder, QPoint pic_size, const QString &style, const QString &css_string, QWidget *parent );
+
+    //!
+    //! \brief FixSvgStyleInFile Process svg file. Fill specific square block with size "pic_size" with "style" and "css_string"
+    //! \param filepath Path to file
+    //! \param pic_size Area of pic_block
+    //! \param style Stylename
+    //! \param css_string Css for settings Stylename in CDATA block
+    //! \return True if success
+    //!
+    static  bool    FixSvgStyleInFile( const QString &filepath, QPoint pic_size, const QString &style, const QString &css_string );
 
 private:
 	static void		insertNodeAndAddToList( QDomNode &target, QStringList &target_list, const QString &node_name, const QString &data );
@@ -62,6 +85,9 @@ private:
 	static QDomNode	createEquipItem(const QStringList &dev_list, QDomDocument &doc );
 	static void		addElementsToList( QStringList &target_list, const QString &data );
 	static QVector< QString > StringToVector(QString str);
+
+    static QPoint getWidthAndHeightFromPointsParameterInSvg( const QString &points_str );
+    static bool   processRowInSvg(QString &row, QPoint pic_size, const QString &stylename, const QString &css_style);
 };
 
 #endif // UTILS_H

@@ -83,10 +83,20 @@
     <property name="title">
      <string>Fixes</string>
     </property>
+    <widget class="QMenu" name="menuAdd_to_Config">
+     <property name="title">
+      <string>Add to Config...</string>
+     </property>
+     <addaction name="actionAdd_Select_Method_to_Configs"/>
+     <addaction name="actionAdd_Select_Print_to_Configs"/>
+     <addaction name="actionAdd_Print_File_to_Configs"/>
+    </widget>
     <addaction name="actionFix_range_in_attenuator"/>
     <addaction name="actionAdd_equip_to_periodic"/>
+    <addaction name="actionFix_equip_order_in_periodic"/>
     <addaction name="actionFix_PowerAccuracy_naming"/>
-    <addaction name="actionAdd_Select_Method_to_Configs"/>
+    <addaction name="menuAdd_to_Config"/>
+    <addaction name="actionFix_Freq_Acc_Svg"/>
    </widget>
    <widget class="QMenu" name="menuTests">
     <property name="title">
@@ -94,8 +104,16 @@
     </property>
     <addaction name="actionAdd_test"/>
    </widget>
+   <widget class="QMenu" name="menuUtils">
+    <property name="title">
+     <string>Utils</string>
+    </property>
+    <addaction name="actionReplace_color_in_Svg"/>
+    <addaction name="actionReplace_color_on_origin_Svg"/>
+   </widget>
    <addaction name="menuFixes"/>
    <addaction name="menuTests"/>
+   <addaction name="menuUtils"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <attribute name="toolBarArea">
@@ -544,6 +562,61 @@
   <action name="actionAdd_Select_Method_to_Configs">
    <property name="text">
     <string>Add Select Method to Configs</string>
+   </property>
+  </action>
+  <action name="actionAdd_Select_Print_to_Configs">
+   <property name="text">
+    <string>Add Select Print to Configs</string>
+   </property>
+  </action>
+  <action name="actionddd">
+   <property name="text">
+    <string>ddd</string>
+   </property>
+  </action>
+  <action name="actiondsds">
+   <property name="text">
+    <string>dsds</string>
+   </property>
+  </action>
+  <action name="actionaaa">
+   <property name="text">
+    <string>aaa</string>
+   </property>
+  </action>
+  <action name="actionAdd_Print_File_to_Configs">
+   <property name="text">
+    <string>Add Print File to Configs</string>
+   </property>
+  </action>
+  <action name="actionReplace_color_in_Svg">
+   <property name="text">
+    <string>Replace color in Svg</string>
+   </property>
+  </action>
+  <action name="actionReplace_in_origin_pics_backhround_to_transparent">
+   <property name="text">
+    <string>Replace in origin pics backhround to transparent</string>
+   </property>
+  </action>
+  <action name="actionReplace_origin_color_in_Svg">
+   <property name="text">
+    <string>Replace origin color in Svg</string>
+   </property>
+  </action>
+  <action name="actionReplace_color_on_origin_Svg">
+   <property name="text">
+    <string>Replace color on origin Svg</string>
+   </property>
+  </action>
+  <action name="actionFix_Freq_Acc_Svg">
+   <property name="text">
+    <string>Fix Freq Acc Svg</string>
+   </property>
+  </action>
+  <action name="actionFix_equip_order_in_periodic">
+   <property name="text">
+    <string>Fix equip order in periodic</string>
    </property>
   </action>
  </widget>

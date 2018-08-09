@@ -10,6 +10,9 @@
 #include <QFormLayout>
 #include <QLabel>
 #include <QMessageBox>
+#include <QProgressDialog>
+#include <QDir>
+#include <QApplication>
 
 #include "utils.h"
 #include "param.h"
@@ -585,6 +588,38 @@ void Utils::addEquipToPerformance( Manager *manager)
 
 }
 
+void Utils::fixEquipOrderInPeriodic(Manager *manager)
+{
+    for( int i = 0; i < manager->getConfigsCount(); ++i )
+    {
+        Config *conf = manager->getConfig( i );
+        QDomNode main_root = conf->getMain()->getRoot();
+        QDomElement select_method = main_root.firstChildElement( "select_method" );
+        if( !select_method.isNull() )
+        {
+            QDomNode method = select_method.firstChild();
+            while( !method.isNull() )
+            {
+                QDomElement tests = method.firstChildElement( "tests" );
+
+                QString tests_str = tests.text();
+                QStringList tests_list = tests_str.split( "," );
+
+                int equip_pos = tests_list.indexOf( "Equipment" );
+                if( equip_pos != -1 )
+                {
+                    tests_list.move( equip_pos, 1 );
+                }
+                tests.firstChild().setNodeValue( tests_list.join( "," ) );
+
+                method = method.nextSibling();
+            }
+        }
+        conf->setChanged( true );
+        manager->setChanged( true );
+    }
+}
+
 void Utils::fixPowerAccuracyNaming(Manager *manager)
 {
     int config_count = manager->getConfigsCount();
@@ -621,23 +656,37 @@ void Utils::fixPowerAccuracyNaming(Manager *manager)
     }
 }
 
-void Utils::addSelectMethodToConfigs(Manager *manager)
+void Utils::addTagToMain(Manager *manager, const QString &tag_name, const QString &paste_after)
 {
     int config_count = manager->getConfigsCount();
     bool fChanged = false;
-
+    bool fInsertLast = paste_after.isEmpty();
     for( int i = 0; i < config_count; ++i )
     {
         Item *mainElement = manager->getConfig( i )->getMain();
 
-        if( !mainElement->getParam( "select_method" ) )
+        if( !mainElement->getParam( tag_name ) )
         {
             QDomNode mainRoot = mainElement->getRoot();
 
-            QDomDocument d;
-            QDomElement methodNode = d.createElement( "select_method" );
+            if( !mainRoot.firstChildElement( tag_name ).isNull() )
+            {
+                qDebug() << "Utils::addTagToMain: tag present in Main block";
+                continue;
+            }
 
-            mainRoot.appendChild( methodNode );
+            QDomDocument d;
+            QDomElement newNode = d.createElement( tag_name );
+
+            if( fInsertLast )
+            {
+                mainRoot.appendChild( newNode );
+            }
+            else
+            {
+                mainRoot.insertAfter( newNode, mainRoot.firstChildElement( paste_after ) );
+            }
+
             manager->getConfig( i )->setChanged( true );
             fChanged = true;
         }
@@ -741,6 +790,8 @@ SpoilerGroupBox *Utils::NodeToGroupBox( const QDomNode &node, FIELDS &fields )
 	QDomNodeList children = node.childNodes();
 	for( int i = 0; i < children.count(); ++i )
 	{
+        if( children.at( i ).isComment() ) continue;
+
 		if( NodeIsFieldType( children.at( i ) ) )
 		{
 			qDebug() << "data in text node: " << TextInside( children.at( i ) ).data();
@@ -763,7 +814,210 @@ SpoilerGroupBox *Utils::NodeToGroupBox( const QDomNode &node, FIELDS &fields )
 		}
 	}
 
-	return gbox;
+    return gbox;
+}
+
+bool Utils::ReplaceInFile(const QString &src_filename, const QString &tgt_filename, const QMap<QString, QString> replace_map)
+{
+    QFile svg_file( src_filename );
+    if( !svg_file.open( QIODevice::ReadOnly | QIODevice::Text ) )
+    {
+        qCritical() << "Utils::ReplaceInFile: Error opening file on read " << src_filename;
+        return false;
+    }
+
+    QTextStream in( &svg_file );
+    QString svg_code = in.readAll();
+    svg_file.close();
+
+    qDebug() << "Processing " << src_filename;
+    for( QString key: replace_map.keys() )
+    {
+        svg_code = svg_code.replace( key, replace_map.value( key ) );
+        qDebug() << "\tReplaced " << key << " with " << replace_map.value( key );
+    }
+
+    qDebug() << "Output file " << tgt_filename;
+    QFile svg_file_out( tgt_filename );
+    if( !svg_file_out.open( QIODevice::WriteOnly | QIODevice::Text ) )
+    {
+        qCritical() << "Utils::ReplaceInFile: Error opening file on write " << tgt_filename;
+        return false;
+    }
+
+    QTextStream out( &svg_file_out );
+    out << svg_code;
+    svg_file_out.close();
+
+    return true;
+}
+
+bool Utils::ReplaceColorInSvgs(const QString &dev_dir_path, const QMap<QString, QString> &replace_map, bool fReplaceOrigin, QWidget *parent)
+{
+    qDebug() << "Utils::ReplaceColorInSvgs started";
+    qDebug() << "Utils::ReplaceColorInSvgs dir path: " << dev_dir_path;
+
+    QDir path( dev_dir_path );
+    QStringList devices = path.entryList( QDir::Dirs );
+
+    if( devices.count() < 3 )
+    {
+        return false;
+    }
+
+    QProgressDialog progress( "Processing Svg...", "Cancel", 2, devices.count()-1, parent );
+    progress.setWindowModality( Qt::WindowModal );
+    progress.setMinimumDuration( 0 );
+    progress.setMinimumSize( 400, 100 );
+    QApplication::processEvents();
+
+    for( int i = 2; i < devices.count(); ++i )
+    {
+        progress.setValue( i );
+        if( progress.wasCanceled() )
+        {
+            break;
+        }
+
+        QString img_dir_path = QString( "%1/%2/images" )
+                               .arg( dev_dir_path )
+                               .arg( devices[ i ] );
+
+        QString img_inverse_dir_path;
+
+        if( fReplaceOrigin )
+        {
+            img_inverse_dir_path = img_dir_path;
+        }
+        else
+        {
+            img_inverse_dir_path = QString( "%1/%2/images_inverse" )
+                                                   .arg( dev_dir_path )
+                                                   .arg( devices[ i ] );
+        }
+
+        QDir img_dir( img_dir_path );
+        QDir img_inverse_dir( img_inverse_dir_path );
+        if( !img_inverse_dir.exists() )
+        {
+            img_inverse_dir.mkpath( "." );
+        }
+
+        QStringList files = img_dir.entryList( QStringList() << "*.svg", QDir::Files );
+
+        qDebug() << "files: " << files;
+        foreach( QString filename, files )
+        {
+            QApplication::processEvents();
+            QString src_filename = QString( "%1/%2" ).arg( img_dir_path ).arg( filename );
+            QString tgt_filename = QString( "%1/%2" ).arg( img_inverse_dir_path ).arg( filename );
+            if( !ReplaceInFile( src_filename, tgt_filename, replace_map ) )
+            {
+                return false;
+            }
+        }
+    }
+    progress.setValue( devices.count()-1 );
+
+    return true;
+}
+
+bool Utils::FixSvgStyle(const QString &pics_foulder, QPoint pic_size, const QString &style, const QString &css_string, QWidget *parent)
+{
+    QString dev_dir_path = QString( "../../release/devices" );
+
+    QDir path( dev_dir_path );
+    QStringList devices = path.entryList( QDir::Dirs );
+
+    if( devices.count() < 3 )
+    {
+        return false;
+    }
+
+    QProgressDialog progress( "Processing Svg...", "Cancel", 2, devices.count()-1, parent );
+    progress.setWindowModality( Qt::WindowModal );
+    progress.setMinimumDuration( 0 );
+    progress.setMinimumSize( 400, 100 );
+    QApplication::processEvents();
+
+    for( int i = 2; i < devices.count(); ++i )
+    {
+        progress.setValue( i );
+        if( progress.wasCanceled() )
+        {
+            break;
+        }
+
+        QString img_dir_path = QString( "%1/%2/%3" )
+                               .arg( dev_dir_path )
+                               .arg( devices[ i ] )
+                               .arg( pics_foulder );
+
+        QDir img_dir( img_dir_path );
+
+        QStringList files = img_dir.entryList( QStringList() << "Adapter_Frequency_accuracy_*_port_*.svg", QDir::Files );
+
+        qDebug() << "device: " << devices[ i ];
+        qDebug() << "\tfiles: " << files;
+        foreach( QString filename, files )
+        {
+            QApplication::processEvents();
+            QString svg_filename = QString( "%1/%2" ).arg( img_dir_path ).arg( filename );
+
+            FixSvgStyleInFile( svg_filename, pic_size, style, css_string );
+        }
+    }
+    progress.setValue( devices.count()-1 );
+
+    return true;
+
+}
+
+bool Utils::FixSvgStyleInFile(const QString &filepath, QPoint pic_size, const QString &style, const QString &css_string)
+{
+    QString tempfile_path = filepath + ".temp";
+
+    QFile file_in ( filepath );
+    QFile file_out( tempfile_path );
+
+    if( !file_in.open( QIODevice::ReadOnly | QIODevice::Text ) )
+    {
+        qWarning() << "Utils::FixSvgStyle: can't find file " << filepath;
+        return false;
+    }
+
+    if( !file_out.open( QIODevice::WriteOnly | QIODevice::Text ) )
+    {
+        qWarning() << "Utils::FixSvgStyle: can't find file " << tempfile_path;
+        return false;
+    }
+
+    QTextStream in ( &file_in  );
+    QTextStream out( &file_out );
+
+    while( !in.atEnd() )
+    {
+        QString row = in.readLine();
+
+        QString new_row = row;
+        if( processRowInSvg( new_row, pic_size, style, css_string ) )
+        {
+//            qInfo() << "replace:\n " << row << "\nwith\n" << new_row;
+            out << new_row << "\n";
+        }
+        else
+        {
+            out << row << "\n";
+        }
+    }
+
+    file_in .close();
+    file_out.close();
+
+    file_in.remove();
+    file_out.rename( tempfile_path, filepath );
+
+    return true;
 }
 
 void Utils::insertNodeAndAddToList(QDomNode &target, QStringList &target_list, const QString &node_name, const QString &data)
@@ -841,6 +1095,76 @@ QVector<QString> Utils::StringToVector(QString str)
 		str_vector.append( tmp.at( i ) );
 	}
 
-	return str_vector;
+    return str_vector;
+}
+
+QPoint Utils::getWidthAndHeightFromPointsParameterInSvg(const QString &points_str)
+{
+    QStringList groups = points_str.split( " ", QString::SkipEmptyParts );
+
+    if( groups.count() < 4 )
+    {
+        return QPoint();
+    }
+
+    QStringList gr = groups[ 0 ].split( "," );
+    QPoint x1( gr[ 0 ].toInt(), gr[ 1 ].toInt() );
+
+    gr = groups[ 1 ].split( "," );
+    QPoint x2( gr[ 0 ].toInt(), gr[ 1 ].toInt() );
+
+    gr = groups[ 2 ].split( "," );
+    QPoint x3( gr[ 0 ].toInt(), gr[ 1 ].toInt() );
+
+
+    QPoint result;
+
+    result.setX( (int)sqrt( std::pow( x1.x() - x2.x(), 2 ) + std::pow( x1.y() - x2.y(), 2 ) ) );
+    result.setY( (int)sqrt( std::pow( x2.x() - x3.x(), 2 ) + std::pow( x2.y() - x3.y(), 2 ) ) );
+
+    return result;
+}
+
+bool Utils::processRowInSvg(QString &row, QPoint pic_size, const QString &stylename, const QString &css_style)
+{
+    QStringList splitted_row = row.split( "\"" );
+    QString row_start = splitted_row.first();
+    row_start = row_start.trimmed().left( 8 );
+
+    if( row.contains( "]]>", Qt::CaseSensitive ) )
+    {
+        row = "    " + css_style + "\n" + row;
+        return true;
+    }
+
+    if( row_start != "<polygon" )
+    {
+        return false;
+    }
+
+    if( splitted_row.count() < 4 )
+    {
+        qCritical() << "Utils::processRowInSvg: count parameters error!";
+        return false;
+    }
+
+    QString coords_block = splitted_row[ 3 ];
+
+    QPoint poly_size = getWidthAndHeightFromPointsParameterInSvg( coords_block );
+
+    qDebug() << "\t\tcompare: " << pic_size << poly_size;
+    if( ( abs( pic_size.x() - poly_size.x() ) > 2 ) ||
+        ( abs( pic_size.y() - poly_size.y() ) > 2 ) )
+    {
+        return false;
+    }
+
+
+    QString style_block = splitted_row[ 1 ];
+    style_block = stylename + " " + style_block.split( " " )[ 1 ];
+    splitted_row[ 1 ] = style_block;
+    row = splitted_row.join( "\"" );
+
+    return true;
 }
 

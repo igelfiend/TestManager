@@ -181,7 +181,7 @@ void Manager::setWindow(MainWindow *value)
 
 void Manager::setEditForm(QWidget *form)
 {
-
+    edit_form = dynamic_cast< EditParamForm* >( form );
 }
 
 MainWindow *Manager::getWindow() const

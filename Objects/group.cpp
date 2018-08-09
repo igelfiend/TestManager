@@ -48,8 +48,6 @@ Group::Group(QString title, QVector<Config *> configs, MainWindow *window) :
 		Param *t_param = nullptr;
         ParamListItem * item = new ParamListItem(configs.at( i )->getFullName(), list, t_param );
 		list->addItem( item );
-
-		list->addItem( configs.at( i )->getFullName() );
 	}
 
 	container->addWidget(lb);

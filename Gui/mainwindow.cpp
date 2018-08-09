@@ -87,7 +87,7 @@ void MainWindow::init()
     settings.endGroup();
 
     QDir path("../../release/devices");
-	QStringList devices = path.entryList(QDir::Dirs);
+    QStringList devices = path.entryList(QDir::Dirs);
 
 	for (int i = 2; i < devices.size(); ++i)
 	{
@@ -705,15 +705,18 @@ void MainWindow::on_actionAdd_equip_to_periodic_triggered()
     Utils::addEquipToPerformance( manager );
 }
 
+void MainWindow::on_actionFix_equip_order_in_periodic_triggered()
+{
+    Utils::fixEquipOrderInPeriodic( manager );
+}
+
 void MainWindow::on_actionFix_PowerAccuracy_naming_triggered()
 {
-    qDebug() << "Clicked";
     Utils::fixPowerAccuracyNaming( manager )   ;
 }
 
 void MainWindow::on_actionAdd_test_triggered()
 {
-    qDebug() << "adding test";
     AddNewTestDialog add_test;
     if(add_test.exec() == QDialog::Accepted)
     {
@@ -730,5 +733,51 @@ void MainWindow::on_actionAdd_test_triggered()
 
 void MainWindow::on_actionAdd_Select_Method_to_Configs_triggered()
 {
-    Utils::addSelectMethodToConfigs( manager );
+    Utils::addTagToMain( manager, "select_method", "read_mode" );
+}
+
+void MainWindow::on_actionAdd_Select_Print_to_Configs_triggered()
+{
+    Utils::addTagToMain( manager, "select_print", "read_mode" );
+}
+
+void MainWindow::on_actionAdd_Print_File_to_Configs_triggered()
+{
+    Utils::addTagToMain( manager, "print_file", "read_mode" );
+}
+
+void MainWindow::on_actionReplace_color_in_Svg_triggered()
+{
+    QMap< QString, QString > replace_map;
+    replace_map[ "#0059FF" ] = "#56698F";
+    replace_map[ "#6969AD" ] = "#7684A6";
+    replace_map[ "#00A8FF" ] = "#7791BE";
+    replace_map[ "#33B9FF" ] = "#5D7295";
+    replace_map[ "#7BB0E0" ] = "#97A9CD";
+    replace_map[ "#252527" ] = "none";
+    replace_map[ "#3D3C41" ] = "#FFFFFF";
+    replace_map[ "#727271" ] = "#8C8C8C";
+    replace_map[ "#FEFEFE" ] = "#000000";
+
+    bool fReplaceOrigin = false;
+    Utils::ReplaceColorInSvgs( QString( "../../release/devices" ), replace_map, fReplaceOrigin, this );
+}
+
+void MainWindow::on_actionReplace_color_on_origin_Svg_triggered()
+{
+    QMap< QString, QString > replace_map;
+    replace_map[ "#252527" ] = "none";
+
+    bool fReplaceOrigin = true;
+    Utils::ReplaceColorInSvgs( QString( "../../release/devices" ), replace_map, fReplaceOrigin, this );
+}
+
+void MainWindow::on_actionFix_Freq_Acc_Svg_triggered()
+{
+    QPoint pic_size = QPoint( 1152, 500 );
+    QString stylename = "dev_style";
+    QString css_style = ".dev_style {fill:#252527}";
+    QString pics_foulder = "images";
+
+    Utils::FixSvgStyle( pics_foulder, pic_size, stylename, css_style, this );
 }
