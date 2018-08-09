@@ -10,14 +10,8 @@
 #include "test_info.h"
 #include "utils.h"
 
-Test::Test(QString name, Config *config, QDomNode root):Item(name, config, root)
-{
-}
-
-Test::~Test()
-{
-
-}
+Test::Test(const QString &name, Config *config, const QDomNode &root):Item(name, config, root)
+{}
 
 void Test::setTemplateDir(const QString &path)
 {
@@ -49,7 +43,7 @@ void Item::setVersion(const QString &value)
 	version = value;
 }
 
-Item::Item(QString name, Config *config, QDomNode root)
+Item::Item(const QString &name, Config *config, const QDomNode &root)
 {
 	this->name = name;
 	this->config = config;
@@ -58,10 +52,8 @@ Item::Item(QString name, Config *config, QDomNode root)
 
 Item::~Item()
 {
-	for( int i = 0; i < params.count(); ++i )
-	{
-		delete params.at( i );
-	}
+    qDeleteAll( params );
+    params.clear();
 }
 
 void Item::init()
@@ -110,7 +102,7 @@ Param *Item::getParam(int index) const
 	return nullptr;
 }
 
-Param *Item::getParam(QString param_name) const
+Param *Item::getParam(const QString &param_name) const
 {
 	for( int i = 0; i < params.count(); ++i )
 	{
@@ -132,7 +124,7 @@ bool Item::removeParam(int index)
 	return false;
 }
 
-bool Item::removeParam(QString param_name)
+bool Item::removeParam(const QString &param_name)
 {
 	for( int i = 0; i < params.count(); ++i )
 	{
@@ -181,12 +173,5 @@ Config *Item::getConfig() const
 }
 
 
-Main::Main(QString name, Config *config, QDomNode root):Item(name, config, root)
-{
-
-}
-
-Main::~Main()
-{
-
-}
+Main::Main(const QString &name, Config *config, const QDomNode &root):Item(name, config, root)
+{}

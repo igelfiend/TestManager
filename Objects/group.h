@@ -75,9 +75,9 @@ public:
     };
 
 	Group();
-	Group(QString title, QVector< Config* >	configs,	MainWindow *window);
-	Group(QString title, QVector< Item* >	tests,		MainWindow *window);
-	Group(QString title, QVector< Param* >	params,		MainWindow *window);
+    Group(const QString &title, QVector< Config* >	configs,	MainWindow *window);
+    Group(const QString &title, QVector< Item* >	tests,		MainWindow *window);
+    Group(const QString &title, QVector< Param* >	params,		MainWindow *window);
 	~Group();
 
 	Param		*getGroupParam() const;
@@ -107,7 +107,7 @@ class CompareGroup: public BaseGroup
 	Q_OBJECT
 public:
 	CompareGroup();
-	CompareGroup(QString textarea_text, QVector< Config* >	configs,	MainWindow *window );
+    CompareGroup(const QString &textarea_text, QVector< Config* >	configs,	MainWindow *window );
 	CompareGroup( QVector< Param* >		params,		MainWindow *window );
 	~CompareGroup();
 private:

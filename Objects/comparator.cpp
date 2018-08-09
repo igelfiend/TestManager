@@ -10,11 +10,6 @@
 #include <QDockWidget>
 #include <QDebug>
 
-Comparator::Comparator()
-{
-
-}
-
 Comparator::Comparator(Manager *manager, QVBoxLayout *outLayout)
 {
 	this->manager	= manager;
@@ -22,11 +17,6 @@ Comparator::Comparator(Manager *manager, QVBoxLayout *outLayout)
 
 	blocks.append( new CompareBlock( this ) );
 	blocks.append( new CompareBlock( this ) );
-
-}
-
-Comparator::~Comparator()
-{
 
 }
 

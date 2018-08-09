@@ -43,7 +43,7 @@ QDomElement Utils::getXmlElement(const QDomNode &domNode, const QString &path, Q
 	return QDomElement();
 }
 
-void Utils::printNode(QDomNode node)
+void Utils::printNode(const QDomNode &node)
 {
 	QString pStr;
 	QTextStream s(&pStr);
@@ -126,7 +126,7 @@ QVector<QVector<QString> > Utils::parseString(QString str)
 	return result;
 }
 
-QString Utils::saveToString(QVector<QVector<QString> > matrix, StringType string_type)
+QString Utils::saveToString(const QVector<QVector<QString> > &matrix, StringType string_type)
 {
 	if( matrix.count() < 1 )
 	{
@@ -213,10 +213,9 @@ QString Utils::saveToString(QVector<QVector<QString> > matrix, StringType string
 	}
 }
 
-QString Utils::saveToString(QVector<QString> matrix, StringType string_type)
+QString Utils::saveToString(const QVector<QString> &matrix, StringType string_type)
 {
 	QString result = "";
-	QString tmp;
 
 	switch( string_type )
 	{
@@ -319,7 +318,7 @@ void Utils::clearLayout(QLayout *layout)
 	}
 }
 
-QDomText Utils::TextInside(QDomNode node)
+QDomText Utils::TextInside(const QDomNode &node)
 {
 	QDomNodeList nodes = node.childNodes();
 	for( int i = 0; i < nodes.count(); ++i )
@@ -1043,7 +1042,7 @@ void Utils::insertNode(QDomNode &target, const QString &node_name, const QString
 	}
 }
 
-void Utils::removeChilds(QDomNode &node)
+void Utils::removeChilds(QDomNode node)
 {
 	QDomNodeList nodes = node.childNodes();
 	while(!nodes.isEmpty())
@@ -1085,7 +1084,7 @@ void Utils::addElementsToList(QStringList &target_list, const QString &data)
 	}
 }
 
-QVector<QString> Utils::StringToVector(QString str)
+QVector<QString> Utils::StringToVector(const QString &str)
 {
 	QStringList tmp = str.split(",");
 	QVector< QString > str_vector;

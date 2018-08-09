@@ -5,7 +5,7 @@
 
 #include <QDebug>
 
-Config::Config(QString device, QString type, QDomDocument document)
+Config::Config(const QString &device, const QString &type, const QDomDocument &document)
 {
 	this->device = device;
 	this->type = type;
@@ -14,10 +14,8 @@ Config::Config(QString device, QString type, QDomDocument document)
 
 Config::~Config()
 {
-	for( int i = 0; i < items.count(); ++i )
-	{
-		delete items.at( i );
-	}
+    qDeleteAll(items);
+    items.clear();
 }
 
 void Config::init()
@@ -71,7 +69,7 @@ Test *Config::getTest(int index) const
 	return nullptr;
 }
 
-Test *Config::getTest(QString test_name) const
+Test *Config::getTest(const QString &test_name) const
 {
 	for( int i = 1; i < items.size(); ++i)
 	{
@@ -94,7 +92,7 @@ bool Config::removeTest(int index)
 	return false;
 }
 
-bool Config::removeTest(QString test_name)
+bool Config::removeTest(const QString &test_name)
 {
 	for( int i = 1; i < items.size(); ++i)
 	{

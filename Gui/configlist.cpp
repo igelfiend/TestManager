@@ -148,7 +148,7 @@ QWidget *ConfigList::getParent() const
 	return parent;
 }
 
-void ConfigList::ShowContextMenu(QPoint pos)
+void ConfigList::ShowContextMenu(const QPoint &pos)
 {
 	QMenu menu;
 	QPoint globalPos = mapToGlobal(pos);

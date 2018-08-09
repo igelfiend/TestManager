@@ -31,7 +31,7 @@ public:
 	bool isAddingGroup() const;
 
 public slots:
-	void	ShowContextMenu(QPoint pos);
+    void	ShowContextMenu(const QPoint &pos);
 	void	ShowItemInfo();
 	void	CreateNewGroup();
 

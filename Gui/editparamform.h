@@ -21,7 +21,7 @@ public:
 	explicit EditParamForm(QWidget *parent = 0);
 	~EditParamForm();
 
-	void	setText( QString text );
+    void	setText( const QString &text );
 	QString	getText() const;
 
 	QBoxLayout *getLayout() const;

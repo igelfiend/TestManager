@@ -34,15 +34,15 @@ public:
 										const QString& path,
 										Qt::CaseSensitivity caseSensitivity );
 
-	static	void	printNode(QDomNode node );
-	static	QVector< QVector< QString > > parseString(QString str);
-	static	QString saveToString( QVector<QVector<QString>> matrix, StringType string_type );
-	static	QString saveToString( QVector<QString> matrix, StringType string_type );
-	static	StringType getStringType(QString str);
+    static	void	printNode(const QDomNode &node );
+    static	QVector< QVector< QString > > parseString(QString str);
+    static	QString saveToString( const QVector<QVector<QString>> &matrix, StringType string_type );
+    static	QString saveToString( const QVector<QString> &matrix, StringType string_type );
+    static	StringType getStringType(QString str);
 	static	QString spacesToTabs(QString str);
 	static	void	clearLayout( QLayout *layout );
-	static QDomText TextInside( QDomNode node );
-	static void		removeChilds(QDomNode &node );
+    static QDomText TextInside( const QDomNode &node );
+    static void		removeChilds(QDomNode node );
 
 	static	void	fixAccuracyTestRange(const QString &test_name, const QString &version, Manager *manager );
 
@@ -84,7 +84,7 @@ private:
 	static void		insertNode( QDomNode &target, const QString &node_name, const QString &data );
 	static QDomNode	createEquipItem(const QStringList &dev_list, QDomDocument &doc );
 	static void		addElementsToList( QStringList &target_list, const QString &data );
-	static QVector< QString > StringToVector(QString str);
+    static QVector< QString > StringToVector(const QString &str);
 
     static QPoint getWidthAndHeightFromPointsParameterInSvg( const QString &points_str );
     static bool   processRowInSvg(QString &row, QPoint pic_size, const QString &stylename, const QString &css_style);

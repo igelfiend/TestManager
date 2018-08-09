@@ -16,9 +16,9 @@ class Comparator: public QObject
 	Q_OBJECT
 	friend class CompareBlock;
 public:
-	Comparator();
+    Comparator(){}
 	Comparator(Manager *manager, QVBoxLayout *outLayout );
-	~Comparator();
+    ~Comparator(){}
 
 	void	update();
 	void	execute();

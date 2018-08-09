@@ -15,7 +15,7 @@ class Param
 {
 public:
     Param();
-	Param( QString name, QDomNode node, ParamType p_type, StringType str_type = StringType::None );
+    Param( const QString &name, const QDomNode &node, ParamType p_type, StringType str_type = StringType::None );
 	Param( Param *param );
 
 	bool	compare( Param * param );
@@ -35,7 +35,7 @@ public:
 	ParamType	getType() const;
 	QDomNode	getNode() const;
 
-	static void updateParams(QVector<Param *> params, QString data);
+    static void updateParams(QVector<Param *> params, const QString &data);
 
 
 

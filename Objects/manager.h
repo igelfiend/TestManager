@@ -22,7 +22,7 @@ public:
 
 	ConfigInfo *	getConfigInfo() const;
 	bool	isLoaded() const;
-	void	Load( QStringList devices, QStringList modes );
+    void	Load( const QStringList &devices, const QStringList &modes );
 	void	Save();
 	void	Clear();
 	void	ShowLoadedData();
@@ -38,7 +38,7 @@ public:
 	bool	isChanged() const;
 	void	setChanged(bool value);
 
-	void	setBarText( QString text );
+    void	setBarText( const QString &text );
 
 private:
 	bool	loaded;

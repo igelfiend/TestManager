@@ -14,7 +14,7 @@ ParamListItem::ParamListItem()
 //	item	= nullptr;
 }
 
-ParamListItem::ParamListItem(QString text, QListWidget *parent, Param *param) :
+ParamListItem::ParamListItem(const QString &text, QListWidget *parent, Param *param) :
 	QListWidgetItem(text, parent, ItemType::UserType)
 {
 //	ParamListItem();
@@ -22,7 +22,7 @@ ParamListItem::ParamListItem(QString text, QListWidget *parent, Param *param) :
 	this->param = param;
 }
 
-ParamListItem::ParamListItem(QString text, QListWidget *parent, Item *item) :
+ParamListItem::ParamListItem(const QString &text, QListWidget *parent, Item *item) :
 	QListWidgetItem(text, parent, ItemType::UserType)
 {
 //	ParamListItem();
@@ -30,7 +30,7 @@ ParamListItem::ParamListItem(QString text, QListWidget *parent, Item *item) :
 	this->item = item;
 }
 
-ParamListItem::ParamListItem(QString text, QListWidget *parent, Config *config) :
+ParamListItem::ParamListItem(const QString &text, QListWidget *parent, Config *config) :
 	QListWidgetItem(text, parent, ItemType::UserType)
 {
 //	ParamListItem();
@@ -39,9 +39,7 @@ ParamListItem::ParamListItem(QString text, QListWidget *parent, Config *config) 
 }
 
 ParamListItem::~ParamListItem()
-{
-
-}
+{}
 
 Param *ParamListItem::getParam() const
 {

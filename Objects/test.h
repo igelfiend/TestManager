@@ -13,7 +13,7 @@ class Test;
 class Item
 {
 public:
-	Item(QString name, Config * config, QDomNode root);
+    Item(const QString &name, Config *config, const QDomNode &root);
 	virtual ~Item();
 
 	virtual	void init();
@@ -21,14 +21,14 @@ public:
 
 	QString getVersion() const;
 	Param	*getParam(int index) const;
-	Param	*getParam(QString param_name) const;
+    Param	*getParam(const QString &param_name) const;
 	virtual QString	getName() const;
 	Config	*getConfig()const;
 	Test	*toTest();
 	Main	*toMain();
 
 	bool removeParam(int index);
-	bool removeParam(QString param_name);
+    bool removeParam(const QString &param_name);
 
 	void setVersion(const QString &value);
 	void setKeyName(const QString &value);
@@ -52,8 +52,7 @@ protected:
 class Main: public Item
 {
 public:
-	Main(QString name, Config * config, QDomNode root);
-	~Main();
+    Main(const QString &name, Config * config, const QDomNode &root);
 
 //	void init();
 private:
@@ -63,8 +62,7 @@ private:
 class Test: public Item
 {
 public:
-	Test(QString name, Config *config, QDomNode root);
-	virtual ~Test();
+    Test(const QString &name, Config *config, const QDomNode &root);
 
 //	void init();
 	void setTemplateDir(const QString &path);

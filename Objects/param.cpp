@@ -10,7 +10,7 @@ Param::Param()
 	owner = nullptr;
 }
 
-Param::Param(QString name, QDomNode node, ParamType p_type, StringType str_type):
+Param::Param(const QString &name, const QDomNode &node, ParamType p_type, StringType str_type):
 	Param()
 {
 	this->name	= name;
@@ -110,7 +110,7 @@ void Param::setType(const ParamType &value)
 	type = value;
 }
 
-void Param::updateParams(QVector<Param *> params, QString data)
+void Param::updateParams(QVector<Param *> params, const QString &data)
 {
 	if( params.count() == 0 )
 	{

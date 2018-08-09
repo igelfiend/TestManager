@@ -59,7 +59,7 @@ public:
 
 	void	addGroup(BaseGroup *group);
 	void	addCompareGroups(QVector<CompareGroup *> groups);
-	void	addHeader(QString text, int level = 1 );
+    void	addHeader(const QString &text, int level = 1 );
 	void	addHLine();
 	void	clearGroups();
 	void	loadGroups();

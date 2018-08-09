@@ -15,11 +15,6 @@ ConfigInfo::ConfigInfo( Manager *manager )
 	init();
 }
 
-ConfigInfo::~ConfigInfo()
-{
-
-}
-
 void ConfigInfo::init()
 {
 	qDebug() << "Initialisation configuration of tests...";
@@ -175,7 +170,7 @@ TestParam *TestInfo::getParam( int index)
 	return nullptr;
 }
 
-TestParam *TestInfo::getParam(QString name)
+TestParam *TestInfo::getParam(const QString &name)
 {
 	for( int i = 0; i < params.count(); ++i )
 	{
@@ -213,7 +208,7 @@ QString TestInfo::getVersionedName() const
 }
 
 
-TestParam::TestParam(QString path, QString name, ParamType type)
+TestParam::TestParam(const QString &path, const QString &name, ParamType type)
 {
 	this->path	= path;
 	this->name	= name;
@@ -221,18 +216,13 @@ TestParam::TestParam(QString path, QString name, ParamType type)
 	this->string_type	= StringType::None;
 }
 
-TestParam::TestParam(QString path, QString name, ParamType type, StringType str_type, QStringList column_names)
+TestParam::TestParam(const QString &path, const QString &name, ParamType type, StringType str_type, const QStringList &column_names)
 {
 	this->path	= path;
 	this->name	= name;
 	this->param_type	= type;
 	this->column_names	= column_names;
 	this->string_type	= str_type;
-}
-
-TestParam::~TestParam()
-{
-
 }
 
 QString TestParam::getPath() const

@@ -33,7 +33,7 @@ Group::Group()
 	lb			= nullptr;
 }
 
-Group::Group(QString title, QVector<Config *> configs, MainWindow *window) :
+Group::Group(const QString &title, QVector<Config *> configs, MainWindow *window) :
 	BaseGroup( configs, window )
 {
 	initPtr();
@@ -54,7 +54,7 @@ Group::Group(QString title, QVector<Config *> configs, MainWindow *window) :
 	container->addWidget(list);
 }
 
-Group::Group(QString title, QVector<Item *> tests, MainWindow *window):
+Group::Group(const QString &title, QVector<Item *> tests, MainWindow *window):
 	BaseGroup( tests, window )
 {
 	initPtr();
@@ -80,7 +80,7 @@ Group::Group(QString title, QVector<Item *> tests, MainWindow *window):
 	container->addWidget(list);
 }
 
-Group::Group(QString title, QVector<Param *> params, MainWindow *window) :
+Group::Group(const QString &title, QVector<Param *> params, MainWindow *window) :
 	BaseGroup( params, window )
 {
     qDebug() << "Group constructor(params based)";
@@ -125,15 +125,8 @@ Group::Group(QString title, QVector<Param *> params, MainWindow *window) :
 
 Group::~Group()
 {
-	if( lb )
-	{
-		delete lb;
-	}
-
-	if( button )
-	{
-		delete button;
-	}
+    delete lb;
+    delete button;
 	delete list;
 }
 
@@ -487,7 +480,7 @@ CompareGroup::CompareGroup()
 
 }
 
-CompareGroup::CompareGroup( QString textarea_text, QVector<Config *> configs, MainWindow *window):
+CompareGroup::CompareGroup( const QString &textarea_text, QVector<Config *> configs, MainWindow *window):
 	BaseGroup( configs, window )
 {
 	QString title;

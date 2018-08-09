@@ -31,10 +31,8 @@ Manager::Manager(MainWindow *parent)
 
 Manager::~Manager()
 {
-	for( int i = 0; i < configs.count(); ++i )
-	{
-		delete configs.at( i );
-	}
+    qDeleteAll( configs );
+    configs.clear();
 }
 
 Config *Manager::getConfig(int index) const
@@ -61,7 +59,7 @@ bool Manager::isLoaded() const
 	return loaded;
 }
 
-void Manager::Load(QStringList devices, QStringList modes)
+void Manager::Load(const QStringList &devices, const QStringList &modes)
 {
 	for (int i = 0; i < devices.size(); ++i)
 	{
@@ -205,7 +203,7 @@ void Manager::setChanged(bool value)
 	changed = value;
 }
 
-void Manager::setBarText(QString text)
+void Manager::setBarText(const QString &text)
 {
 	window->statusBar()->showMessage( text );
 }

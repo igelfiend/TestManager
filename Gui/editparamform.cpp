@@ -20,7 +20,7 @@ EditParamForm::~EditParamForm()
 	delete ui;
 }
 
-void EditParamForm::setText(QString text)
+void EditParamForm::setText(const QString &text)
 {
 	QPlainTextEdit *edit = dynamic_cast<QPlainTextEdit *>( ui->verticalLayout_3->itemAt( 0 )->widget() );
 	edit->setPlainText( text );

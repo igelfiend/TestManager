@@ -57,16 +57,9 @@ MainWindow::~MainWindow()
 		delete groups.at( i );
 	}
 
-	if( no_test_group )
-	{
-		delete no_test_group;
-	}
+    delete no_test_group;
 
-	if( no_param_group )
-	{
-		delete no_param_group;
-	}
-
+    delete no_param_group;
 }
 
 void MainWindow::init()
@@ -213,7 +206,7 @@ void MainWindow::addCompareGroups(QVector<CompareGroup *> groups)
 	//	group_coord.x++;
 }
 
-void MainWindow::addHeader(QString text, int level )
+void MainWindow::addHeader(const QString &text, int level )
 {
 	QLabel *label_test	= new QLabel( text );
 
