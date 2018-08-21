@@ -105,12 +105,10 @@ void Comparator::execute()
 			}
 
 			QString param_title = QString("Parameter: %1").arg( name_param );
-			bool fParamTitleInserted = false;
 
 			QVector<LocalGroup>	diff_params;
 			int diff_param_index = 0;
 
-			bool fPass = true;
 			for( int k = 0; k < valid_params.count(); ++k )
 			{
 				LocalGroup start_element;
@@ -133,10 +131,6 @@ void Comparator::execute()
 					{
 						diff_params[ diff_param_index ].params.append( valid_params.at( l ) );
 						valid_params.removeAt( l-- );
-					}
-					else
-					{
-						fPass = false;
 					}
 				}
 
@@ -179,11 +173,7 @@ void Comparator::execute()
 					fTestTitleInserted = true;
 				}
 
-				if( !fParamTitleInserted )
-				{
-					window->addHeader( param_title, 2 );
-					fParamTitleInserted = true;
-				}
+                window->addHeader( param_title, 2 );
 				window->addCompareGroups( compare_groups );
 			}
 		}

@@ -29,8 +29,11 @@ class Item;
 struct TestParam;
 struct coord
 {
-	int x;
-	int y;
+    coord(): x( 0 ), y( 0 ){}
+    coord( int _x, int _y ): x( _x ), y( _y ){}
+
+    int x;
+    int y;
 };
 
 struct LocalGroup
@@ -46,7 +49,7 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget *parent = 0);
+    explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
 	void init();

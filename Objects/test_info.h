@@ -15,12 +15,12 @@ enum ParamType
 class QString;
 class Manager;
 class TestInfo;
-struct TestParam;
+class TestParam;
 
 class ConfigInfo
 {
 public:
-	ConfigInfo(Manager *manager);
+    explicit ConfigInfo(Manager *manager);
 
 	void	init();
 

@@ -25,13 +25,14 @@
 #include "tableparam.h"
 #include "spoilergroupbox.h"
 
-Group::Group()
-{
-	group_param	= nullptr;
-	button		= nullptr;
-	list		= nullptr;
-	lb			= nullptr;
-}
+Group::Group():
+    BaseGroup(),
+    group_param( nullptr ),
+    lb( nullptr ),
+    button( nullptr ),
+    list( nullptr ),
+    group_type( GroupType::NoTest )
+{}
 
 Group::Group(const QString &title, QVector<Config *> configs, MainWindow *window) :
 	BaseGroup( configs, window )
@@ -351,31 +352,31 @@ void Group::editAccepted()
 	}
 }
 
-BaseGroup::BaseGroup()
-{
-	param_info	= nullptr;
-	container	= nullptr;
-	has_data	= false;
-	window		= nullptr;
-}
+BaseGroup::BaseGroup():
+    has_data( false ),
+    window( nullptr ),
+    container( nullptr ),
+    param_info( nullptr )
+{}
 
-BaseGroup::BaseGroup(QVector<Config *> configs, MainWindow *window)
+BaseGroup::BaseGroup(QVector<Config *> configs, MainWindow *window):
+    BaseGroup()
 {
-	has_data	= false;
-	param_info	= window->getCurrentParam();
+    param_info      = window->getCurrentParam();
 	this->configs	= configs;
 	this->window	= window;
 }
 
-BaseGroup::BaseGroup(QVector<Item *> items, MainWindow *window)
+BaseGroup::BaseGroup(QVector<Item *> items, MainWindow *window):
+    BaseGroup()
 {
-	has_data	= false;
-	param_info	= window->getCurrentParam();
-	this->items	= items;
+    param_info      = window->getCurrentParam();
+    this->items     = items;
 	this->window	= window;
 }
 
-BaseGroup::BaseGroup(QVector<Param *> params, MainWindow *window)
+BaseGroup::BaseGroup(QVector<Param *> params, MainWindow *window):
+    BaseGroup()
 {
 	has_data	= true;
 	param_info	= window->getCurrentParam();
@@ -475,10 +476,6 @@ CompareGroup *BaseGroup::toCompareGroup()
 	return dynamic_cast<CompareGroup *>( this );
 }
 
-CompareGroup::CompareGroup()
-{
-
-}
 
 CompareGroup::CompareGroup( const QString &textarea_text, QVector<Config *> configs, MainWindow *window):
 	BaseGroup( configs, window )
@@ -550,9 +547,4 @@ CompareGroup::CompareGroup(QVector<Param *> params, MainWindow *window):
 
 	container->addWidget( label );
 	container->addWidget( textarea );
-}
-
-CompareGroup::~CompareGroup()
-{
-
 }

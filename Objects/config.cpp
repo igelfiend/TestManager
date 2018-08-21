@@ -5,12 +5,13 @@
 
 #include <QDebug>
 
-Config::Config(const QString &device, const QString &type, const QDomDocument &document)
-{
-	this->device = device;
-	this->type = type;
-	this->root = document;
-}
+Config::Config(const QString &device, const QString &type, const QDomDocument &document):
+    device( device ),
+    type( type ),
+    changed( false ),
+    manager( nullptr ),
+    root( document )
+{}
 
 Config::~Config()
 {

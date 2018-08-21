@@ -17,7 +17,7 @@ class ConfigList : public QListWidget
 {
 	Q_OBJECT
 public:
-	ConfigList(QWidget *parent);
+    explicit ConfigList(QWidget *parent);
 	ConfigList(Group *group , QWidget *parent = nullptr);	// Конструктор на основе группы
 
 	Group	*getGroup() const;

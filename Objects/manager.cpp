@@ -20,14 +20,14 @@
 #include "editparamform.h"
 #include "utils.h"
 
-Manager::Manager(MainWindow *parent)
-{
-	this->window = parent;
-	root	= "../../release/devices";
-	loaded	= false;
-	changed	= false;
-	edit_form	= new EditParamForm( parent );
-}
+Manager::Manager(MainWindow *parent):
+    loaded( false ),
+    changed( false ),
+    root( "../../release/devices" ),
+    config_info( nullptr ),
+    window( parent ),
+    edit_form( new EditParamForm( parent ) )
+{}
 
 Manager::~Manager()
 {

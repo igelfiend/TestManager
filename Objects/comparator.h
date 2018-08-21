@@ -39,7 +39,7 @@ class CompareBlock: private QHBoxLayout
 	Q_OBJECT
 public:
 	CompareBlock();
-	CompareBlock( Comparator *comparator );
+    explicit CompareBlock( Comparator *comparator );
 	~CompareBlock();
 
 	void	update();

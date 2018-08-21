@@ -101,13 +101,12 @@ void MainWindow::init()
 
 
     QStringList verifications;
-    QListWidgetItem * item;
     settings.beginGroup( "MODES" );
     {
         verifications = settings.allKeys();
         foreach( QString verif, verifications )
         {
-            item = new QListWidgetItem( verif );
+            QListWidgetItem *item = new QListWidgetItem( verif );
             bool checked = settings.value( verif, false ).toBool();
             item->setCheckState( ( checked ) ? Qt::Checked : Qt::Unchecked );
             ui->listWidgetModes->addItem( item );
@@ -152,7 +151,7 @@ QListWidget *MainWindow::getListModes()
 
 TestInfo *MainWindow::getCurrentTest() const
 {
-	uint curr_index = ui->comboBoxTests->currentIndex();
+    int curr_index = ui->comboBoxTests->currentIndex();
 	return manager->getConfigInfo()->getTest( combobox_tests.at( curr_index ).first, combobox_tests.at( curr_index ).second );
 }
 
@@ -281,7 +280,7 @@ void MainWindow::clearGroups()
 
 void MainWindow::loadGroups()
 {
-	uint current_index	=  ui->comboBoxTests->currentIndex();
+    int current_index	=  ui->comboBoxTests->currentIndex();
 	QString test_name	= combobox_tests.at( current_index ).first;
 	QString version		= combobox_tests.at( current_index ).second;
 	QString param_name	= ui->comboBoxParameters->currentText();

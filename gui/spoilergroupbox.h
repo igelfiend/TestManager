@@ -7,8 +7,8 @@ class SpoilerGroupBox : public QGroupBox
 {
 	Q_OBJECT
 public:
-	SpoilerGroupBox( QWidget *parent );
-	SpoilerGroupBox( const QString &title, QWidget *parent = 0 );
+    explicit SpoilerGroupBox( QWidget *parent );
+    SpoilerGroupBox( const QString &title, QWidget *parent = nullptr );
 
 public slots:
 	void toggled_spoiler(bool flag);

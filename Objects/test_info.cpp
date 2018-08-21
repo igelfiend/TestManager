@@ -208,22 +208,25 @@ QString TestInfo::getVersionedName() const
 }
 
 
-TestParam::TestParam(const QString &path, const QString &name, ParamType type)
-{
-	this->path	= path;
-	this->name	= name;
-	this->param_type	= type;
-	this->string_type	= StringType::None;
-}
+TestParam::TestParam():
+    param_type( ParamType::Simple ),
+    string_type( StringType::None )
+{}
 
-TestParam::TestParam(const QString &path, const QString &name, ParamType type, StringType str_type, const QStringList &column_names)
-{
-	this->path	= path;
-	this->name	= name;
-	this->param_type	= type;
-	this->column_names	= column_names;
-	this->string_type	= str_type;
-}
+TestParam::TestParam(const QString &path, const QString &name, ParamType type):
+    path( path ),
+    name( name ),
+    param_type( type ),
+    string_type( StringType::None )
+{}
+
+TestParam::TestParam(const QString &path, const QString &name, ParamType type, StringType str_type, const QStringList &column_names):
+    path( path ),
+    name( name ),
+    param_type( type ),
+    string_type( str_type ),
+    column_names( column_names )
+{}
 
 QString TestParam::getPath() const
 {

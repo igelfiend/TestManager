@@ -14,7 +14,7 @@ class EditParamForm;
 class Manager
 {
 public:
-	Manager(MainWindow *parent);
+    explicit Manager(MainWindow *parent);
 	~Manager();
 
 	Config *	getConfig( int index ) const;
@@ -41,6 +41,8 @@ public:
     void	setBarText( const QString &text );
 
 private:
+    Q_DISABLE_COPY(Manager)
+
 	bool	loaded;
 	bool	changed;
 	QString root;

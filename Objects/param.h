@@ -16,7 +16,7 @@ class Param
 public:
     Param();
     Param( const QString &name, const QDomNode &node, ParamType p_type, StringType str_type = StringType::None );
-	Param( Param *param );
+    explicit Param( Param *param );
 
 	bool	compare( Param * param );
 

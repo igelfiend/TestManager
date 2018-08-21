@@ -106,10 +106,10 @@ class CompareGroup: public BaseGroup
 {
 	Q_OBJECT
 public:
-	CompareGroup();
-    CompareGroup(const QString &textarea_text, QVector< Config* >	configs,	MainWindow *window );
-	CompareGroup( QVector< Param* >		params,		MainWindow *window );
-	~CompareGroup();
+    CompareGroup(){}
+    CompareGroup(const QString &textarea_text, QVector< Config* > configs, MainWindow *window );
+    CompareGroup( QVector< Param* >	params,	MainWindow *window );
+
 private:
 	QLabel		*label;
 	QPlainTextEdit	*textarea;

@@ -381,7 +381,7 @@ void Utils::fixAccuracyTestRange(const QString &test_name, const QString &versio
 			if( j > 0 )
 			{
 				double currFreq = mhz.at(0).at(0).toDouble();
-				if( abs( currFreq - prevFreq ) < 0.0001 )
+                if( fabs( currFreq - prevFreq ) < 0.0001 )
 				{
 					int count_points = count_points_node.text().toInt();
 					double step = ( endFreq - currFreq ) / ( count_points - 1 );

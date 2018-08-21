@@ -43,12 +43,11 @@ void Item::setVersion(const QString &value)
 	version = value;
 }
 
-Item::Item(const QString &name, Config *config, const QDomNode &root)
-{
-	this->name = name;
-	this->config = config;
-	this->root = root;
-}
+Item::Item(const QString &name, Config *config, const QDomNode &root):
+    name( name ),
+    config( config ),
+    root( root )
+{}
 
 Item::~Item()
 {

@@ -5,19 +5,18 @@
 #include "param.h"
 #include "manager.h"
 
-Param::Param()
-{
-	owner = nullptr;
-}
+Param::Param():
+    owner( nullptr ),
+    type( ParamType::Simple )
+{}
 
 Param::Param(const QString &name, const QDomNode &node, ParamType p_type, StringType str_type):
-	Param()
-{
-	this->name	= name;
-	this->node	= node;
-	this->type	= p_type;
-	this->str_format	= str_type;
-}
+    name( name ),
+    owner( nullptr ),
+    node( node ),
+    type( p_type ),
+    str_format( str_type )
+{}
 
 Param::Param(Param *param):
 	Param()
