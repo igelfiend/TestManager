@@ -57,6 +57,8 @@ public:
 	QListWidget	*getListDevices();
 	QListWidget	*getListModes();
 
+    QStringList getCheckedDevicesList();
+
 	TestInfo	*getCurrentTest()	const;
 	TestParam	*getCurrentParam()	const;
 
@@ -99,6 +101,8 @@ private slots:
     void on_actionReplace_color_in_Svg_triggered();
     void on_actionReplace_color_on_origin_Svg_triggered();
     void on_actionFix_Freq_Acc_Svg_triggered();
+
+    void on_actionReplace_colors_triggered();
 
 private:
 	void closeEvent(QCloseEvent *event);

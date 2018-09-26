@@ -57,7 +57,7 @@ public:
 	static	bool	NodeIsFieldType( const QDomNode &node );
 	static	SpoilerGroupBox	*NodeToGroupBox(const QDomNode &node, FIELDS &fields);
     static  bool    ReplaceInFile(const QString &src_filename, const QString &tgt_filename, const QMap< QString, QString > replace_map);
-    static  bool    ReplaceColorInSvgs(const QString &dev_dir_path, const QMap<QString, QString> &replace_map, bool fReplaceOrigin, QWidget *parent );
+    static  bool    ReplaceColorInSvgs(const QString &dev_dir_path, const QStringList &devices, const QMap<QString, QString> &replace_map, bool fReplaceOrigin, QWidget *parent );
 
     //!
     //! \brief FixSvgStyle Process all svgs

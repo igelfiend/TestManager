@@ -851,28 +851,22 @@ bool Utils::ReplaceInFile(const QString &src_filename, const QString &tgt_filena
     return true;
 }
 
-bool Utils::ReplaceColorInSvgs(const QString &dev_dir_path, const QMap<QString, QString> &replace_map, bool fReplaceOrigin, QWidget *parent)
+bool Utils::ReplaceColorInSvgs(const QString &dev_dir_path, const QStringList &devices, const QMap<QString, QString> &replace_map, bool fReplaceOrigin, QWidget *parent)
 {
     qDebug() << "Utils::ReplaceColorInSvgs started";
     qDebug() << "Utils::ReplaceColorInSvgs dir path: " << dev_dir_path;
 
-    QDir path( dev_dir_path );
-    QStringList devices = path.entryList( QDir::Dirs );
-
-    if( devices.count() < 3 )
-    {
-        return false;
-    }
-
-    QProgressDialog progress( "Processing Svg...", "Cancel", 2, devices.count()-1, parent );
+    QString msg( "Processing Svg..." );
+    QProgressDialog progress( msg, "Cancel", 0, devices.count()-1, parent );
     progress.setWindowModality( Qt::WindowModal );
     progress.setMinimumDuration( 0 );
     progress.setMinimumSize( 400, 100 );
     QApplication::processEvents();
 
-    for( int i = 2; i < devices.count(); ++i )
+    for( int i = 0; i < devices.count(); ++i )
     {
         progress.setValue( i );
+        progress.setLabelText( msg + "\n current device: " + devices[ i ] );
         if( progress.wasCanceled() )
         {
             break;

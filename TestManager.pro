@@ -33,7 +33,8 @@ SOURCES += main.cpp\
     Gui/tableparam.cpp \
     Objects/comparator.cpp \
     Gui/spoilergroupbox.cpp \
-    Gui/AddNewTestDialog.cpp
+    Gui/AddNewTestDialog.cpp \
+    Gui/colorreplacerform.cpp
 
 HEADERS  += utils.h \
     Gui/configlist.h \
@@ -49,7 +50,9 @@ HEADERS  += utils.h \
     Gui/tableparam.h \
     Objects/comparator.h \
     Gui/spoilergroupbox.h \
-    Gui/AddNewTestDialog.h
+    Gui/AddNewTestDialog.h \
+    Gui/colorreplacerform.h
 
 FORMS    += Gui/mainwindow.ui \
-            Gui/editparamform.ui
+            Gui/editparamform.ui \
+    Gui/colorreplacerform.ui

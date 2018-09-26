@@ -27,6 +27,7 @@
 #include "comparator.h"
 #include "AddNewTestDialog.h"
 
+#include "colorreplacerform.h"
 #define COL_COUNT 5
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -146,7 +147,23 @@ void MainWindow::init()
 
 QListWidget *MainWindow::getListModes()
 {
-	return ui->listWidgetModes;
+    return ui->listWidgetModes;
+}
+
+QStringList MainWindow::getCheckedDevicesList()
+{
+    QStringList result;
+    QListWidget *lw = ui->listWidgetDevices;
+    for( int i = 0; i < lw->count(); ++i )
+    {
+        QListWidgetItem *listRow = lw->item( i );
+        if( listRow->checkState() == Qt::Checked )
+        {
+            result.append( lw->item( i )->text() );
+        }
+    }
+
+    return result;
 }
 
 TestInfo *MainWindow::getCurrentTest() const
@@ -752,7 +769,7 @@ void MainWindow::on_actionReplace_color_in_Svg_triggered()
     replace_map[ "#FEFEFE" ] = "#000000";
 
     bool fReplaceOrigin = false;
-    Utils::ReplaceColorInSvgs( QString( "../../release/devices" ), replace_map, fReplaceOrigin, this );
+//    Utils::ReplaceColorInSvgs( QString( "../../release/devices" ), replace_map, fReplaceOrigin, this );
 }
 
 void MainWindow::on_actionReplace_color_on_origin_Svg_triggered()
@@ -761,7 +778,7 @@ void MainWindow::on_actionReplace_color_on_origin_Svg_triggered()
     replace_map[ "#252527" ] = "none";
 
     bool fReplaceOrigin = true;
-    Utils::ReplaceColorInSvgs( QString( "../../release/devices" ), replace_map, fReplaceOrigin, this );
+//    Utils::ReplaceColorInSvgs( QString( "../../release/devices" ), replace_map, fReplaceOrigin, this );
 }
 
 void MainWindow::on_actionFix_Freq_Acc_Svg_triggered()
@@ -772,4 +789,28 @@ void MainWindow::on_actionFix_Freq_Acc_Svg_triggered()
     QString pics_foulder = "images";
 
     Utils::FixSvgStyle( pics_foulder, pic_size, stylename, css_style, this );
+}
+
+void MainWindow::on_actionReplace_colors_triggered()
+{
+    ColorReplacerForm replaceForm;
+    QStringList checkedDevicesList = getCheckedDevicesList();
+    replaceForm.setProcessingDevices( checkedDevicesList );
+    if( replaceForm.exec() == QDialog::Accepted )
+    {
+        ColorReplacementTable table = replaceForm.getDataFromTable();
+
+        if( table.isEmpty() )
+        {
+            QMessageBox mbox;
+            mbox.setText( "Replacing data is empty" );
+            mbox.exec();
+            return;
+        }
+
+        QMap<QString, QString> replaceMap = table.toMap();
+        bool fReplaceOrigin = replaceForm.isSelfReplaced();
+
+        Utils::ReplaceColorInSvgs( QString( "../../release/devices" ), checkedDevicesList, replaceMap, fReplaceOrigin, this );
+    }
 }

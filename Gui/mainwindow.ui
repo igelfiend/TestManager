@@ -108,8 +108,7 @@
     <property name="title">
      <string>Utils</string>
     </property>
-    <addaction name="actionReplace_color_in_Svg"/>
-    <addaction name="actionReplace_color_on_origin_Svg"/>
+    <addaction name="actionReplace_colors"/>
    </widget>
    <addaction name="menuFixes"/>
    <addaction name="menuTests"/>
@@ -617,6 +616,11 @@
   <action name="actionFix_equip_order_in_periodic">
    <property name="text">
     <string>Fix equip order in periodic</string>
+   </property>
+  </action>
+  <action name="actionReplace_colors">
+   <property name="text">
+    <string>Replace colors</string>
    </property>
   </action>
  </widget>
