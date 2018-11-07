@@ -12,9 +12,10 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = TestManager
 TEMPLATE = app
 
-target.path = C:/work/VNAPT_GIT/TestManager/release
-INSTALLS += target
 CONFIG(release, debug|release):DEFINES += QT_NO_DEBUG_OUTPUT
+
+DESTDIR = $$PWD/../release
+message( destdir = $$DESTDIR )
 
 INCLUDEPATH += gui\
                objects
